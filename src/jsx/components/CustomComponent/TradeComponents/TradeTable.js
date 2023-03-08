@@ -444,9 +444,12 @@ const DataTable = () => {
                                   650.89[3.04%]
                                 </span>
                               </div>
-                              <span className="mb-0">Price by PrimeCrypto</span>
+                              <span className="mb-0">Price by PrimeCrypto |
+                              
+                               Market Open</span>
                             </Row>
                           </Col>
+                          
                         </Row>
                       </Card.Header>
                       <Card.Body>

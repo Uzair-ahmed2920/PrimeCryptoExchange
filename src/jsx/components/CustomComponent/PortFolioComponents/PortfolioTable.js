@@ -654,6 +654,16 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
 
                         </Row>
                       </Col>
+                      <Col style={{display: "flex",flexDirection: "column",alignItems: "end"}}>
+                        <Row>
+                          <div style={{fontSize: "large",fontWeight: "700"}}>
+                           | #2591795407
+                           
+                        <span style={{display: "flex",flexDirection: "column"}}>Trade Id</span>
+                        </div>
+
+                        </Row>
+                      </Col>
                     </Row>
                     <Card>
                       <Card.Header style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
