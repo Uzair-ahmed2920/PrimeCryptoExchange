@@ -232,6 +232,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   };
 
 
+const [isChecked, setIsChecked] = useState(false);
 
   return (
     <>
@@ -698,11 +699,11 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                     <Form.Check
                       inline
                       label="Close only Part of the trade"
-                      name="group1"
-
-
+                     type="checkbox"
+  checked={isChecked}
+  onChange={() => setIsChecked(!isChecked)}
                     />
-                    <Row>
+                    {isChecked && <div> <Row>
                       <Col xl={1}></Col>
                       <Col xl={2}>
                         <h3 style={{ color: "rgb(62, 172, 255)", fontSize: "large", fontWeight: "600", marginTop: "1rem" }}>Amount</h3>
@@ -747,7 +748,8 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                           </p>
                         </div>
                       </Row>
-                    </Row>
+                    </Row></div>}
+                   
 
                   </Tab.Container>
                 </Tab.Pane>
