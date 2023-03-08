@@ -39,7 +39,7 @@ const DataTable = () => {
     // rows
   );
 
-    const [previousData, setPreviousData] = useState();
+  const [previousData, setPreviousData] = useState();
   const dispatch = useDispatch();
   const [percentage, setPercentage] = useState("percent_change_24h");
   const [largeModal, setLargeModal] = useState(false);
@@ -160,7 +160,7 @@ const DataTable = () => {
     const res = await dispatch(getAllCoin()).then((res) => {
       console.log("res", res);
       console.log(requests, "requests");
-      console.log(JSON.parse(localStorage.getItem("perviouse")),"from local")
+      console.log(JSON.parse(localStorage.getItem("perviouse")), "from local")
       let previousNewData = JSON.parse(localStorage.getItem("perviouse"))
       setPreviousData(previousNewData);
       console.log("previousNewData", previousNewData);
@@ -176,12 +176,12 @@ const DataTable = () => {
   };
 
 
-  const GetColor = (id,price) => {
-    
+  const GetColor = (id, price) => {
+
 
     if (previousData) {
       let previousPrice = previousData.find((item) => item.id === id);
-      
+
       if (previousPrice) {
         if (previousPrice.price > price) {
           return "red";
@@ -216,7 +216,7 @@ const DataTable = () => {
 
   useEffect(() => {
     getData();
-  
+
   }, []);
   return (
     <div className="col-xl-12">
@@ -278,7 +278,7 @@ const DataTable = () => {
                             }
                           >
                             {sortD.columnName === column.columnName &&
-                            sortD.sortType === "asc" ? (
+                              sortD.sortType === "asc" ? (
                               <i
                                 className="fa fa-arrow-down ms-2 fs-14"
                                 style={{ opacity: "0.7" }}
@@ -321,7 +321,7 @@ const DataTable = () => {
                           className="text-center"
                           style={{
                             color: GetColor(item.id, item.price),
-                              
+
                           }}
                         >
                           ${item.price}
@@ -453,10 +453,10 @@ const DataTable = () => {
                         <Row>
                           <Col xl={1}></Col>
                           <Col xl={2}>
-                            <h3 style={{ color: "#3eacff" }}>Amount</h3>
+                            <h3 style={{ color: "rgb(62, 172, 255)", fontSize: "large", fontWeight: "600", marginTop: "1rem" }}>Amount</h3>
                           </Col>
                           <Col xl={6}>
-                            <form>
+                            <form style={{marginTop: "8px"}}>
                               <div className="input-group ">
                                 <span className="input-group-text text-black">
                                   -
@@ -482,14 +482,16 @@ const DataTable = () => {
                             <Button
                               style={{
                                 backgroundColor: "#3eacff",
-                                height: "3rem",
+                                height: "4rem",
+                                display: "flex",flexDirection: "column"
                               }}
-                              className="btn btn-sm"
+                              variant="info"
                               onClick={() =>
                                 handleClick(modalCurrentData.price)
                               }
                             >
                               <i className="material-icons">swap_horiz</i>
+                              Units
                             </Button>
                           </Col>
                           <Col xl={1}></Col>
@@ -498,7 +500,7 @@ const DataTable = () => {
                           <div className="text-center mb-0">
                             <p>
                               {" "}
-                              0.24 UNITS | 5.00% of Equity | EXPOSURE $5,219.99{" "}
+                              0.24 UNITS | 5.00% of Equity | EXPOSURE $5,219.99 {" "}
                             </p>
                           </div>
                         </Row>
@@ -510,21 +512,52 @@ const DataTable = () => {
                         <div className="profile-tab">
                           <div className="custom-tab-1">
                             <Tab.Container defaultActiveKey="Posts">
-                              <Nav as="ul" className="nav nav-tabs">
+                              <Nav as="ul" className="nav nav-tabs" style={{ justifyContent: "space-between" }}>
                                 <Nav.Item as="li" className="nav-item">
-                                  <Nav.Link to="#nosl" eventKey="NoSl">
-                                    Stop Loss
+                                  <Nav.Link to="#nosl" eventKey="NoSl" style={{ color: "red" }}>
+                                    No SL
                                   </Nav.Link>
+                                  <Link style={{color:"rgb(62, 172, 255)"}}
+
+                                  
+                                  >
+                                    Stop Loss
+                                  </Link>
                                 </Nav.Item>
                                 <Nav.Item as="li" i className="nav-item">
                                   <Nav.Link
                                     to="#take-profit"
-                                    eventKey="TakeProfit"
+                                    eventKey="TakeProfit" >
+                                    X1
+                                  </Nav.Link>
+                                  <Link style={{color:"rgb(62, 172, 255)"}}
+
+                                    onClick={() =>
+
+                                      onClick()
+                                    }
+                                  >
+                                    Leverage
+                                  </Link>
+                                </Nav.Item>
+                                <Nav.Item as="li" i className="nav-item">
+                                  <Nav.Link
+                                    to="#take-profit"
+                                    eventKey="TakeProfit" style={{ color: "green" }}>
+                                    $50,000.00
+                                  </Nav.Link>
+                                  <Link style={{color:"rgb(62, 172, 255)",marginLeft: "2rem"}}
+
+                                    onClick={() =>
+
+                                      onClick()
+                                    }
                                   >
                                     Take Profit
-                                  </Nav.Link>
+                                  </Link>
                                 </Nav.Item>
                               </Nav>
+                              <p style={{fontSize: "large", fontWeight: "600", justifyContent: "center", alignItems: "center",display: "flex", marginTop: "1rem"}}>You are Buying Underlying Asset</p>
                               <Tab.Content>
                                 <Tab.Pane id="nosl" eventKey="NoSl">
                                   <div className="sell-element">
@@ -532,12 +565,12 @@ const DataTable = () => {
                                       <Row>
                                         <Col xl={1}></Col>
                                         <Col xl={2}>
-                                          <h3 style={{ color: "#3eacff" }}>
+                                          <h3 style={{ color: "#3eacff",marginTop: "10px" }}>
                                             Rate
                                           </h3>
                                         </Col>
                                         <Col xl={6}>
-                                          <form>
+                                          <form style={{marginTop: "8px"}}>
                                             <div className="input-group ">
                                               <span className="input-group-text text-black">
                                                 -
@@ -553,16 +586,18 @@ const DataTable = () => {
                                           </form>
                                         </Col>
                                         <Col>
-                                          <Button
-                                            style={{
-                                              backgroundColor: "#3eacff",
-                                              height: "3rem",
-                                            }}
-                                            className="btn btn-sm"
+                                        <Button
+                              style={{
+                                backgroundColor: "#3eacff",
+                                height: "4rem",
+                                display: "flex",flexDirection: "column"
+                              }}
+                              variant="info"
                                           >
                                             <i className="material-icons">
                                               swap_horiz
                                             </i>
+                                            Units
                                           </Button>
                                         </Col>
                                         <Col xl={1}></Col>
@@ -585,12 +620,12 @@ const DataTable = () => {
                                       <Row>
                                         <Col xl={1}></Col>
                                         <Col xl={2}>
-                                          <h3 style={{ color: "#3eacff" }}>
+                                          <h3 style={{ color: "#3eacff",marginTop: "10px" }}>
                                             Rate
                                           </h3>
                                         </Col>
                                         <Col xl={6}>
-                                          <form>
+                                          <form style={{marginTop: "8px"}}>
                                             <div className="input-group ">
                                               <span className="input-group-text text-black">
                                                 -
@@ -606,16 +641,18 @@ const DataTable = () => {
                                           </form>
                                         </Col>
                                         <Col>
-                                          <Button
-                                            style={{
-                                              backgroundColor: "#3eacff",
-                                              height: "3rem",
-                                            }}
-                                            className="btn btn-sm"
+                                        <Button
+                              style={{
+                                backgroundColor: "#3eacff",
+                                height: "4rem",
+                                display: "flex",flexDirection: "column"
+                              }}
+                              variant="info"
                                           >
                                             <i className="material-icons">
                                               swap_horiz
                                             </i>
+                                            Units
                                           </Button>
                                         </Col>
                                         <Col xl={1}></Col>
@@ -640,15 +677,21 @@ const DataTable = () => {
             </div>
           </Tab.Container>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{ justifyContent: "center" }}>
           <Button
-            style={{ backgroundColor: "#3eacff", width: "100%" }}
-            className="btn btn-large"
+            style={{ backgroundColor: "#3eacff", width: "30%" }}
+            variant="info"
             onClick={() => openTrade()}
           >
             Open Trade
           </Button>
         </Modal.Footer>
+        <p style={{ justifyContent: "center", display: "flex" }}>By the Crytocurrencies your Accepting Our 
+         <Link style={{color:"rgb(62, 172, 255)"}}>
+         Crytocurrencies Addendum
+                                  </Link>
+         </p>
+
       </Modal>
     </div>
   );

@@ -16,6 +16,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   const [data, setData] = useState(
     document.querySelectorAll("#market_wrapper tbody tr")
   );
+
   const [largeModal, setLargeModal] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [symbol, setSymbol] = useState("");
@@ -170,64 +171,66 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     { label: "P/L($)", columnName: "pl", sort: false },
     { label: "P/L(%)", columnName: "plp", sort: false },
   ];
-  
-  const profitLossAmount = (unit,openingPrice,symbol) => {
-  let ProfitLoss = 0;
-  // eslint-disable-next-line array-callback-return
-  //console.log(requests.coinData,"requests.coinData")
-  if (requests.coinData) {
-    let previousPrice = requests.coinData.find((item) => item.symbol === symbol);
-    
-    //console.log(previousPrice, "previousPrice");
-    if (previousPrice) {
-      
-      
-      ProfitLoss = (previousPrice.price - openingPrice) * unit;
+
+  const profitLossAmount = (unit, openingPrice, symbol) => {
+    let ProfitLoss = 0;
+    // eslint-disable-next-line array-callback-return
+    //console.log(requests.coinData,"requests.coinData")
+    if (requests.coinData) {
+      let previousPrice = requests.coinData.find((item) => item.symbol === symbol);
+
+      //console.log(previousPrice, "previousPrice");
+      if (previousPrice) {
+
+
+        ProfitLoss = (previousPrice.price - openingPrice) * unit;
+      }
     }
-  }
-  console.log(ProfitLoss, "ProfitLoss");
-  return ProfitLoss;
+    console.log(ProfitLoss, "ProfitLoss");
+    return ProfitLoss;
 
   }
 
-  const profitLossPercentage = (unit,openingPrice,symbol,trade) => {
+  const profitLossPercentage = (unit, openingPrice, symbol, trade) => {
     let ProfitLoss = 0;
     let profitLossPercent = 0;
     // eslint-disable-next-line array-callback-return
     //console.log(requests.coinData,"requests.coinData")
     if (requests.coinData) {
       let previousPrice = requests.coinData.find((item) => item.symbol === symbol);
-      
+
       //console.log(previousPrice, "previousPrice");
       if (previousPrice) {
-        
-        
+
+
         ProfitLoss = (previousPrice.price - openingPrice) * unit;
         profitLossPercent = (ProfitLoss / trade) * 100;
       }
     }
     console.log(ProfitLoss, "ProfitLoss");
     return profitLossPercent;
-    }
+  }
 
 
-  const GetAverageofProfitLoss = (data,symbol) => {
+  const GetAverageofProfitLoss = (data, symbol) => {
     let total = 0;
     let count = 0;
     data.map((item) => {
       if (item.symbol === symbol) {
-        total += profitLossAmount(item.purchase_units,item.crypto_purchase_price,item.crypto_symbol);
+        total += profitLossAmount(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol);
         count++;
         console.log(total, "total");
       }
-      
+
 
     });
     return total / count;
   }
+  const closetrade = (value) => {
 
- 
-  
+
+  };
+
 
 
   return (
@@ -290,7 +293,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                 }
                               >
                                 {sortD.columnName === column.columnName &&
-                                sortD.sortType === "asc" ? (
+                                  sortD.sortType === "asc" ? (
                                   <i
                                     className="fa fa-arrow-down ms-2 fs-14"
                                     style={{ opacity: "0.7" }}
@@ -344,7 +347,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                             className={`text-center`}
                             style={{ color: item.pl > 0 ? "green" : "red" }}
                           >
-                            {GetAverageofProfitLoss(requests.tradeData,item.crypto_symbol)}
+                            {GetAverageofProfitLoss(requests.tradeData, item.crypto_symbol)}
                           </td>
                         </tr>
                       ))}
@@ -375,9 +378,8 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                         {paggination.map((number, i) => (
                           <Link
                             key={i}
-                            className={`paginate_button  ${
-                              activePag.current === i ? "current" : ""
-                            } `}
+                            className={`paginate_button  ${activePag.current === i ? "current" : ""
+                              } `}
                             onClick={() => onClick(i)}
                           >
                             {number}
@@ -443,7 +445,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                 }
                               >
                                 {sortD.columnName === column.columnName &&
-                                sortD.sortType === "asc" ? (
+                                  sortD.sortType === "asc" ? (
                                   <i
                                     className="fa fa-arrow-down ms-2 fs-14"
                                     style={{ opacity: "0.7" }}
@@ -468,10 +470,10 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                               fontSize: "10px bold",
                               paddingLeft: "20px",
                               paddingRight: "20px",
-                            //   '&:hover': {
-                            //     backgroundColor: 'red',
-                            //     color: 'black',
-                            //   }
+                              //   '&:hover': {
+                              //     backgroundColor: 'red',
+                              //     color: 'black',
+                              //   }
                             }}
                           >
                             Close all
@@ -513,43 +515,45 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                             {item.crypto_purchase_price}
                           </td>
                           <td className="text-center">
-                            <span className="text-center" style={{border:"2px solid #D3D3D3", padding:"6px 15px",borderRadius:"5px"}}>
-                            ....
-                                </span>
+                            <span className="text-center" style={{ border: "2px solid #D3D3D3", padding: "6px 15px", borderRadius: "5px" }}>
+                              ....
+                            </span>
                           </td>
                           <td className="text-center">
-                          <span className="text-center" style={{border:"2px solid #D3D3D3", padding:"6px 15px",borderRadius:"5px"}}>
-                            
-                            ....
-                                </span>
+                            <span className="text-center" style={{ border: "2px solid #D3D3D3", padding: "6px 15px", borderRadius: "5px" }}>
+
+                              ....
+                            </span>
                           </td>
                           <td
                             className={`text-center`}
-                            style={{ color: profitLossAmount(item.purchase_units, item.crypto_purchase_price,item.crypto_symbol) > 0 ? "green" : "red" }}
+                            style={{ color: profitLossAmount(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol) > 0 ? "green" : "red" }}
                           >
-                            {Math.round(profitLossAmount(item.purchase_units, item.crypto_purchase_price,item.crypto_symbol)*10000)/10000}
+                            {Math.round(profitLossAmount(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol) * 10000) / 10000}
                           </td>
                           <td
                             className={`text-center`}
-                            style={{ color: profitLossPercentage(item.purchase_units, item.crypto_purchase_price,item.crypto_symbol,item.trade) > 0 ? "green" : "red" }}
+                            style={{ color: profitLossPercentage(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol, item.trade) > 0 ? "green" : "red" }}
                           >
-                            {Math.round(profitLossPercentage(item.purchase_units, item.crypto_purchase_price,item.crypto_symbol,item.trade))*100/100}%
+                            {Math.round(profitLossPercentage(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol, item.trade)) * 100 / 100}%
                           </td>
                           <td className="align-items-center">
-                          <Button
-                            variant="outline-danger"
-                            style={{
-                              borderRadius: "50px ",
-                              padding: "5px 15px",
-                              fontSize: "10px bold",
-                            //   '&:hover': {
-                            //     backgroundColor: 'red',
-                            //     color: 'black',
-                            //   }
-                            }}
-                          >
-                            Close
-                          </Button>
+                            <Button
+                              variant="outline-danger"
+                              style={{
+                                borderRadius: "50px ",
+                                padding: "5px 15px",
+                                fontSize: "10px bold",
+                                //   '&:hover': {
+                                //     backgroundColor: 'red',
+                                //     color: 'black',
+                                //   }
+
+                              }}
+                              onClick={() => buyNow(item)}
+                            >
+                              Close
+                            </Button>
                           </td>
                         </tr>
                       ))}
@@ -580,9 +584,8 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                         {paggination.map((number, i) => (
                           <Link
                             key={i}
-                            className={`paginate_button  ${
-                              activePag.current === i ? "current" : ""
-                            } `}
+                            className={`paginate_button  ${activePag.current === i ? "current" : ""
+                              } `}
                             onClick={() => onClick(i)}
                           >
                             {number}
@@ -607,6 +610,152 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
           </div>
         )}
       </div>
+      <Modal className="fade bd-example-modal-lg" show={largeModal} size="lg">
+        <Modal.Header>
+          <Modal.Title>Close Trade</Modal.Title>
+          <Button
+
+            className="btn-close"
+            onClick={() => setLargeModal(false)}
+          ></Button>
+        </Modal.Header>
+        <Modal.Body style={{ backgroundColor: "#f1f1f1" }}>
+          <Tab.Container defaultActiveKey="Navbuy">
+            <div className="">
+              <Tab.Content>
+                <Tab.Pane eventKey="Navbuy">
+                  <Tab.Container defaultActiveKey="Navbuymarket">
+                    <Row>
+                      <Col xl={2}>
+                        <img
+                          src={{ cryptoicons }}
+                          width="100%"
+                        />
+                      </Col>
+                      <Col>
+                        <h4 className="mb-0"></h4>
+                        <Row>
+                          <div style={{ flexDirection: "column" }}>
+                            <p
+                              className="mb-0"
+                              style={{ fontSize: "20px" }}
+                            >
+                              <h3 className="mb-0">
+                                Buy BTC
+                              </h3>
+                            </p>
+                            <span
+                              style={{ marginTop: "0.4rem", flexDirection: "column" }}
+                              className="text black mb-0"
+                            >
+                              650.89
+                            </span>
+                          </div>
+
+                        </Row>
+                      </Col>
+                    </Row>
+                    <Card>
+                      <Card.Header style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
+                        <Row style={{width: "100%"}}>
+                        <div style={{fontSize: "larger",fontWeight: "700"}}>
+                           Amount
+                          </div>
+                          <div>
+                            <span style={{display: "flex", justifyContent: "end" }}>$1,000.00</span>
+                            <p style={{ display: "flex", justifyContent: "end" }}>0.042372 Units</p>
+                          </div>
+                        </Row>
+                        <Row style={{width: "100%"}}>
+                        <div style={{fontSize: "larger",fontWeight: "700"}}>
+                            Current P/L
+                          </div>
+                          <div>
+                            <span style={{ color: "red", display: "flex", justifyContent: "end" }}>-$60.66</span>
+                          </div>
+                        </Row>
+                        <hr></hr>
+                        <Row style={{width: "100%"}}>
+                          <div style={{fontSize: "larger",fontWeight: "700"}}>
+                            Total  
+                             </div>
+                          <div>
+                            <span style={{display: "flex", justifyContent: "end" }}>$939.34</span>
+                          </div>
+                        </Row>
+                      </Card.Header>
+                    </Card>
+                    <Form.Check
+                      inline
+                      label="Close only Part of the trade"
+                      name="group1"
+
+
+                    />
+                    <Row>
+                      <Col xl={1}></Col>
+                      <Col xl={2}>
+                        <h3 style={{ color: "rgb(62, 172, 255)", fontSize: "large", fontWeight: "600", marginTop: "1rem" }}>Amount</h3>
+                      </Col>
+                      <Col xl={6}>
+                        <form style={{ marginTop: "8px" }}>
+                          <div className="input-group ">
+                            <span className="input-group-text text-black">
+                              -
+                            </span>
+                            {/* <input type="text" className="form-control" value={inputValue}/> */}
+                            <input
+                              type="text"
+                              className="form-control"
+
+                            />
+                            <span className="input-group-text text-black">
+                              +
+                            </span>
+                          </div>
+                        </form>
+                      </Col>
+                      <Col>
+                        {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
+                        <Button
+                              style={{
+                                backgroundColor: "#3eacff",
+                                height: "4rem",
+                                display: "flex",flexDirection: "column"
+                              }}
+                              variant="info"
+                                          >
+                          <i className="material-icons">swap_horiz</i>
+                          Units
+                        </Button>
+                      </Col>
+                      <Row>
+                        <div className="text-center mb-0">
+                          <p>
+
+                            0.24 UNITS
+                          </p>
+                        </div>
+                      </Row>
+                    </Row>
+
+                  </Tab.Container>
+                </Tab.Pane>
+              </Tab.Content>
+            </div>
+          </Tab.Container>
+        </Modal.Body>
+        <Modal.Footer style={{ justifyContent: "center" }}>
+          <Button
+            style={{ backgroundColor: "red", width: "30%" }}
+            variant="danger"
+            onClick={() => closetrade()}
+          >
+            Close Trade
+          </Button>
+        </Modal.Footer>
+
+      </Modal>
     </>
   );
 };
