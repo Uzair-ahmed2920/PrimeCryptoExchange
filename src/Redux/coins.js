@@ -11,6 +11,7 @@ const initialState = {
   withdrawRequest: [{}],
   coinData: [{}],
   tradeData: [{}],
+  tradeHistory: [{}],
 };
 // get requests
 // export const getUserWallet = createAsyncThunk(
@@ -60,6 +61,43 @@ export const getAllTrade = createAsyncThunk("getAllTrade", async (postData) => {
   
 });
 
+// trade close
+export const tradeClose = createAsyncThunk("tradeClose", async (postData) => {
+  let reqBody = { crypto_sale_price: postData.crypto_sale_price };
+  console.log(reqBody, "reqBody from trade close");
+  try {   
+    const res = await axiosInstance.delete(`/api/activetrade/${postData.id}`, {data:reqBody}).catch((err) => {
+      console.log(err.response.data, "err.response.data");
+    });
+    if (res.status === 200) {
+      console.log(res.data , "trade data close");
+      successMessage("Successfully Trade close !");
+      return res.data;
+    }
+  } catch (err) {
+    errorMessage(err.response.data || err.message);
+    console.log(err);
+  }
+});
+
+// get trade history
+export const getTradeHistory = createAsyncThunk(
+  "getTradeHistory",
+  async (postData) => {
+    try {
+      const res = await axiosInstance.get(`/api/tradehistory/${postData.user_id}`);
+      if (res.status === 200) {
+        successMessage("Successfully get All Trade History !");
+        return res.data;
+      }
+    } catch (err) {
+      errorMessage(err.response.data || err.message);
+      console.log(err);
+    }
+  }
+);
+  
+
 // get requests
  export const getAllDepositRequest = createAsyncThunk(
     "getAllDepositRequest",
@@ -92,7 +130,6 @@ export const getAllTrade = createAsyncThunk("getAllTrade", async (postData) => {
       }
     }
   );
-
   // updste coin status
   export const updateDepositStatus = createAsyncThunk(
     "updateDepositStatus",
@@ -303,6 +340,30 @@ export const coinReducer = createSlice({
       state.isloading = false;
       console.log("rejected", action);
     },
+    [tradeClose.fulfilled]: (state, action) => {
+      state.isloading = false;
+      //state.data = action.payload;
+      console.log("action.payload", action.payload);
+    },
+    [tradeClose.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [tradeClose.rejected]: (state, action) => {
+      state.isloading = false;
+      console.log("rejected trade", action);
+    },
+    [getTradeHistory.fulfilled]: (state, action) => {
+      state.isloading = false;
+      state.tradeHistory = action.payload;
+    },
+    [getTradeHistory.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [getTradeHistory.rejected]: (state, action) => {
+      state.isloading = false;
+      console.log("rejected", action);
+    },
+
     
 
 

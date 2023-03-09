@@ -8,7 +8,7 @@ import jwt_decode from "jwt-decode";
 
 import bitcoin from "../../../../images/coins/btc.png";
 import Cookies from "universal-cookie";
-import { getAllCoin, getAllTrade } from "../../../../Redux/coins";
+import { getAllCoin, getAllTrade, tradeClose } from "../../../../Redux/coins";
 import { useDispatch, useSelector } from "react-redux";
 import cryptoicons from "../../../../images/cryptoIcons/cryptoImg";
 
@@ -18,20 +18,28 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   );
 
   const [largeModal, setLargeModal] = useState(false);
+  const [modalCurrentData, setModalCurrentData] = useState();
+  const [currentPLAmount, setCurrentPLAmount] = useState(0);
   const [clicked, setClicked] = useState(false);
   const [symbol, setSymbol] = useState("");
   const [reduceData, setReduceData] = useState([]);
+  const [allCalculatedData, setAllCalculatedData] = useState([]);
   const [noSl, setNoSl] = useState(true);
   const navigate = useNavigate();
   const sort = 6;
   const activePag = useRef(0);
   const [test, settest] = useState(0);
 
-  const buyNow = (value) => {
+  const buyNow = (value,pl) => {
     console.log("row clicked", value);
+    setModalCurrentData(value);
+    setCurrentPLAmount(pl);
     // navigate("/coin-details")
     setLargeModal(true);
   };
+
+  console.log("modalCurrentData", modalCurrentData);
+  console.log("currentPLAmount", currentPLAmount);
 
   // Active data
   const chageData = (frist, sec) => {
@@ -66,6 +74,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     console.log(res, "res from portfolio");
   };
 
+
   useEffect(() => {
     let body = {
       user_id: id,
@@ -75,6 +84,8 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
       console.log(res, "res from portfolio");
       const result = Object.values(
         res?.payload?.reduce((acc, cur) => {
+             let previousPrice = requests.coinData.find((item) => item.symbol === cur.crypto_symbol);
+            // console.log(previousPrice, "previousPrice from reducer");
           const key = cur.crypto_symbol;
           if (!acc[key]) {
             acc[key] = {
@@ -92,18 +103,22 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
               stop_loss: cur.stop_loss,
               take_profit: cur.take_profit,
               user_id: cur.user_id,
+              profitLoss: (previousPrice?.price - cur.crypto_purchase_price) * cur.purchase_units,
+
             };
           } else {
             acc[key].investment += cur.investment;
             acc[key].purchase_units += cur.purchase_units;
             acc[key].Count++;
             acc[key].total_trade += cur.trade;
+            acc[key].profitLoss += (previousPrice?.price - cur.crypto_purchase_price) * cur.purchase_units;
           }
 
           return acc;
         }, {})
       ).map((obj) => {
         obj.trade = obj.total_trade / obj.Count;
+        obj.profitLoss = obj.profitLoss / obj.Count;
         delete obj.total_trade;
         delete obj.Count;
         return obj;
@@ -226,8 +241,21 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     });
     return total / count;
   }
-  const closetrade = (value) => {
+  const closetrade = () => {
+            console.log("checking close trade")
+            if (requests?.coinData) {
+              let previousPrice = requests.coinData.find((item) => item.symbol === modalCurrentData?.crypto_symbol);
+              console.log(previousPrice,"previousPrice from closetrade")
+              let body = {
+               id: modalCurrentData?.id,
+               crypto_sale_price: previousPrice?.price,
+               }
+             console.log(body,"body of close trade")
 
+
+   const res=  dispatch(tradeClose(body));
+    console.log(res,"res of close trade")
+  }
 
   };
 
@@ -346,9 +374,9 @@ const [isChecked, setIsChecked] = useState(false);
                           </td>
                           <td
                             className={`text-center`}
-                            style={{ color: item.pl > 0 ? "green" : "red" }}
+                            style={{ color: item.profitLoss > 0 ? "green" : "red" }}
                           >
-                            {GetAverageofProfitLoss(requests.tradeData, item.crypto_symbol)}
+                            ${item.profitLoss}
                           </td>
                         </tr>
                       ))}
@@ -536,7 +564,7 @@ const [isChecked, setIsChecked] = useState(false);
                             className={`text-center`}
                             style={{ color: profitLossPercentage(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol, item.trade) > 0 ? "green" : "red" }}
                           >
-                            {Math.round(profitLossPercentage(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol, item.trade)) * 100 / 100}%
+                            {Math.round(profitLossPercentage(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol, item.trade) * 100) / 100}%
                           </td>
                           <td className="align-items-center">
                             <Button
@@ -551,7 +579,7 @@ const [isChecked, setIsChecked] = useState(false);
                                 //   }
 
                               }}
-                              onClick={() => buyNow(item)}
+                              onClick={() => buyNow(item,profitLossAmount(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol))}
                             >
                               Close
                             </Button>
@@ -615,7 +643,6 @@ const [isChecked, setIsChecked] = useState(false);
         <Modal.Header>
           <Modal.Title>Close Trade</Modal.Title>
           <Button
-
             className="btn-close"
             onClick={() => setLargeModal(false)}
           ></Button>
@@ -629,7 +656,7 @@ const [isChecked, setIsChecked] = useState(false);
                     <Row>
                       <Col xl={2}>
                         <img
-                          src={{ cryptoicons }}
+                          src={cryptoicons[modalCurrentData?.crypto_symbol]}
                           width="100%"
                         />
                       </Col>
@@ -642,7 +669,7 @@ const [isChecked, setIsChecked] = useState(false);
                               style={{ fontSize: "20px" }}
                             >
                               <h3 className="mb-0">
-                                Buy BTC
+                                {modalCurrentData?.crypto_name}
                               </h3>
                             </p>
                             <span
@@ -658,8 +685,7 @@ const [isChecked, setIsChecked] = useState(false);
                       <Col style={{display: "flex",flexDirection: "column",alignItems: "end"}}>
                         <Row>
                           <div style={{fontSize: "large",fontWeight: "700"}}>
-                           | #2591795407
-                           
+                           | #2591795407     
                         <span style={{display: "flex",flexDirection: "column"}}>Trade Id</span>
                         </div>
 
@@ -673,8 +699,8 @@ const [isChecked, setIsChecked] = useState(false);
                            Amount
                           </div>
                           <div>
-                            <span style={{display: "flex", justifyContent: "end" }}>$1,000.00</span>
-                            <p style={{ display: "flex", justifyContent: "end" }}>0.042372 Units</p>
+                            <span style={{display: "flex", justifyContent: "end" }}>${modalCurrentData?.trade}</span>
+                            <p style={{ display: "flex", justifyContent: "end" }}>{modalCurrentData?.purchase_units} Units</p>
                           </div>
                         </Row>
                         <Row style={{width: "100%"}}>
@@ -682,7 +708,7 @@ const [isChecked, setIsChecked] = useState(false);
                             Current P/L
                           </div>
                           <div>
-                            <span style={{ color: "red", display: "flex", justifyContent: "end" }}>-$60.66</span>
+                            <span style={{ color: "red", display: "flex", justifyContent: "end" }}>{currentPLAmount}</span>
                           </div>
                         </Row>
                         <hr></hr>
@@ -691,7 +717,7 @@ const [isChecked, setIsChecked] = useState(false);
                             Total  
                              </div>
                           <div>
-                            <span style={{display: "flex", justifyContent: "end" }}>$939.34</span>
+                            <span style={{display: "flex", justifyContent: "end" }}>{modalCurrentData?.trade+(currentPLAmount)}</span>
                           </div>
                         </Row>
                       </Card.Header>
@@ -761,10 +787,10 @@ const [isChecked, setIsChecked] = useState(false);
           <Button
             style={{ backgroundColor: "red", width: "30%" }}
             variant="danger"
-            onClick={() => closetrade()}
+            onClick={closetrade}
           >
             Close Trade
-          </Button>
+          </Button >
         </Modal.Footer>
 
       </Modal>
