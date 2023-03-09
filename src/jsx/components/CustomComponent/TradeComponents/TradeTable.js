@@ -218,6 +218,7 @@ const DataTable = () => {
     getData();
 
   }, []);
+  
   return (
     <div className="col-xl-12">
       <ToastContainer />
@@ -419,7 +420,7 @@ const DataTable = () => {
                     <Card>
                       <Card.Header>
                         <Row>
-                          <Col xl={2}>
+                          <Col xl={2} xs={4}  >
                             <img
                               src={cryptoicons[modalCurrentData?.symbol]}
                               width="100%"
@@ -444,7 +445,9 @@ const DataTable = () => {
                                   650.89[3.04%]
                                 </span>
                               </div>
-                              <span className="mb-0">Price by PrimeCrypto |
+                              <span className="mb-0"
+                             style={{color: "black",fontWeight:"300"}}
+                              >Price by PrimeCrypto |
                               
                                Market Open</span>
                             </Row>
@@ -453,12 +456,12 @@ const DataTable = () => {
                         </Row>
                       </Card.Header>
                       <Card.Body>
-                        <Row>
+                        <Row >
                           <Col xl={1}></Col>
                           <Col xl={2}>
                             <h3 style={{ color: "rgb(62, 172, 255)", fontSize: "large", fontWeight: "600", marginTop: "1rem" }}>Amount</h3>
                           </Col>
-                          <Col xl={6}>
+                          <Col xl={6} xs={12} >
                             <form style={{marginTop: "8px"}}>
                               <div className="input-group ">
                                 <span className="input-group-text text-black">
@@ -480,13 +483,14 @@ const DataTable = () => {
                               </div>
                             </form>
                           </Col>
-                          <Col>
+                          <Col style={{display:"flex", justifyContent: "center", alignItems: "center"}}>
                             {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
                             <Button
                               style={{
                                 backgroundColor: "#3eacff",
-                                height: "4rem",
-                                display: "flex",flexDirection: "column"
+                                height: "3rem",
+                                display: "flex",flexDirection: "column",
+                                justifyContent: "center"
                               }}
                               variant="info"
                               onClick={() =>
@@ -501,48 +505,38 @@ const DataTable = () => {
                         </Row>
                         <Row>
                           <div className="text-center mb-0">
-                            <p>
+                            <p style={{color: "black",fontWeight:"300"}}>
                               {" "}
                               0.24 UNITS | 5.00% of Equity | EXPOSURE $5,219.99 {" "}
                             </p>
                           </div>
                         </Row>
-                      </Card.Body>
-                    </Card>
-
-                    <div className="card">
-                      <div className="card-body">
-                        <div className="profile-tab">
-                          <div className="custom-tab-1">
+                        <div className="custom-tab-1">
                             <Tab.Container defaultActiveKey="Posts">
-                              <Nav as="ul" className="nav nav-tabs" style={{ justifyContent: "space-between" }}>
-                                <Nav.Item as="li" className="nav-item">
+                              <Nav as="ul"  style={{ justifyContent: "space-around" }}>
+                                <Nav.Item as="li" className="nav-item" >
                                   <Nav.Link to="#nosl" eventKey="NoSl" style={{ color: "red" }}>
                                     No SL
                                   </Nav.Link>
                                   <Link style={{color:"rgb(62, 172, 255)"}}
-
-                                  
                                   >
                                     Stop Loss
                                   </Link>
                                 </Nav.Item>
-                                <Nav.Item as="li" i className="nav-item">
+                                {/* <Nav.Item as="li" i className="nav-item">
                                   <Nav.Link
                                     to="#take-profit"
                                     eventKey="TakeProfit" >
                                     X1
                                   </Nav.Link>
                                   <Link style={{color:"rgb(62, 172, 255)"}}
-
                                     onClick={() =>
-
                                       onClick()
                                     }
                                   >
                                     Leverage
                                   </Link>
-                                </Nav.Item>
+                                </Nav.Item> */}
                                 <Nav.Item as="li" i className="nav-item">
                                   <Nav.Link
                                     to="#take-profit"
@@ -550,19 +544,18 @@ const DataTable = () => {
                                     $50,000.00
                                   </Nav.Link>
                                   <Link style={{color:"rgb(62, 172, 255)",marginLeft: "2rem"}}
-
                                     onClick={() =>
-
                                       onClick()
                                     }
                                   >
                                     Take Profit
                                   </Link>
                                 </Nav.Item>
-                              </Nav>
-                              <p style={{fontSize: "large", fontWeight: "600", justifyContent: "center", alignItems: "center",display: "flex", marginTop: "1rem"}}>You are Buying Underlying Asset</p>
-                              <Tab.Content>
-                                <Tab.Pane id="nosl" eventKey="NoSl">
+ </Nav>
+                              <Tab.Content >
+                                <Tab.Pane id="nosl" eventKey="NoSl"
+                              
+                                >
                                   <div className="sell-element">
                                     <div className="">
                                       <Row>
@@ -588,12 +581,13 @@ const DataTable = () => {
                                             </div>
                                           </form>
                                         </Col>
-                                        <Col>
+                                        <Col style={{display:"flex", justifyContent: "center", alignItems: "center"}}>
                                         <Button
                               style={{
                                 backgroundColor: "#3eacff",
-                                height: "4rem",
-                                display: "flex",flexDirection: "column"
+                                height: "3rem",
+                                display: "flex",flexDirection: "column",
+                                justifyContent: "center"
                               }}
                               variant="info"
                                           >
@@ -614,7 +608,7 @@ const DataTable = () => {
                                   </div>
                                 </Tab.Pane>
 
-                                <Tab.Pane
+                                <Tab.Pane 
                                   id="take-profit"
                                   eventKey="TakeProfit"
                                 >
@@ -643,13 +637,14 @@ const DataTable = () => {
                                             </div>
                                           </form>
                                         </Col>
-                                        <Col>
+                                        <Col style={{display:"flex", justifyContent: "center", alignItems: "center"}}>
                                         <Button
-                              style={{
-                                backgroundColor: "#3eacff",
-                                height: "4rem",
-                                display: "flex",flexDirection: "column"
-                              }}
+                                style={{
+                                  backgroundColor: "#3eacff",
+                                  height: "3rem",
+                                  display: "flex",flexDirection: "column",
+                                  justifyContent: "center"
+                                }}
                               variant="info"
                                           >
                                             <i className="material-icons">
@@ -671,16 +666,9 @@ const DataTable = () => {
                               </Tab.Content>
                             </Tab.Container>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Tab.Container>
-                </Tab.Pane>
-              </Tab.Content>
-            </div>
-          </Tab.Container>
-        </Modal.Body>
-        <Modal.Footer style={{ justifyContent: "center" }}>
+                      </Card.Body>
+                    </Card>
+                    <Modal.Footer style={{ justifyContent: "center" }}>
           <Button
             style={{ backgroundColor: "#3eacff", width: "30%" }}
             variant="info"
@@ -694,6 +682,13 @@ const DataTable = () => {
          Crytocurrencies Addendum
                                   </Link>
          </p>
+                  </Tab.Container>
+                </Tab.Pane>
+              </Tab.Content>
+            </div>
+          </Tab.Container>
+        </Modal.Body>
+      
 
       </Modal>
     </div>

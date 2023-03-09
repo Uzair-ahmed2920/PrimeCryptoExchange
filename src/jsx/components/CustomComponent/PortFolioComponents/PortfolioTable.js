@@ -260,7 +260,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   };
 
 
-const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   return (
     <>
@@ -654,7 +654,7 @@ const [isChecked, setIsChecked] = useState(false);
                 <Tab.Pane eventKey="Navbuy">
                   <Tab.Container defaultActiveKey="Navbuymarket">
                     <Row>
-                      <Col xl={2}>
+                      <Col xl={2} xs={4}>
                         <img
                           src={cryptoicons[modalCurrentData?.crypto_symbol]}
                           width="100%"
@@ -668,13 +668,15 @@ const [isChecked, setIsChecked] = useState(false);
                               className="mb-0"
                               style={{ fontSize: "20px" }}
                             >
-                              <h3 className="mb-0">
-                                {modalCurrentData?.crypto_name}
+                              <h3 className="mb-0 text-[black]"
+                                style={{ color: "black" }}
+                              >
+                               {modalCurrentData?.crypto_name}
                               </h3>
                             </p>
                             <span
-                              style={{ marginTop: "0.4rem", flexDirection: "column" }}
-                              className="text black mb-0"
+                              style={{ marginTop: "0.4rem", flexDirection: "column", color: "black" }}
+                              className="text-[black] mb-0"
                             >
                               650.89
                             </span>
@@ -682,117 +684,116 @@ const [isChecked, setIsChecked] = useState(false);
 
                         </Row>
                       </Col>
-                      <Col style={{display: "flex",flexDirection: "column",alignItems: "end"}}>
+                      <Col style={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
                         <Row>
-                          <div style={{fontSize: "large",fontWeight: "700"}}>
-                           | #2591795407     
-                        <span style={{display: "flex",flexDirection: "column"}}>Trade Id</span>
-                        </div>
-
+                          <div style={{ fontSize: "large", fontWeight: "700", color: "black" }}>
+                            #2591795407
+                          </div>
+                          <span style={{ display: "flex", flexDirection: "column" }}>Trade Id</span>
                         </Row>
                       </Col>
                     </Row>
-                    <Card>
+                    <Card style={{ marginTop: "1rem" }}>
                       <Card.Header style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
-                        <Row style={{width: "100%"}}>
-                        <div style={{fontSize: "larger",fontWeight: "700"}}>
-                           Amount
+                        <Row style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <div style={{ fontSize: "larger", fontWeight: "700", color: "black", width: "50%" }}>
+                            Amount
                           </div>
-                          <div>
-                            <span style={{display: "flex", justifyContent: "end" }}>${modalCurrentData?.trade}</span>
-                            <p style={{ display: "flex", justifyContent: "end" }}>{modalCurrentData?.purchase_units} Units</p>
+                          <div style={{ color: "black", fontWeight: "700", width: "50%", display: "flex", justifyContent: "end", alignItems: "center" }}>
+                          {modalCurrentData?.purchase_units}
                           </div>
                         </Row>
-                        <Row style={{width: "100%"}}>
-                        <div style={{fontSize: "larger",fontWeight: "700"}}>
+                        <Row style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "3rem" }}>
+                          <div style={{ fontSize: "larger", fontWeight: "700", color: "black", width: "50%" }}>
                             Current P/L
                           </div>
-                          <div>
-                            <span style={{ color: "red", display: "flex", justifyContent: "end" }}>{currentPLAmount}</span>
+                          <div style={{ color: "red", fontWeight: "700", width: "50%", display: "flex", justifyContent: "end", alignItems: "center" }}>
+                          {modalCurrentData?.trade+(currentPLAmount)}
                           </div>
                         </Row>
-                        <hr></hr>
-                        <Row style={{width: "100%"}}>
-                          <div style={{fontSize: "larger",fontWeight: "700"}}>
-                            Total  
-                             </div>
-                          <div>
-                            <span style={{display: "flex", justifyContent: "end" }}>{modalCurrentData?.trade+(currentPLAmount)}</span>
+
+                        <Row style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "3rem" }}>
+                          <div style={{ fontSize: "larger", fontWeight: "700", color: "black", width: "50%" }}>
+                            Total
                           </div>
+                          <div style={{ color: "black", fontWeight: "700", width: "50%", display: "flex", justifyContent: "end", alignItems: "center" }}>
+                            $939.34</div>
                         </Row>
                       </Card.Header>
                     </Card>
                     <Form.Check
                       inline
                       label="Close only Part of the trade"
-                     type="checkbox"
-  checked={isChecked}
-  onChange={() => setIsChecked(!isChecked)}
+                      style={{ color: "black" }}
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => setIsChecked(!isChecked)}
                     />
-                    {isChecked && <div> <Row>
-                      <Col xl={1}></Col>
-                      <Col xl={2}>
-                        <h3 style={{ color: "rgb(62, 172, 255)", fontSize: "large", fontWeight: "600", marginTop: "1rem" }}>Amount</h3>
-                      </Col>
-                      <Col xl={6}>
-                        <form style={{ marginTop: "8px" }}>
-                          <div className="input-group ">
-                            <span className="input-group-text text-black">
-                              -
-                            </span>
-                            {/* <input type="text" className="form-control" value={inputValue}/> */}
-                            <input
-                              type="text"
-                              className="form-control"
-
-                            />
-                            <span className="input-group-text text-black">
-                              +
-                            </span>
-                          </div>
-                        </form>
-                      </Col>
-                      <Col>
-                        {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
-                        <Button
-                              style={{
-                                backgroundColor: "#3eacff",
-                                height: "4rem",
-                                display: "flex",flexDirection: "column"
-                              }}
-                              variant="info"
-                                          >
-                          <i className="material-icons">swap_horiz</i>
-                          Units
-                        </Button>
-                      </Col>
+                    {isChecked && <div>
                       <Row>
-                        <div className="text-center mb-0">
-                          <p>
+                        <Col xl={1}></Col>
+                        <Col xl={2}>
+                          <h3 style={{ color: "rgb(62, 172, 255)", fontSize: "large", fontWeight: "600", marginTop: "1rem" }}>Amount</h3>
+                        </Col>
+                        <Col xl={6}>
+                          <form style={{ marginTop: "8px" }}>
+                            <div className="input-group ">
+                              <span className="input-group-text text-black">
+                                -
+                              </span>
+                              {/* <input type="text" className="form-control" value={inputValue}/> */}
+                              <input
+                                type="text"
+                                className="form-control"
 
-                            0.24 UNITS
-                          </p>
-                        </div>
+                              />
+                              <span className="input-group-text text-black">
+                                +
+                              </span>
+                            </div>
+                          </form>
+                        </Col>
+                        <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                          <Button
+                            style={{
+                              backgroundColor: "#3eacff",
+                              height: "3rem",
+                              display: "flex", flexDirection: "column",
+                              justifyContent: "center"
+                            }}
+                            variant="info"
+                          >
+                            <i className="material-icons">
+                              swap_horiz
+                            </i>
+                            Units
+                          </Button>
+                        </Col>
+                        <Row>
+                          <div className="text-center mb-0">
+                            <p>
+
+                              0.24 UNITS
+                            </p>
+                          </div>
+                        </Row>
                       </Row>
-                    </Row></div>}
-                   
-
+                    </div>}
+                    <Modal.Footer style={{ justifyContent: "center" }}>
+                      <Button
+                        style={{ backgroundColor: "red", width: "30%" }}
+                        variant="danger"
+                        onClick={() => closetrade()}
+                      >
+                        Close Trade
+                      </Button>
+                    </Modal.Footer>
                   </Tab.Container>
                 </Tab.Pane>
               </Tab.Content>
             </div>
           </Tab.Container>
         </Modal.Body>
-        <Modal.Footer style={{ justifyContent: "center" }}>
-          <Button
-            style={{ backgroundColor: "red", width: "30%" }}
-            variant="danger"
-            onClick={closetrade}
-          >
-            Close Trade
-          </Button >
-        </Modal.Footer>
-
       </Modal>
     </>
   );
