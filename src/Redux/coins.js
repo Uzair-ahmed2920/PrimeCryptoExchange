@@ -80,6 +80,23 @@ export const tradeClose = createAsyncThunk("tradeClose", async (postData) => {
   }
 });
 
+// partial trade close
+export const partialTradeClose = createAsyncThunk("partialTradeClose", async (postData) => {
+  try {
+    const res = await axiosInstance.post(`/api/activetrade/partial`, postData).catch((err) => {
+      console.log(err.response.data, "err.response.data");
+    });
+    if (res.status === 200) {
+      console.log(res.data , "trade data close");
+      successMessage("Successfully partial Trade close !");
+      return res.data;
+    }
+  } catch (err) {
+    errorMessage(err.response.data || err.message);
+    console.log(err);
+  }
+});
+
 // get trade history
 export const getTradeHistory = createAsyncThunk(
   "getTradeHistory",
@@ -352,6 +369,20 @@ export const coinReducer = createSlice({
       state.isloading = false;
       console.log("rejected trade", action);
     },
+
+    [partialTradeClose.fulfilled]: (state, action) => {
+      state.isloading = false;
+      //state.data = action.payload;
+      console.log("action.payload partial close", action.payload);
+    },
+    [partialTradeClose.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [partialTradeClose.rejected]: (state, action) => {
+      state.isloading = false;
+      console.log("rejected partial trade close", action);
+    },
+    
     [getTradeHistory.fulfilled]: (state, action) => {
       state.isloading = false;
       state.tradeHistory = action.payload;

@@ -8,9 +8,10 @@ import jwt_decode from "jwt-decode";
 
 import bitcoin from "../../../../images/coins/btc.png";
 import Cookies from "universal-cookie";
-import { getAllCoin, getAllTrade, tradeClose } from "../../../../Redux/coins";
+import { getAllCoin, getAllTrade, partialTradeClose, tradeClose } from "../../../../Redux/coins";
 import { useDispatch, useSelector } from "react-redux";
 import cryptoicons from "../../../../images/cryptoIcons/cryptoImg";
+import { ToastContainer } from "react-toastify";
 
 const DataTable = ({ header, description, rows, columns, trade = false }) => {
   const [data, setData] = useState(
@@ -18,6 +19,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   );
 
   const [largeModal, setLargeModal] = useState(false);
+  const [inputValue, setInputValue] = useState();
   const [modalCurrentData, setModalCurrentData] = useState();
   const [currentPLAmount, setCurrentPLAmount] = useState(0);
   const [clicked, setClicked] = useState(false);
@@ -226,36 +228,45 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     return profitLossPercent;
   }
 
-
-  const GetAverageofProfitLoss = (data, symbol) => {
-    let total = 0;
-    let count = 0;
-    data.map((item) => {
-      if (item.symbol === symbol) {
-        total += profitLossAmount(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol);
-        count++;
-        console.log(total, "total");
-      }
-
-
-    });
-    return total / count;
-  }
   const closetrade = () => {
             console.log("checking close trade")
             if (requests?.coinData) {
               let previousPrice = requests.coinData.find((item) => item.symbol === modalCurrentData?.crypto_symbol);
               console.log(previousPrice,"previousPrice from closetrade")
-              let body = {
-               id: modalCurrentData?.id,
-               crypto_sale_price: previousPrice?.price,
-               }
-             console.log(body,"body of close trade")
+              if(isChecked)
+              {
+                if(inputValue>0){
 
+                  let body = {
+                    user_id: id,
+                    trade_id: modalCurrentData?.id,
+                    partial_trade_close_amount: inputValue,
+                    crypto_sale_price: previousPrice?.price,
+                    trade_type:"partial"
+                  }
+                  console.log(body,"body of partial close trade")
+                  const res=  dispatch(partialTradeClose(body));
+                  console.log(res,"res of partial close trade")
+                  setLargeModal(false)
 
-   const res=  dispatch(tradeClose(body));
-    console.log(res,"res of close trade")
-  }
+                }
+                else{
+                  return alert("Please enter amount");
+                }
+            }
+              else{
+                let body = {
+                 id: modalCurrentData?.id,
+                 crypto_sale_price: previousPrice?.price,
+                 }
+               console.log(body,"body of close trade")
+  
+  
+              const res=  dispatch(tradeClose(body));
+              console.log(res,"res of close trade")
+              setLargeModal(false)
+            }
+              }
 
   };
 
@@ -264,6 +275,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
 
   return (
     <>
+    <ToastContainer/>
       {clicked && (
         <Button
           onClick={() => setClicked(false)}
@@ -700,7 +712,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                             Amount
                           </div>
                           <div style={{ color: "black", fontWeight: "700", width: "50%", display: "flex", justifyContent: "end", alignItems: "center" }}>
-                          {modalCurrentData?.purchase_units}
+                          {modalCurrentData?.trade}
                           </div>
                         </Row>
                         <Row style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "3rem" }}>
@@ -708,7 +720,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                             Current P/L
                           </div>
                           <div style={{ color: "red", fontWeight: "700", width: "50%", display: "flex", justifyContent: "end", alignItems: "center" }}>
-                          {modalCurrentData?.trade+(currentPLAmount)}
+                          {modalCurrentData?.purchase_units}
                           </div>
                         </Row>
 
@@ -717,7 +729,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                             Total
                           </div>
                           <div style={{ color: "black", fontWeight: "700", width: "50%", display: "flex", justifyContent: "end", alignItems: "center" }}>
-                            $939.34</div>
+                          {modalCurrentData?.trade+(currentPLAmount)}</div>
                         </Row>
                       </Card.Header>
                     </Card>
@@ -729,7 +741,8 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                       checked={isChecked}
                       onChange={() => setIsChecked(!isChecked)}
                     />
-                    {isChecked && <div>
+                    {isChecked && <div> 
+                      
                       <Row>
                         <Col xl={1}></Col>
                         <Col xl={2}>
@@ -745,6 +758,10 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                               <input
                                 type="text"
                                 className="form-control"
+                                value={inputValue}
+                                    onChange={(e) =>
+                                      setInputValue(e.target.value)
+                                    }
 
                               />
                               <span className="input-group-text text-black">
