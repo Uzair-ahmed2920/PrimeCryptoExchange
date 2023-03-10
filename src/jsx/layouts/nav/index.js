@@ -9,7 +9,7 @@ import AdminSideBar from "../nav/AdminSideBar";
 import { useDispatch, useSelector } from "react-redux";
 
 const JobieNav = ({ title, onClick: ClickToAddEvent, onClick2, onClick3 }) => {
-  const userReducer = useSelector((store) => store?.userReducer?.currentUser);
+  const userReducer = useSelector((store) => store?.userReducer);
 
   const [toggle, setToggle] = useState("");
   const onClick = (name) => setToggle(toggle === name ? "" : name);
@@ -26,7 +26,8 @@ const JobieNav = ({ title, onClick: ClickToAddEvent, onClick2, onClick3 }) => {
         onBox={() => onClick("box")}
         onClick={() => ClickToAddEvent()}
       />
-      {userReducer?.is_admin == 1 ? <AdminSideBar /> : <SideBar />}
+      {userReducer?.currentUser?.is_admin ? <AdminSideBar /> : <SideBar />}
+      {/* {true ? <AdminSideBar /> : <SideBar />} */}
     </Fragment>
   );
 };

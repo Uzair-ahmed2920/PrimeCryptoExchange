@@ -252,7 +252,7 @@ const Markup = () => {
     { url: "map-jqvmap", component: <JqvMap /> },
     { url: "uc-lightgallery", component: <Lightgallery /> },
     //Admin
-    { url: "admin-dashboard", component: <AdminDashboard /> },
+    // { url: "admin-dashboard", component: <AdminDashboard /> },
 //
 	/////Redux
 	//{ url: "todo", component: Todo },	

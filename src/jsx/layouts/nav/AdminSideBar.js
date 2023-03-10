@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 /// Link
 import { Link, NavLink } from "react-router-dom";
 
-import {MenuList} from './Menu';
+import {AdminMenueList} from './AdminMenueList';
 import {useScrollPosition} from "@n8tb1t/use-scroll-position";
 import { ThemeContext } from "../../../context/ThemeContext";
 
@@ -252,7 +252,7 @@ const AdminSideBar = () => {
     >
       <PerfectScrollbar className="deznav-scroll">         
           <ul className="metismenu" id="menu">
-              {MenuList.map((data, index)=>{
+              {AdminMenueList?.map((data, index)=>{
                 let menuClass = data.classsChange;
                   if(menuClass === "menu-title"){
                     return(

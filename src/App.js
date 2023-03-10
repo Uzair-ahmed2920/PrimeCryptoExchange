@@ -15,6 +15,7 @@ import {
 import "./vendor/bootstrap-select/dist/css/bootstrap-select.min.css";
 import "./css/style.css";
 import { useDispatch, useSelector } from "react-redux";
+import AdminIndex from "../src/jsx/AdminIndex";
 import Cookies from "universal-cookie";
 import jwt_decode from "jwt-decode";
 import axiosInstance from "./services/AxiosInstance";
@@ -55,7 +56,7 @@ function App(props) {
         .get(`/api/user/${user?.id}`)
         .then((res) => {
           console.log(res?.data, "res?.data");
-           dispatch(setCurrentUser(res?.data));
+          dispatch(setCurrentUser(res?.data));
         })
         .catch((e) => {
           console.log(e);
@@ -65,7 +66,7 @@ function App(props) {
     }
   }, []);
   if (userReducer?.currentUser && userReducer?.currentUser !== null) {
-  //if (false)
+    //if (false)
     return (
       <>
         <Suspense
@@ -79,7 +80,8 @@ function App(props) {
             </div>
           }
         >
-          <Index />
+          {userReducer?.currentUser?.is_admin ? <AdminIndex /> : <Index />}
+          {/* {true ? <AdminIndex /> : <Index />} */}
         </Suspense>
       </>
     );
