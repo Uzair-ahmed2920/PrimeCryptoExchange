@@ -426,6 +426,7 @@ const DataTable = () => {
                               width="100%"
                             />
                           </Col>
+
                           <Col>
                             <h4 className="mb-0">{modalCurrentData?.name}</h4>
                             <Row>
@@ -454,14 +455,16 @@ const DataTable = () => {
                           </Col>
                           
                         </Row>
+
+
                       </Card.Header>
                       <Card.Body>
-                        <Row >
+                        <Row>
                           <Col xl={1}></Col>
                           <Col xl={2}>
                             <h3 style={{ color: "rgb(62, 172, 255)", fontSize: "large", fontWeight: "600", marginTop: "1rem" }}>Amount</h3>
                           </Col>
-                          <Col xl={6} xs={12} >
+                          <Col xl={6} >
                             <form style={{marginTop: "8px"}}>
                               <div className="input-group ">
                                 <span className="input-group-text text-black">
@@ -483,9 +486,9 @@ const DataTable = () => {
                               </div>
                             </form>
                           </Col>
-                          <Col style={{display:"flex", justifyContent: "center", alignItems: "center"}}>
+                          <Col className= "btn" style={{display:"flex", alignItems: "center"}}>
                             {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
-                            <Button
+                            <Button 
                               style={{
                                 backgroundColor: "#3eacff",
                                 height: "3rem",
@@ -581,8 +584,7 @@ const DataTable = () => {
                                             </div>
                                           </form>
                                         </Col>
-                                        <Col style={{display:"flex", justifyContent: "center", alignItems: "center"}}>
-                                        <Button
+                                        <Col className= "btn" style={{display:"flex", alignItems: "center"}}>                                        <Button
                               style={{
                                 backgroundColor: "#3eacff",
                                 height: "3rem",
@@ -637,8 +639,7 @@ const DataTable = () => {
                                             </div>
                                           </form>
                                         </Col>
-                                        <Col style={{display:"flex", justifyContent: "center", alignItems: "center"}}>
-                                        <Button
+                                        <Col className= "btn" style={{display:"flex", alignItems: "center"}}>                                        <Button
                                 style={{
                                   backgroundColor: "#3eacff",
                                   height: "3rem",

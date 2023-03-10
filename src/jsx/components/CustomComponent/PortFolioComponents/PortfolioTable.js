@@ -753,7 +753,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                             </div>
                           </form>
                         </Col>
-                        <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <Col className= "btn" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                           <Button
                             style={{
                               backgroundColor: "#3eacff",
