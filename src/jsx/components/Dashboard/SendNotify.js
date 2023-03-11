@@ -21,7 +21,7 @@ function
               <h3 style={{color:"rgb(62, 172, 255)" }}>Home / </h3>
             </Row>
             <Row>
-              <p style={{marginTop: "5px"}}>Notifications</p>
+              <p className="notification">Notifications</p>
             </Row>
           </Col>
         </div>

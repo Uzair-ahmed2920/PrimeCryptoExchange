@@ -774,3 +774,8 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
     width: 100%
   }
 }
+.notification{
+  margin-top:4px !important;; 
+  font-size: medium;
+   font-weight: 500
+}
