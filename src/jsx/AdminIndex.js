@@ -143,11 +143,17 @@ import Portfolio from "./components/Pages/Portfolio";
 import TradeHistory from "./components/Pages/TradeHistory";
 import TransactionHistory from "./components/Pages/TransactionHistory";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
+import ManageCoins from "./components/Pages/ManageCoins";
+import DepositRequests from "./components/Pages/DepositRequests";
+import WithdrawalRequest from "./components/Pages/WithdrawalRequest";
 
 const AdminIndex = () => {
   const allroutes = [
     //Admin
     { url: "admin-dashboard", component: <AdminDashboard /> },
+    { url: "manage-coins", component: <ManageCoins /> },
+    { url: "deposit-requests", component: <DepositRequests /> },
+    { url: "withdrawal-requests", component: <WithdrawalRequest /> },
   ];
   //let path = window.location.pathname;
   //path = path.split("/");

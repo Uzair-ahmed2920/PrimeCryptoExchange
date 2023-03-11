@@ -8501,10 +8501,11 @@ label {
     display: none; }
   .nav-header .brand-title-color {
     display: none; }
-  @media only screen and (max-width: 87.5rem) {
+  /* @media only screen and (max-width: 87.5rem) {
     .nav-header {
       height: 5.5rem;
-      width: 17rem; } }
+      width: 17rem; } 
+    } */
   .nav-header .brand-logo {
     margin-top: -2rem;
     display: flex;
@@ -11724,9 +11725,9 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     position: relative;
     height: 100%;
     overflow-y: scroll; }
-  @media only screen and (max-width: 87.5rem) {
+  /* @media only screen and (max-width: 87.5rem) {
     .deznav {
-      width: 17rem; } }
+      width: 17rem; } } */
   .deznav ul {
     padding: 0;
     margin: 0;
@@ -30854,7 +30855,8 @@ div#mCSB_1 {
 
 .intro {
   border: 0.0625rem solid red;
-  color: #1d1d1d; }
+  color: #1d1d1d;
+ }
 
 #listResults .slider {
   margin: 1.5625rem 0; }
