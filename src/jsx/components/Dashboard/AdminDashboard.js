@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllDepositRequest, getAllWithDrawRequest } from '../../../Redux/coins';
 import DataWithdrawTable from '../CustomComponent/WithdrawTable';
 import { Send } from '@mui/icons-material';
-import SendNotify from '../Dashboard/Index5/SendNotify';
+
 const rows = [
 	{sno:"abc",datetime:Date.now(),status:'up',type:'abc',amount:123 },
 	{sno:"abc",datetime:Date.now(),status:'up',type:'abc',amount:123 },
@@ -299,7 +299,6 @@ const filterDataofWithdraw =(data, type) => {
 					</Row>
 				</div>
 			</div>
-			<SendNotify></SendNotify>
 		</>
 	)
 }

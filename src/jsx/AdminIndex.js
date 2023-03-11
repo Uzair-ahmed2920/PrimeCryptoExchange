@@ -143,11 +143,14 @@ import Portfolio from "./components/Pages/Portfolio";
 import TradeHistory from "./components/Pages/TradeHistory";
 import TransactionHistory from "./components/Pages/TransactionHistory";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
+import SendNotify from './components/Dashboard/Index5/SendNotify';
 
 const AdminIndex = () => {
   const allroutes = [
     //Admin
     { url: "admin-dashboard", component: <AdminDashboard /> },
+    { url: "notify", component: <SendNotify /> },
+
   ];
   //let path = window.location.pathname;
   //path = path.split("/");
