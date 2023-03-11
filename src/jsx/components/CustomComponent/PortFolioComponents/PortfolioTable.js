@@ -23,6 +23,10 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     document.querySelectorAll("#market_wrapper tbody tr")
   );
 
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const [show, setShow] = useState(false);
   const [largeModal, setLargeModal] = useState(false);
   const [inputValue, setInputValue] = useState();
   const [modalCurrentData, setModalCurrentData] = useState();
@@ -624,26 +628,17 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                             {item.crypto_purchase_price}
                           </td>
                           <td className="text-center">
-                            <span
-                              className="text-center"
-                              style={{
-                                border: "2px solid #D3D3D3",
-                                padding: "6px 20px",
-                                borderRadius: "5px",
-                              }}
+                            <span className="text-center" style={{ border: "2px solid #D3D3D3", padding: "6px 15px", borderRadius: "5px" }}
+                                 onClick={handleShow}
                             >
-                              {item.stop_loss}
+                        {item.stop_loss}
                             </span>
                           </td>
                           <td className="text-center">
-                            <span
-                              className="text-center"
-                              style={{
-                                border: "2px solid #D3D3D3",
-                                padding: "6px 15px",
-                                borderRadius: "5px",
-                              }}
+                            <span className="text-center" style={{ border: "2px solid #D3D3D3", padding: "6px 15px", borderRadius: "5px" }}
+                            onClick={handleShow}
                             >
+
                               {item.take_profit}
                             </span>
                           </td>
@@ -774,6 +769,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
           </div>
         )}
       </div>
+
       <Modal className="fade bd-example-modal-lg" show={largeModal} size="lg">
         <Modal.Header>
           <Modal.Title>Close Trade</Modal.Title>
@@ -1042,6 +1038,236 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
           </Tab.Container>
         </Modal.Body>
       </Modal>
+{/* Update Trade Modal */}
+      <Modal className="fade bd-example-modal-lg" show={show} onHide={handleClose} size="lg">
+        <Modal.Header>
+          <Modal.Title>Update Trade</Modal.Title>
+          <Button
+            className="btn-close"
+            onClick={() => handleClose(false)}
+          ></Button>
+        </Modal.Header>
+        <Modal.Body style={{ backgroundColor: "#f1f1f1" }}>
+          <Tab.Container defaultActiveKey="Navbuy">
+            <div className="">
+              <Tab.Content>
+                <Tab.Pane eventKey="Navbuy">
+                  <Tab.Container defaultActiveKey="Navbuymarket">
+                    <Card>
+                      <Card.Header>
+                        <Row>
+                          <Col xl={2} xs={4}  >
+                            <img
+                              src={cryptoicons[modalCurrentData?.symbol]}
+                              width="100%"
+                            />
+                          </Col>
+
+                          <Col>
+                            <h4 className="mb-0">{modalCurrentData?.name}</h4>
+                            <Row>
+                              <div className="d-flex justify-content-start mb-0">
+                                <p
+                                  className="mb-0"
+                                  style={{ fontSize: "20px" }}
+                                >
+                                  <h3 className="mb-0">
+                                    {modalCurrentData?.price}
+                                  </h3>
+                                </p>
+                                <span
+                                  style={{ marginTop: "0.7rem" }}
+                                  className="text-green mb-0"
+                                >
+                                  650.89[3.04%]
+                                </span>
+                              </div>
+                              <span className="mb-0"
+                                style={{ color: "black", fontWeight: "300" }}
+                              >Price by PrimeCrypto |
+
+                                Market Open</span>
+                            </Row>
+                          </Col>
+                        </Row>
+                      </Card.Header>
+                      <Card.Body>
+                        <div className="custom-tab-1">
+                          <Tab.Container defaultActiveKey="Posts">
+                            <Nav as="ul" style={{ justifyContent: "space-around" }}>
+                              <Nav.Item as="li" className="nav-item" >
+                                <Nav.Link to="#nosl" eventKey="NoSl" style={{ color: "red" }}>
+                                  No SL
+                                </Nav.Link>
+                                <Link style={{ color: "rgb(62, 172, 255)" }}
+                                >
+                                  Stop Loss
+                                </Link>
+                              </Nav.Item>
+                              {/* <Nav.Item as="li" i className="nav-item">
+                                  <Nav.Link
+                                    to="#take-profit"
+                                    eventKey="TakeProfit" >
+                                    X1
+                                  </Nav.Link>
+                                  <Link style={{color:"rgb(62, 172, 255)"}}
+                                    onClick={() =>
+                                      onClick()
+                                    }
+                                  >
+                                    Leverage
+                                  </Link>
+                                </Nav.Item> */}
+                              <Nav.Item as="li" i className="nav-item">
+                                <Nav.Link
+                                  to="#take-profit"
+                                  eventKey="TakeProfit" style={{ color: "green" }}>
+                                  $50,000.00
+                                </Nav.Link>
+                                <Link style={{ color: "rgb(62, 172, 255)", marginLeft: "2rem" }}
+                                  onClick={() =>
+                                    onClick()
+                                  }
+                                >
+                                  Take Profit
+                                </Link>
+                              </Nav.Item>
+                            </Nav>
+                            <Tab.Content >
+                              <Tab.Pane id="nosl" eventKey="NoSl"
+
+                              >
+                                <div className="sell-element">
+                                  <div className="">
+                                    <Row>
+                                      <Col xl={1}></Col>
+                                      <Col xl={2}>
+                                        <h3 className="rate" >
+                                          Rate
+                                        </h3>
+                                      </Col>
+                                      <Col xl={6}>
+                                        <form style={{ marginTop: "8px" }}>
+                                          <div className="input-group ">
+                                            <span className="input-group-text text-black">
+                                              -
+                                            </span>
+                                            <input
+                                              type="text"
+                                              className="form-control"
+                                            />
+                                            <span className="input-group-text text-black">
+                                              +
+                                            </span>
+                                          </div>
+                                        </form>
+                                      </Col>
+                                      <Col className="btn" >
+                                        <Button className="bttn"
+                                          variant="info"
+                                        >
+                                          <i className="material-icons">
+                                            swap_horiz
+                                          </i>
+                                          Units
+                                        </Button>
+                                      </Col>
+                                      <Col xl={1}></Col>
+                                    </Row>
+                                    <Row>
+                                      <div className="text-center mb-0">
+                                        <p> 100% of the Position Amount </p>
+                                      </div>
+                                    </Row>
+                                  </div>
+                                </div>
+                              </Tab.Pane>
+
+                              <Tab.Pane
+                                id="take-profit"
+                                eventKey="TakeProfit"
+                              >
+                                <div className="sell-element">
+                                  <div className="">
+                                    <Row>
+                                      <Col xl={1}></Col>
+                                      <Col xl={2}>
+                                        <h3 className="rate">
+                                          Rate
+                                        </h3>
+                                      </Col>
+                                      <Col xl={6}>
+                                        <form style={{ marginTop: "8px" }}>
+                                          <div className="input-group ">
+                                            <span className="input-group-text text-black">
+                                              -
+                                            </span>
+                                            <input
+                                              type="text"
+                                              className="form-control"
+                                            />
+                                            <span className="input-group-text text-black">
+                                              +
+                                            </span>
+                                          </div>
+                                        </form>
+                                      </Col>
+                                      <Col className="btn" >
+                                        <Button className="bttn"
+                                          variant="info"
+                                        >
+                                          <i className="material-icons">
+                                            swap_horiz
+                                          </i>
+                                          Units
+                                        </Button>
+                                      </Col>
+                                      <Col xl={1}></Col>
+                                    </Row>
+                                    <Row>
+                                      <div className="text-center mb-0">
+                                        <p> 100% of the Position Amount </p>
+                                      </div>
+                                    </Row>
+                                  </div>
+                                </div>
+                              </Tab.Pane>
+                            </Tab.Content>
+                          </Tab.Container>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                    <Modal.Footer style={{ justifyContent: "center" }}>
+                      <Button className="open"
+                       
+                        variant="info"
+      
+                      >
+                        Update Trade
+                      </Button>
+                    </Modal.Footer>
+                    <p style={{ justifyContent: "center", display: "flex" }}>By the Crytocurrencies your Accepting Our
+                      <Link style={{ color: "rgb(62, 172, 255)" }}>
+                        Crytocurrencies Addendum
+                      </Link>
+                    </p>
+                  </Tab.Container>
+                </Tab.Pane>
+              </Tab.Content>
+            </div>
+          </Tab.Container>
+        </Modal.Body>
+
+
+      </Modal>
+
+     
+
+
+
+
+
+
     </>
   );
 };

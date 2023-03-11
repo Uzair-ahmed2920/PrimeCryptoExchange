@@ -1,45 +1,30 @@
 import React from "react";
-import { Col, Row } from "react-bootstrap";
-import Table from "react-bootstrap/Table";
 import PageTitle from "../../layouts/PageTitle";
 import TabelComponent from "../../layouts/TabelComponent";
 
-const UserManagment = () => {
-    
-  const renderTabelPending = () => {
+const ManageCoins = () => {
+  const buyTablePending = () => {
     return [
       {
-        title: "User",
+        title: "Markets",
         render: (rowData) => {
           return <span>{20}</span>;
         },
       },
       {
-        title: "Email",
+        title: "Price",
         render: (rowData) => {
           return <span>{20}</span>;
         },
       },
       {
-        title: "Profit",
+        title: "Change 24h",
         render: (rowData) => {
           return <span>{20}</span>;
         },
       },
       {
-        title: "DATE",
-        render: (rowData) => {
-          return <span>{20}</span>;
-        },
-      },
-      {
-        title: "Loss",
-        render: (rowData) => {
-          return <span>{20}</span>;
-        },
-      },
-      {
-        title: "Available Balance",
+        title: "Status",
         render: (rowData) => {
           return <span>{20}</span>;
         },
@@ -55,14 +40,15 @@ const UserManagment = () => {
   const data = ["", "", ""];
   return (
     <>
-      <PageTitle activeMenu="User Management" motherMenu="Admin" />
+      <PageTitle activeMenu="Manage Coins" motherMenu="Admin" />
       <TabelComponent
-        cols={renderTabelPending()}
+        cols={buyTablePending()}
         data={data}
-        tabeltitle={"Users"}
+        tabeltitle={"Manage Coins"}
         itemsPerPage={1}
       />
     </>
   );
 };
-export default UserManagment;
+
+export default ManageCoins;
