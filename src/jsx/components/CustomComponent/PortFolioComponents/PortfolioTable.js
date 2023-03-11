@@ -8,7 +8,12 @@ import jwt_decode from "jwt-decode";
 
 import bitcoin from "../../../../images/coins/btc.png";
 import Cookies from "universal-cookie";
-import { getAllCoin, getAllTrade, partialTradeClose, tradeClose } from "../../../../Redux/coins";
+import {
+  getAllCoin,
+  getAllTrade,
+  partialTradeClose,
+  tradeClose,
+} from "../../../../Redux/coins";
 import { useDispatch, useSelector } from "react-redux";
 import cryptoicons from "../../../../images/cryptoIcons/cryptoImg";
 import { ToastContainer } from "react-toastify";
@@ -32,7 +37,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   const activePag = useRef(0);
   const [test, settest] = useState(0);
 
-  const buyNow = (value,pl) => {
+  const buyNow = (value, pl) => {
     console.log("row clicked", value);
     setModalCurrentData(value);
     setCurrentPLAmount(pl);
@@ -76,18 +81,29 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     console.log(res, "res from portfolio");
   };
 
-
   useEffect(() => {
+
+
     let body = {
       user_id: id,
     };
     dispatch(getAllCoin());
-    const resp = dispatch(getAllTrade(body)).then((res) => {
-      console.log(res, "res from portfolio");
+
+    Promise.all([dispatch(getAllCoin()), dispatch(getAllTrade(body))])
+    .then(([coinDataAction, tradeDataAction]) => {
+      const coinData = coinDataAction.payload;
+      const tradeData = tradeDataAction.payload;
+      
+      console.log(coinData, "coinData from reducer");
+      console.log(tradeData, "tradeData from reducer");
+
       const result = Object.values(
-        res?.payload?.reduce((acc, cur) => {
-             let previousPrice = requests.coinData.find((item) => item.symbol === cur.crypto_symbol);
-            // console.log(previousPrice, "previousPrice from reducer");
+        tradeData.reduce((acc, cur) => {
+          let previousPrice = coinData.find(
+            (item) => item.symbol === cur.crypto_symbol
+          );
+          console.log(previousPrice, "previousPrice from reducer");
+
           const key = cur.crypto_symbol;
           if (!acc[key]) {
             acc[key] = {
@@ -105,18 +121,22 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
               stop_loss: cur.stop_loss,
               take_profit: cur.take_profit,
               user_id: cur.user_id,
-              profitLoss: (previousPrice?.price - cur.crypto_purchase_price) * cur.purchase_units,
-
+              profitLoss:
+                (previousPrice?.price - cur.crypto_purchase_price) *
+                cur.purchase_units,
             };
           } else {
             acc[key].investment += cur.investment;
             acc[key].purchase_units += cur.purchase_units;
             acc[key].Count++;
             acc[key].total_trade += cur.trade;
-            acc[key].profitLoss += (previousPrice?.price - cur.crypto_purchase_price) * cur.purchase_units;
+            acc[key].profitLoss +=
+              (previousPrice?.price - cur.crypto_purchase_price) *
+              cur.purchase_units;
           }
 
           return acc;
+          
         }, {})
       ).map((obj) => {
         obj.trade = obj.total_trade / obj.Count;
@@ -128,6 +148,58 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
       setReduceData(result);
       console.log(result, "reduce from portfolio");
     });
+
+    // const resp = dispatch(getAllTrade(body)).then((res) => {
+    //   console.log(res, "res from portfolio");
+    //   const result = Object.values(
+    //     res?.payload?.reduce((acc, cur) => {
+    //       let previousPrice = requests?.coinData?.find(
+    //         (item) => item.symbol === cur.crypto_symbol
+    //       );
+    //        console.log(previousPrice, "previousPrice from reducer");
+    //       const key = cur.crypto_symbol;
+    //       if (!acc[key]) {
+    //         acc[key] = {
+    //           crypto_symbol: cur.crypto_symbol,
+    //           trade: cur.trade,
+    //           Count: 1,
+    //           total_trade: cur.trade,
+    //           admin_profit: cur.admin_profit,
+    //           crypto_name: cur.crypto_name,
+    //           crypto_purchase_price: cur.crypto_purchase_price,
+    //           id: cur.id,
+    //           invested_date: cur.invested_date,
+    //           investment: cur.investment,
+    //           purchase_units: cur.purchase_units,
+    //           stop_loss: cur.stop_loss,
+    //           take_profit: cur.take_profit,
+    //           user_id: cur.user_id,
+    //           profitLoss:
+    //             (previousPrice?.price - cur.crypto_purchase_price) *
+    //             cur.purchase_units,
+    //         };
+    //       } else {
+    //         acc[key].investment += cur.investment;
+    //         acc[key].purchase_units += cur.purchase_units;
+    //         acc[key].Count++;
+    //         acc[key].total_trade += cur.trade;
+    //         acc[key].profitLoss +=
+    //           (previousPrice?.price - cur.crypto_purchase_price) *
+    //           cur.purchase_units;
+    //       }
+
+    //       return acc;
+    //     }, {})
+    //   ).map((obj) => {
+    //     obj.trade = obj.total_trade / obj.Count;
+    //     obj.profitLoss = obj.profitLoss / obj.Count;
+    //     delete obj.total_trade;
+    //     delete obj.Count;
+    //     return obj;
+    //   });
+    //   setReduceData(result);
+    //   console.log(result, "reduce from portfolio");
+    // });
     //getData()
   }, []);
 
@@ -194,19 +266,18 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     // eslint-disable-next-line array-callback-return
     //console.log(requests.coinData,"requests.coinData")
     if (requests.coinData) {
-      let previousPrice = requests.coinData.find((item) => item.symbol === symbol);
+      let previousPrice = requests.coinData.find(
+        (item) => item.symbol === symbol
+      );
 
       //console.log(previousPrice, "previousPrice");
       if (previousPrice) {
-
-
         ProfitLoss = (previousPrice.price - openingPrice) * unit;
       }
     }
     console.log(ProfitLoss, "ProfitLoss");
     return ProfitLoss;
-
-  }
+  };
 
   const profitLossPercentage = (unit, openingPrice, symbol, trade) => {
     let ProfitLoss = 0;
@@ -214,68 +285,62 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     // eslint-disable-next-line array-callback-return
     //console.log(requests.coinData,"requests.coinData")
     if (requests.coinData) {
-      let previousPrice = requests.coinData.find((item) => item.symbol === symbol);
+      let previousPrice = requests.coinData.find(
+        (item) => item.symbol === symbol
+      );
 
       //console.log(previousPrice, "previousPrice");
       if (previousPrice) {
-
-
         ProfitLoss = (previousPrice.price - openingPrice) * unit;
         profitLossPercent = (ProfitLoss / trade) * 100;
       }
     }
     console.log(ProfitLoss, "ProfitLoss");
     return profitLossPercent;
-  }
-
-  const closetrade = () => {
-            console.log("checking close trade")
-            if (requests?.coinData) {
-              let previousPrice = requests.coinData.find((item) => item.symbol === modalCurrentData?.crypto_symbol);
-              console.log(previousPrice,"previousPrice from closetrade")
-              if(isChecked)
-              {
-                if(inputValue>0){
-
-                  let body = {
-                    user_id: id,
-                    trade_id: modalCurrentData?.id,
-                    partial_trade_close_amount: inputValue,
-                    crypto_sale_price: previousPrice?.price,
-                    trade_type:"partial"
-                  }
-                  console.log(body,"body of partial close trade")
-                  const res=  dispatch(partialTradeClose(body));
-                  console.log(res,"res of partial close trade")
-                  setLargeModal(false)
-
-                }
-                else{
-                  return alert("Please enter amount");
-                }
-            }
-              else{
-                let body = {
-                 id: modalCurrentData?.id,
-                 crypto_sale_price: previousPrice?.price,
-                 }
-               console.log(body,"body of close trade")
-  
-  
-              const res=  dispatch(tradeClose(body));
-              console.log(res,"res of close trade")
-              setLargeModal(false)
-            }
-              }
-
   };
 
+  const closetrade = () => {
+    console.log("checking close trade");
+    if (requests?.coinData) {
+      let previousPrice = requests.coinData.find(
+        (item) => item.symbol === modalCurrentData?.crypto_symbol
+      );
+      console.log(previousPrice, "previousPrice from closetrade");
+      if (isChecked) {
+        if (inputValue > 0) {
+          let body = {
+            user_id: id,
+            trade_id: modalCurrentData?.id,
+            partial_trade_close_amount: inputValue,
+            crypto_sale_price: previousPrice?.price,
+            trade_type: "partial",
+          };
+          console.log(body, "body of partial close trade");
+          const res = dispatch(partialTradeClose(body));
+          console.log(res, "res of partial close trade");
+          setLargeModal(false);
+        } else {
+          return alert("Please enter amount");
+        }
+      } else {
+        let body = {
+          id: modalCurrentData?.id,
+          crypto_sale_price: previousPrice?.price,
+        };
+        console.log(body, "body of close trade");
+
+        const res = dispatch(tradeClose(body));
+        console.log(res, "res of close trade");
+        setLargeModal(false);
+      }
+    }
+  };
 
   const [isChecked, setIsChecked] = useState(false);
 
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
       {clicked && (
         <Button
           onClick={() => setClicked(false)}
@@ -334,7 +399,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                 }
                               >
                                 {sortD.columnName === column.columnName &&
-                                  sortD.sortType === "asc" ? (
+                                sortD.sortType === "asc" ? (
                                   <i
                                     className="fa fa-arrow-down ms-2 fs-14"
                                     style={{ opacity: "0.7" }}
@@ -386,7 +451,9 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                           </td>
                           <td
                             className={`text-center`}
-                            style={{ color: item.profitLoss > 0 ? "green" : "red" }}
+                            style={{
+                              color: item.profitLoss > 0 ? "green" : "red",
+                            }}
                           >
                             ${item.profitLoss}
                           </td>
@@ -419,8 +486,9 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                         {paggination.map((number, i) => (
                           <Link
                             key={i}
-                            className={`paginate_button  ${activePag.current === i ? "current" : ""
-                              } `}
+                            className={`paginate_button  ${
+                              activePag.current === i ? "current" : ""
+                            } `}
                             onClick={() => onClick(i)}
                           >
                             {number}
@@ -486,7 +554,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                 }
                               >
                                 {sortD.columnName === column.columnName &&
-                                  sortD.sortType === "asc" ? (
+                                sortD.sortType === "asc" ? (
                                   <i
                                     className="fa fa-arrow-down ms-2 fs-14"
                                     style={{ opacity: "0.7" }}
@@ -556,27 +624,73 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                             {item.crypto_purchase_price}
                           </td>
                           <td className="text-center">
-                            <span className="text-center" style={{ border: "2px solid #D3D3D3", padding: "6px 15px", borderRadius: "5px" }}>
-                              ....
+                            <span
+                              className="text-center"
+                              style={{
+                                border: "2px solid #D3D3D3",
+                                padding: "6px 20px",
+                                borderRadius: "5px",
+                              }}
+                            >
+                              {item.stop_loss}
                             </span>
                           </td>
                           <td className="text-center">
-                            <span className="text-center" style={{ border: "2px solid #D3D3D3", padding: "6px 15px", borderRadius: "5px" }}>
-
-                              ....
+                            <span
+                              className="text-center"
+                              style={{
+                                border: "2px solid #D3D3D3",
+                                padding: "6px 15px",
+                                borderRadius: "5px",
+                              }}
+                            >
+                              {item.take_profit}
                             </span>
                           </td>
                           <td
                             className={`text-center`}
-                            style={{ color: profitLossAmount(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol) > 0 ? "green" : "red" }}
+                            style={{
+                              color:
+                                profitLossAmount(
+                                  item.purchase_units,
+                                  item.crypto_purchase_price,
+                                  item.crypto_symbol
+                                ) > 0
+                                  ? "green"
+                                  : "red",
+                            }}
                           >
-                            {Math.round(profitLossAmount(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol) * 10000) / 10000}
+                            {Math.round(
+                              profitLossAmount(
+                                item.purchase_units,
+                                item.crypto_purchase_price,
+                                item.crypto_symbol
+                              ) * 10000
+                            ) / 10000}
                           </td>
                           <td
                             className={`text-center`}
-                            style={{ color: profitLossPercentage(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol, item.trade) > 0 ? "green" : "red" }}
+                            style={{
+                              color:
+                                profitLossPercentage(
+                                  item.purchase_units,
+                                  item.crypto_purchase_price,
+                                  item.crypto_symbol,
+                                  item.trade
+                                ) > 0
+                                  ? "green"
+                                  : "red",
+                            }}
                           >
-                            {Math.round(profitLossPercentage(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol, item.trade) * 100) / 100}%
+                            {Math.round(
+                              profitLossPercentage(
+                                item.purchase_units,
+                                item.crypto_purchase_price,
+                                item.crypto_symbol,
+                                item.trade
+                              ) * 100
+                            ) / 100}
+                            %
                           </td>
                           <td className="align-items-center">
                             <Button
@@ -589,9 +703,17 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                 //     backgroundColor: 'red',
                                 //     color: 'black',
                                 //   }
-
                               }}
-                              onClick={() => buyNow(item,profitLossAmount(item.purchase_units, item.crypto_purchase_price, item.crypto_symbol))}
+                              onClick={() =>
+                                buyNow(
+                                  item,
+                                  profitLossAmount(
+                                    item.purchase_units,
+                                    item.crypto_purchase_price,
+                                    item.crypto_symbol
+                                  )
+                                )
+                              }
                             >
                               Close
                             </Button>
@@ -625,8 +747,9 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                         {paggination.map((number, i) => (
                           <Link
                             key={i}
-                            className={`paginate_button  ${activePag.current === i ? "current" : ""
-                              } `}
+                            className={`paginate_button  ${
+                              activePag.current === i ? "current" : ""
+                            } `}
                             onClick={() => onClick(i)}
                           >
                             {number}
@@ -676,60 +799,155 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                         <h4 className="mb-0"></h4>
                         <Row>
                           <div style={{ flexDirection: "column" }}>
-                            <p
-                              className="mb-0"
-                              style={{ fontSize: "20px" }}
-                            >
-                              <h3 className="mb-0 text-[black]"
+                            <p className="mb-0" style={{ fontSize: "20px" }}>
+                              <h3
+                                className="mb-0 text-[black]"
                                 style={{ color: "black" }}
                               >
-                               {modalCurrentData?.crypto_name}
+                                {modalCurrentData?.crypto_name}
                               </h3>
                             </p>
                             <span
-                              style={{ marginTop: "0.4rem", flexDirection: "column", color: "black" }}
+                              style={{
+                                marginTop: "0.4rem",
+                                flexDirection: "column",
+                                color: "black",
+                              }}
                               className="text-[black] mb-0"
                             >
                               650.89
                             </span>
                           </div>
-
                         </Row>
                       </Col>
-                      <Col style={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
+                      <Col
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "end",
+                        }}
+                      >
                         <Row>
-                          <div style={{ fontSize: "large", fontWeight: "700", color: "black" }}>
+                          <div
+                            style={{
+                              fontSize: "large",
+                              fontWeight: "700",
+                              color: "black",
+                            }}
+                          >
                             #2591795407
                           </div>
-                          <span style={{ display: "flex", flexDirection: "column" }}>Trade Id</span>
+                          <span
+                            style={{ display: "flex", flexDirection: "column" }}
+                          >
+                            Trade Id
+                          </span>
                         </Row>
                       </Col>
                     </Row>
                     <Card style={{ marginTop: "1rem" }}>
-                      <Card.Header style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
-                        <Row style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <div style={{ fontSize: "larger", fontWeight: "700", color: "black", width: "50%" }}>
+                      <Card.Header
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "start",
+                        }}
+                      >
+                        <Row
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: "larger",
+                              fontWeight: "700",
+                              color: "black",
+                              width: "50%",
+                            }}
+                          >
                             Amount
                           </div>
-                          <div style={{ color: "black", fontWeight: "700", width: "50%", display: "flex", justifyContent: "end", alignItems: "center" }}>
-                          {modalCurrentData?.trade}
+                          <div
+                            style={{
+                              color: "black",
+                              fontWeight: "700",
+                              width: "50%",
+                              display: "flex",
+                              justifyContent: "end",
+                              alignItems: "center",
+                            }}
+                          >
+                            {modalCurrentData?.trade}
                           </div>
                         </Row>
-                        <Row style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "3rem" }}>
-                          <div style={{ fontSize: "larger", fontWeight: "700", color: "black", width: "50%" }}>
+                        <Row
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            marginTop: "3rem",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: "larger",
+                              fontWeight: "700",
+                              color: "black",
+                              width: "50%",
+                            }}
+                          >
                             Current P/L
                           </div>
-                          <div style={{ color: "red", fontWeight: "700", width: "50%", display: "flex", justifyContent: "end", alignItems: "center" }}>
-                          {modalCurrentData?.purchase_units}
+                          <div
+                            style={{
+                              color: "red",
+                              fontWeight: "700",
+                              width: "50%",
+                              display: "flex",
+                              justifyContent: "end",
+                              alignItems: "center",
+                            }}
+                          >
+                            {currentPLAmount}
                           </div>
                         </Row>
 
-                        <Row style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "3rem" }}>
-                          <div style={{ fontSize: "larger", fontWeight: "700", color: "black", width: "50%" }}>
+                        <Row
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            marginTop: "3rem",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: "larger",
+                              fontWeight: "700",
+                              color: "black",
+                              width: "50%",
+                            }}
+                          >
                             Total
                           </div>
-                          <div style={{ color: "black", fontWeight: "700", width: "50%", display: "flex", justifyContent: "end", alignItems: "center" }}>
-                          {modalCurrentData?.trade+(currentPLAmount)}</div>
+                          <div
+                            style={{
+                              color: "black",
+                              fontWeight: "700",
+                              width: "50%",
+                              display: "flex",
+                              justifyContent: "end",
+                              alignItems: "center",
+                            }}
+                          >
+                            {modalCurrentData?.trade + currentPLAmount}
+                          </div>
                         </Row>
                       </Card.Header>
                     </Card>
@@ -741,61 +959,73 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                       checked={isChecked}
                       onChange={() => setIsChecked(!isChecked)}
                     />
-                    {isChecked && <div> 
-                      
-                      <Row>
-                        <Col xl={1}></Col>
-                        <Col xl={2}>
-                          <h3 style={{ color: "rgb(62, 172, 255)", fontSize: "large", fontWeight: "600", marginTop: "1rem" }}>Amount</h3>
-                        </Col>
-                        <Col xl={6}>
-                          <form style={{ marginTop: "8px" }}>
-                            <div className="input-group ">
-                              <span className="input-group-text text-black">
-                                -
-                              </span>
-                              {/* <input type="text" className="form-control" value={inputValue}/> */}
-                              <input
-                                type="text"
-                                className="form-control"
-                                value={inputValue}
-                                    onChange={(e) =>
-                                      setInputValue(e.target.value)
-                                    }
-
-                              />
-                              <span className="input-group-text text-black">
-                                +
-                              </span>
-                            </div>
-                          </form>
-                        </Col>
-                        <Col className= "btn" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                          <Button
-                            style={{
-                              backgroundColor: "#3eacff",
-                              height: "3rem",
-                              display: "flex", flexDirection: "column",
-                              justifyContent: "center"
-                            }}
-                            variant="info"
-                          >
-                            <i className="material-icons">
-                              swap_horiz
-                            </i>
-                            Units
-                          </Button>
-                        </Col>
+                    {isChecked && (
+                      <div>
                         <Row>
-                          <div className="text-center mb-0">
-                            <p>
-
-                              0.24 UNITS
-                            </p>
-                          </div>
+                          <Col xl={1}></Col>
+                          <Col xl={2}>
+                            <h3
+                              style={{
+                                color: "rgb(62, 172, 255)",
+                                fontSize: "large",
+                                fontWeight: "600",
+                                marginTop: "1rem",
+                              }}
+                            >
+                              Amount
+                            </h3>
+                          </Col>
+                          <Col xl={6}>
+                            <form style={{ marginTop: "8px" }}>
+                              <div className="input-group ">
+                                <span className="input-group-text text-black">
+                                  -
+                                </span>
+                                {/* <input type="text" className="form-control" value={inputValue}/> */}
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  value={inputValue}
+                                  onChange={(e) =>
+                                    setInputValue(e.target.value)
+                                  }
+                                />
+                                <span className="input-group-text text-black">
+                                  +
+                                </span>
+                              </div>
+                            </form>
+                          </Col>
+                          <Col
+                            className="btn"
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Button
+                              style={{
+                                backgroundColor: "#3eacff",
+                                height: "3rem",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                              }}
+                              variant="info"
+                            >
+                              <i className="material-icons">swap_horiz</i>
+                              Units
+                            </Button>
+                          </Col>
+                          <Row>
+                            <div className="text-center mb-0">
+                              <p>0.24 UNITS</p>
+                            </div>
+                          </Row>
                         </Row>
-                      </Row>
-                    </div>}
+                      </div>
+                    )}
                     <Modal.Footer style={{ justifyContent: "center" }}>
                       <Button
                         style={{ backgroundColor: "red", width: "30%" }}

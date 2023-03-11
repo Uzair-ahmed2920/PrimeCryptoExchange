@@ -202,16 +202,16 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                         className="text-center"
                         style={{ color: item.change > 0 ? "green" : "red" }}
                       >
-                        {item.purchase_units}%
+                        {item.purchase_units}
                       </td>
                       <td
                         className="text-center"
                         style={{ color: item.pl > 0 ? "green" : "red" }}
                       >
-                        {item.open_trade}%
+                        {item.open_trade}
                       </td>
                       <td className="text-center">{item.open_at}</td>
-                      <td className="text-center">{item.close_trade}</td>
+                      <td className="text-center">{item.partial_user_value? item.partial_user_value : item.close_trade}</td>
                       <td className="text-center">{item.closed_at}</td>
                       <td
                         className="text-center"

@@ -6,8 +6,17 @@ import { useRef } from "react";
 import { Button, Card, Col, Form, Modal, Nav, Row, Tab } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom";
 import { Table } from 'react-bootstrap';
+import Cookies from "universal-cookie";
+import jwt_decode from "jwt-decode";
+import { useDispatch, useSelector } from 'react-redux';
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 import bitcoin from "../../../images/coins/btc.png"
+import { getAllDepositsByUserId, getAllWithdrawalsByUserId } from "../../../Redux/user";
+
+
 
 const DataTable = ({ header, description, rows, columns, trade = false }) => {
     const [data, setData] = useState(
@@ -19,6 +28,13 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     const sort = 6;
     const activePag = useRef(0);
     const [test, settest] = useState(0);
+    const cookies = new Cookies();
+	const dispatch = useDispatch();
+	const token = cookies.get("token");
+	const user = jwt_decode(token);
+	const id = user.id;
+	//use s
+	const requests = useSelector(state => state.userReducer);
 
     const buyNow = (value) => {
         console.log("row clicked", value)
@@ -37,10 +53,20 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
         }
     };
     // use effect
+    // useEffect(() => {
+    //     setData(document.querySelectorAll("#market_wrapper tbody tr"));
+
+
+    //     //chackboxFun();
+    // }, [test]);
+
     useEffect(() => {
-        setData(document.querySelectorAll("#market_wrapper tbody tr"));
-        //chackboxFun();
-    }, [test]);
+
+        dispatch(getAllDepositsByUserId(id))
+        dispatch(getAllWithdrawalsByUserId(id))     
+
+
+    }, []);
 
 
     // Active pagginarion
@@ -78,6 +104,20 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
             return 0;
         });
     };
+
+    const formattedDate = (item) => {
+        if (item.requested_at === null) {
+          return "N/A";
+        }
+        
+        dayjs.extend(utc);
+        dayjs.extend(timezone);
+      
+        return dayjs(item.requested_at)
+          .utc()
+          .format("YYYY-MM-DD | HH:mm:ss");
+      };
+
     return (
         <div className="col-xl-12">
             <div className="card">
@@ -116,14 +156,13 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
 
                                 </thead>
                                 <tbody >
-                                    {sortData(rows, sortD.columnName, sortD.sortType).map((item, index) => (
+                                    {sortData( header === "Deposit Requests"? requests?.getAllUserDeposits : requests?.getAllUserWithdrawals, sortD.columnName, sortD.sortType).map((item, index) => (
                                         <tr key={index} >
                                             <td className="text-center">
-                                               {item.sno}
+                                               {index + 1}
                                             </td>
-                                            <td className="text-center">{item.datetime}</td>
+                                            <td className="text-center">{formattedDate(item)}</td>
                                             <td className="text-center">{item.status}</td>
-                                            <td className="text-center">{item.type}</td>
                                             <td className="text-center">{item.amount}</td>
                                         </tr>
                                     ))}

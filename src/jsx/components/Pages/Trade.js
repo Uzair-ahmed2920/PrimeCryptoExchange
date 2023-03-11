@@ -60,15 +60,15 @@ const Trade = (props) => {
         <Row>
           <PageTitle activeMenu="Trade" motherMenu="Home" />
         </Row>
-        {/* <Row><DataTable /></Row> */}
-        <Row>
+        <Row><DataTable /></Row>
+        {/* <Row>
           <TabelComponent
             cols={buyTablePending()}
             data={data}
             tabeltitle={"Buy Request"}
             itemsPerPage={1}
           />
-        </Row>
+        </Row> */}
       </Col>
     </>
   );

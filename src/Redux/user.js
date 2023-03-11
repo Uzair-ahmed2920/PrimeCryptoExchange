@@ -6,6 +6,8 @@ const cookies = new Cookies();
 const initialState = {
   currentUser: null,
   getUserRewards: [],
+  getAllUserDeposits: [{}],
+  getAllUserWithdrawals: [{}],
   allUsers: [],
   getUserWallet: 0,
   getAdminDefaultPer: {},
@@ -80,6 +82,45 @@ export const getUserWallet = createAsyncThunk(
   }
 );
 
+// get all user deposits
+export const getAllDepositsByUserId = createAsyncThunk(
+  "getAllDepositsByUserId",
+  async (userId) => {
+    try { 
+      const res = await axiosInstance.get(`/api/deposit/${userId}`);
+      if (res.status === 200) {
+        successMessage("successfully get all deposits by user id");
+        return res.data;
+      }
+    } catch (err) {
+      errorMessage(err.response.data || err.message);
+      console.log(err);
+    }
+  }
+);
+
+// get all user withdrawals
+export const getAllWithdrawalsByUserId = createAsyncThunk(
+  "getAllWithdrawalsByUserId",
+  async (userId) => {
+    try {
+      const res = await axiosInstance.get(`/api/withdraw/${userId}`);
+      if (res.status === 200) {
+        successMessage("successfully get all withdrawals by user id");
+        return res.data;
+      }
+    } catch (err) {
+      errorMessage(err.response.data || err.message);
+      console.log(err);
+    }
+  }
+);
+
+
+
+
+
+
 //update Requests
 // export const updateUserLevel = createAsyncThunk(
 //   "updateUserLevel",
@@ -136,6 +177,29 @@ export const userReducer = createSlice({
       state.isloading = true;
     },
     [getUserWallet.rejected]: (state, action) => {
+      state.isloading = false;
+      console.log("rejected", action);
+    },
+    [getAllDepositsByUserId.fulfilled]: (state, action) => {
+      state.isloading = false;
+      state.getAllUserDeposits = action.payload;
+
+    },
+    [getAllDepositsByUserId.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [getAllDepositsByUserId.rejected]: (state, action) => {
+      state.isloading = false;
+      console.log("rejected", action);
+    },
+    [getAllWithdrawalsByUserId.fulfilled]: (state, action) => {
+      state.isloading = false;
+      state.getAllUserWithdrawals = action.payload;
+    },
+    [getAllWithdrawalsByUserId.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [getAllWithdrawalsByUserId.rejected]: (state, action) => {
       state.isloading = false;
       console.log("rejected", action);
     },

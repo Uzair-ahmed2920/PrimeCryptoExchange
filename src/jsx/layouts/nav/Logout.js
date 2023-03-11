@@ -1,6 +1,9 @@
 import React  from 'react';
 import {connect, useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { resetCurrentUser } from '../../../Redux/user';
+import Cookies from "universal-cookie";
+
 
 import { Logout } from '../../../store/actions/AuthActions';
 import { isAuthenticated } from '../../../store/selectors/AuthSelectors';
@@ -25,9 +28,13 @@ function withRouter(Component) {
 function LogoutPage(props){
   const dispatch = useDispatch();
 	const navigate = useNavigate();
+  const cookies = new Cookies();
     function onLogout() {
 		//console.log('------------khelesh-------');
        dispatch(Logout(navigate));
+       dispatch(resetCurrentUser());
+       cookies.remove("token");
+       navigate('/login');
 	   //dispatch(Logout());
        //window.location.reload();
     }
