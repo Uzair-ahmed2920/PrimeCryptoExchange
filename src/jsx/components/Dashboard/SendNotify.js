@@ -8,11 +8,23 @@ import {
   Tab,
 } from "react-bootstrap";
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { Col, Row } from "react-bootstrap";
 function
   SendNotify() {
   return (
     <>
-
+  <div className="col-xl-12">
+      <div className="card">
+        <div className="card-header border-0">
+          <Col xl={12} style={{display:"flex"}} >
+            <Row>
+              <h3 style={{color:"rgb(62, 172, 255)" }}>Home / </h3>
+            </Row>
+            <Row>
+              <p style={{marginTop: "5px"}}>Notifications</p>
+            </Row>
+          </Col>
+        </div>
       <Modal.Header>
 
       </Modal.Header>
@@ -62,6 +74,9 @@ function
         </Tab.Container>
       </Modal.Body>
 
+
+</div>
+</div>
 
     </>
   );

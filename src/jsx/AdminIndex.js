@@ -143,7 +143,7 @@ import Portfolio from "./components/Pages/Portfolio";
 import TradeHistory from "./components/Pages/TradeHistory";
 import TransactionHistory from "./components/Pages/TransactionHistory";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
-import SendNotify from './components/Dashboard/Index5/SendNotify';
+import SendNotify from './components/Dashboard/SendNotify';
 
 const AdminIndex = () => {
   const allroutes = [
