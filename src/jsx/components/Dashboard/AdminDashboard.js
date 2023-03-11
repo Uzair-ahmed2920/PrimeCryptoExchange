@@ -12,6 +12,7 @@ import WidgetChartIndex3 from './Index3/WidgetChartIndex3';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllDepositRequest, getAllWithDrawRequest } from '../../../Redux/coins';
 import DataWithdrawTable from '../CustomComponent/WithdrawTable';
+import { Send } from '@mui/icons-material';
 
 const rows = [
 	{sno:"abc",datetime:Date.now(),status:'up',type:'abc',amount:123 },
@@ -224,6 +225,7 @@ const filterDataofWithdraw =(data, type) => {
 									<div className="bubles-down">
 										<div style={{ width: "100%" }}>
 											<h2>Welcome Back!</h2>
+										
 											<h4><p>Portfolio Value.</p></h4>
 											<h2>$0.00</h2>
 											<Link to={"/exchange"} className="btn text-white" style={{backgroundColor:'#3eacff'}}>Buy Coin</Link>
@@ -297,7 +299,6 @@ const filterDataofWithdraw =(data, type) => {
 					</Row>
 				</div>
 			</div>
-
 		</>
 	)
 }

@@ -147,6 +147,8 @@ import ManageCoins from "./components/Pages/ManageCoins";
 import DepositRequests from "./components/Pages/DepositRequests";
 import WithdrawalRequest from "./components/Pages/WithdrawalRequest";
 
+import SendNotify from './components/Dashboard/SendNotify';
+import UserManagment from './components/Dashboard/UserManagment';
 const AdminIndex = () => {
   const allroutes = [
     //Admin
@@ -154,14 +156,14 @@ const AdminIndex = () => {
     { url: "manage-coins", component: <ManageCoins /> },
     { url: "deposit-requests", component: <DepositRequests /> },
     { url: "withdrawal-requests", component: <WithdrawalRequest /> },
+    { url: "notify", component: <SendNotify /> },
+    { url: "user-management", component: <UserManagment /> },
   ];
   //let path = window.location.pathname;
   //path = path.split("/");
   //path = path[path.length - 1];
-
   //let pagePath = path.split("-").includes("page");
   //const { menuToggle } = useContext(ThemeContext);
-
   return (
     <>
       {/* {coinReducer.isLoading && (

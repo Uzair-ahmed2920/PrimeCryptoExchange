@@ -218,7 +218,7 @@ const DataTable = () => {
     getData();
 
   }, []);
-  
+
   return (
     <div className="col-xl-12">
       <ToastContainer />
@@ -447,13 +447,13 @@ const DataTable = () => {
                                 </span>
                               </div>
                               <span className="mb-0"
-                             style={{color: "black",fontWeight:"300"}}
+                                style={{ color: "black", fontWeight: "300" }}
                               >Price by PrimeCrypto |
-                              
-                               Market Open</span>
+
+                                Market Open</span>
                             </Row>
                           </Col>
-                          
+
                         </Row>
 
 
@@ -462,10 +462,10 @@ const DataTable = () => {
                         <Row>
                           <Col xl={1}></Col>
                           <Col xl={2}>
-                            <h3 style={{ color: "rgb(62, 172, 255)", fontSize: "large", fontWeight: "600", marginTop: "1rem" }}>Amount</h3>
+                            <h3 className="heading">Amount</h3>
                           </Col>
                           <Col xl={6} >
-                            <form style={{marginTop: "8px"}}>
+                            <form style={{ marginTop: "8px" }}>
                               <div className="input-group ">
                                 <span className="input-group-text text-black">
                                   -
@@ -486,15 +486,10 @@ const DataTable = () => {
                               </div>
                             </form>
                           </Col>
-                          <Col className= "btn" style={{display:"flex", alignItems: "center"}}>
+                          <Col className="btn" >
                             {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
-                            <Button 
-                              style={{
-                                backgroundColor: "#3eacff",
-                                height: "3rem",
-                                display: "flex",flexDirection: "column",
-                                justifyContent: "center"
-                              }}
+                            <Button className="bttn"
+
                               variant="info"
                               onClick={() =>
                                 handleClick(modalCurrentData.price)
@@ -508,25 +503,25 @@ const DataTable = () => {
                         </Row>
                         <Row>
                           <div className="text-center mb-0">
-                            <p style={{color: "black",fontWeight:"300"}}>
+                            <p style={{ color: "black", fontWeight: "300" }}>
                               {" "}
                               0.24 UNITS | 5.00% of Equity | EXPOSURE $5,219.99 {" "}
                             </p>
                           </div>
                         </Row>
                         <div className="custom-tab-1">
-                            <Tab.Container defaultActiveKey="Posts">
-                              <Nav as="ul"  style={{ justifyContent: "space-around" }}>
-                                <Nav.Item as="li" className="nav-item" >
-                                  <Nav.Link to="#nosl" eventKey="NoSl" style={{ color: "red" }}>
-                                    No SL
-                                  </Nav.Link>
-                                  <Link style={{color:"rgb(62, 172, 255)"}}
-                                  >
-                                    Stop Loss
-                                  </Link>
-                                </Nav.Item>
-                                {/* <Nav.Item as="li" i className="nav-item">
+                          <Tab.Container defaultActiveKey="Posts">
+                            <Nav as="ul" style={{ justifyContent: "space-around" }}>
+                              <Nav.Item as="li" className="nav-item" >
+                                <Nav.Link to="#nosl" eventKey="NoSl" style={{ color: "red" }}>
+                                  No SL
+                                </Nav.Link>
+                                <Link style={{ color: "rgb(62, 172, 255)" }}
+                                >
+                                  Stop Loss
+                                </Link>
+                              </Nav.Item>
+                              {/* <Nav.Item as="li" i className="nav-item">
                                   <Nav.Link
                                     to="#take-profit"
                                     eventKey="TakeProfit" >
@@ -540,156 +535,146 @@ const DataTable = () => {
                                     Leverage
                                   </Link>
                                 </Nav.Item> */}
-                                <Nav.Item as="li" i className="nav-item">
-                                  <Nav.Link
-                                    to="#take-profit"
-                                    eventKey="TakeProfit" style={{ color: "green" }}>
-                                    $50,000.00
-                                  </Nav.Link>
-                                  <Link style={{color:"rgb(62, 172, 255)",marginLeft: "2rem"}}
-                                    onClick={() =>
-                                      onClick()
-                                    }
-                                  >
-                                    Take Profit
-                                  </Link>
-                                </Nav.Item>
- </Nav>
-                              <Tab.Content >
-                                <Tab.Pane id="nosl" eventKey="NoSl"
-                              
+                              <Nav.Item as="li" i className="nav-item">
+                                <Nav.Link
+                                  to="#take-profit"
+                                  eventKey="TakeProfit" style={{ color: "green" }}>
+                                  $50,000.00
+                                </Nav.Link>
+                                <Link style={{ color: "rgb(62, 172, 255)", marginLeft: "2rem" }}
+                                  onClick={() =>
+                                    onClick()
+                                  }
                                 >
-                                  <div className="sell-element">
-                                    <div className="">
-                                      <Row>
-                                        <Col xl={1}></Col>
-                                        <Col xl={2}>
-                                          <h3 style={{ color: "#3eacff",marginTop: "10px" }}>
-                                            Rate
-                                          </h3>
-                                        </Col>
-                                        <Col xl={6}>
-                                          <form style={{marginTop: "8px"}}>
-                                            <div className="input-group ">
-                                              <span className="input-group-text text-black">
-                                                -
-                                              </span>
-                                              <input
-                                                type="text"
-                                                className="form-control"
-                                              />
-                                              <span className="input-group-text text-black">
-                                                +
-                                              </span>
-                                            </div>
-                                          </form>
-                                        </Col>
-                                        <Col className= "btn" style={{display:"flex", alignItems: "center"}}>                                        <Button
-                              style={{
-                                backgroundColor: "#3eacff",
-                                height: "3rem",
-                                display: "flex",flexDirection: "column",
-                                justifyContent: "center"
-                              }}
-                              variant="info"
-                                          >
-                                            <i className="material-icons">
-                                              swap_horiz
-                                            </i>
-                                            Units
-                                          </Button>
-                                        </Col>
-                                        <Col xl={1}></Col>
-                                      </Row>
-                                      <Row>
-                                        <div className="text-center mb-0">
-                                          <p> 100% of the Position Amount </p>
-                                        </div>
-                                      </Row>
-                                    </div>
-                                  </div>
-                                </Tab.Pane>
+                                  Take Profit
+                                </Link>
+                              </Nav.Item>
+                            </Nav>
+                            <Tab.Content >
+                              <Tab.Pane id="nosl" eventKey="NoSl"
 
-                                <Tab.Pane 
-                                  id="take-profit"
-                                  eventKey="TakeProfit"
-                                >
-                                  <div className="sell-element">
-                                    <div className="">
-                                      <Row>
-                                        <Col xl={1}></Col>
-                                        <Col xl={2}>
-                                          <h3 style={{ color: "#3eacff",marginTop: "10px" }}>
-                                            Rate
-                                          </h3>
-                                        </Col>
-                                        <Col xl={6}>
-                                          <form style={{marginTop: "8px"}}>
-                                            <div className="input-group ">
-                                              <span className="input-group-text text-black">
-                                                -
-                                              </span>
-                                              <input
-                                                type="text"
-                                                className="form-control"
-                                              />
-                                              <span className="input-group-text text-black">
-                                                +
-                                              </span>
-                                            </div>
-                                          </form>
-                                        </Col>
-                                        <Col className= "btn" style={{display:"flex", alignItems: "center"}}>                                        <Button
-                                style={{
-                                  backgroundColor: "#3eacff",
-                                  height: "3rem",
-                                  display: "flex",flexDirection: "column",
-                                  justifyContent: "center"
-                                }}
-                              variant="info"
-                                          >
-                                            <i className="material-icons">
-                                              swap_horiz
-                                            </i>
-                                            Units
-                                          </Button>
-                                        </Col>
-                                        <Col xl={1}></Col>
-                                      </Row>
-                                      <Row>
-                                        <div className="text-center mb-0">
-                                          <p> 100% of the Position Amount </p>
-                                        </div>
-                                      </Row>
-                                    </div>
+                              >
+                                <div className="sell-element">
+                                  <div className="">
+                                    <Row>
+                                      <Col xl={1}></Col>
+                                      <Col xl={2}>
+                                        <h3 className="rate" >
+                                          Rate
+                                        </h3>
+                                      </Col>
+                                      <Col xl={6}>
+                                        <form style={{ marginTop: "8px" }}>
+                                          <div className="input-group ">
+                                            <span className="input-group-text text-black">
+                                              -
+                                            </span>
+                                            <input
+                                              type="text"
+                                              className="form-control"
+                                            />
+                                            <span className="input-group-text text-black">
+                                              +
+                                            </span>
+                                          </div>
+                                        </form>
+                                      </Col>
+                                      <Col className="btn" >
+                                        <Button className="bttn"
+                                          variant="info"
+                                        >
+                                          <i className="material-icons">
+                                            swap_horiz
+                                          </i>
+                                          Units
+                                        </Button>
+                                      </Col>
+                                      <Col xl={1}></Col>
+                                    </Row>
+                                    <Row>
+                                      <div className="text-center mb-0">
+                                        <p> 100% of the Position Amount </p>
+                                      </div>
+                                    </Row>
                                   </div>
-                                </Tab.Pane>
-                              </Tab.Content>
-                            </Tab.Container>
-                          </div>
+                                </div>
+                              </Tab.Pane>
+
+                              <Tab.Pane
+                                id="take-profit"
+                                eventKey="TakeProfit"
+                              >
+                                <div className="sell-element">
+                                  <div className="">
+                                    <Row>
+                                      <Col xl={1}></Col>
+                                      <Col xl={2}>
+                                        <h3 className="rate">
+                                          Rate
+                                        </h3>
+                                      </Col>
+                                      <Col xl={6}>
+                                        <form style={{ marginTop: "8px" }}>
+                                          <div className="input-group ">
+                                            <span className="input-group-text text-black">
+                                              -
+                                            </span>
+                                            <input
+                                              type="text"
+                                              className="form-control"
+                                            />
+                                            <span className="input-group-text text-black">
+                                              +
+                                            </span>
+                                          </div>
+                                        </form>
+                                      </Col>
+                                      <Col className="btn" >
+                                        <Button className="bttn"
+                                          variant="info"
+                                        >
+                                          <i className="material-icons">
+                                            swap_horiz
+                                          </i>
+                                          Units
+                                        </Button>
+                                      </Col>
+                                      <Col xl={1}></Col>
+                                    </Row>
+                                    <Row>
+                                      <div className="text-center mb-0">
+                                        <p> 100% of the Position Amount </p>
+                                      </div>
+                                    </Row>
+                                  </div>
+                                </div>
+                              </Tab.Pane>
+                            </Tab.Content>
+                          </Tab.Container>
+                        </div>
                       </Card.Body>
                     </Card>
                     <Modal.Footer style={{ justifyContent: "center" }}>
-          <Button
-            style={{ backgroundColor: "#3eacff", width: "30%" }}
-            variant="info"
-            onClick={() => openTrade()}
-          >
-            Open Trade
-          </Button>
-        </Modal.Footer>
-        <p style={{ justifyContent: "center", display: "flex" }}>By the Crytocurrencies your Accepting Our 
-         <Link style={{color:"rgb(62, 172, 255)"}}>
-         Crytocurrencies Addendum
-                                  </Link>
-         </p>
+                      <Button className="open"
+                       
+                        variant="info"
+                        onClick={() => openTrade()}
+                      >
+                        Open Trade
+                      </Button>
+                    </Modal.Footer>
+                    <p style={{ justifyContent: "center", display: "flex" }}>By the Crytocurrencies your Accepting Our
+                      <Link style={{ color: "rgb(62, 172, 255)" }}>
+                        Crytocurrencies Addendum
+                      </Link>
+                    </p>
                   </Tab.Container>
                 </Tab.Pane>
               </Tab.Content>
             </div>
           </Tab.Container>
         </Modal.Body>
-      
+
 
       </Modal>
     </div>
