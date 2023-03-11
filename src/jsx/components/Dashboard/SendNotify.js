@@ -10,7 +10,7 @@ import {
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { Col, Row } from "react-bootstrap";
 function
-  SendNotify() {
+  SendNotify() { 
   return (
     <>
   <div className="col-xl-12">
