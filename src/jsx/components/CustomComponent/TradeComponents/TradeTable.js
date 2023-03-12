@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import cryptoicons from "../../../../images/cryptoIcons/cryptoImg";
 import { InfinitySpin } from "react-loader-spinner";
+import TabelComponent from "../../../layouts/TabelComponent";
 
 //import bitcoin from "../../../../images/coins/btc.png";
 import TradeOrderForm from "./TradeOrderForm";
@@ -24,6 +25,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { createTrade, getAllCoin } from "../../../../Redux/coins";
 import Cookies from "universal-cookie";
 import jwt_decode from "jwt-decode";
+
 // import { change1hAction, getCoinMarketAction } from "../../../../store/actions/CoinMarketActions";
 // import { addWatchlistAction } from "../../../../store/actions/WatchlistAction";
 let columns = [
@@ -216,18 +218,95 @@ const DataTable = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const renderTabel = () => {
+    return [
+      {
+        title: "Markets",
+        render: (rowData) => {
+          return (
+            <div className="market-title d-flex align-items-center">
+              <img src={cryptoicons[rowData.symbol]} width="12%" />
+              {/* <Col> */}
+              <span className="text-muted ms-2">{rowData.name}</span>
+              {/* </Col> */}
+            </div>
+          );
+        },
+      },
+      {
+        title: "Price",
+        render: (rowData) => {
+          return (
+            <span
+              style={{
+                color: GetColor(rowData.id, rowData.price),
+              }}
+            >
+              ${rowData.price}
+            </span>
+          );
+        },
+      },
+      {
+        title: "Change 24h",
+        render: (rowData) => {
+          return <span>{returnValue(rowData)}%</span>;
+        },
+      },
+      {
+        title: "Invest",
+        render: (rowData) => {
+          return (
+            <span>
+              <Button
+                style={{ backgroundColor: "#3eacff" }}
+                className="btn-sm"
+                onClick={() => buyNow(rowData)}
+              >
+                Buy Now
+              </Button>
+            </span>
+          );
+        },
+      },
+      {
+        title: "Action",
+        render: (rowData) => {
+          return (
+            <span>
+              <Button
+                style={{ backgroundColor: "black" }}
+                className="btn-sm text-white"
+                onClick={() => addToWatchlist(rowData)}
+              >
+                Add to WatchList
+              </Button>
+            </span>
+          );
+        },
+      },
+    ];
+  };
+
   return (
     <div className="col-xl-12">
       <ToastContainer />
-      <div className="card">
+      <TabelComponent
+        cols={renderTabel()}
+        data={requests?.coinData}
+        tabeltitle={"Trade"}
+        itemsPerPage={8}
+      />
+      {/* <div className="card">
         <div className="card-header border-0">
           <Col xl={12}>
-            {/* <Row><h3>{header}</h3></Row> */}
-            <Row>{/* <p className="">{description}</p> */}</Row>
+            <Row></Row>
           </Col>
         </div>
+
         <div className="card-body pt-0">
           {requests.isloading && <InfinitySpin width="200" color="#4fa94d" />}
+
           <div className="table-responsive dataTablemarket">
             <div id="market_wrapper" className="dataTables_wrapper no-footer">
               <table
@@ -300,15 +379,12 @@ const DataTable = () => {
                       sortD.columnName,
                       sortD.sortType
                     ).map((item, index) => (
-                      // {/* {requests.coinData.map((item, index) => ( */}
                       <tr key={index}>
                         <td style={{ width: "30%" }}>
                           <div className="market-title d-flex align-items-center ">
                             <img src={cryptoicons[item.symbol]} width="12%" />
                             <Col>
-                              <h5 className="mb-0 ms-2">
-                                {/* {item.symbol} */}
-                              </h5>
+                              <h5 className="mb-0 ms-2"></h5>
                               <span className="text-muted ms-2">
                                 {item.name}
                               </span>
@@ -323,8 +399,6 @@ const DataTable = () => {
                         >
                           ${item.price}
                         </td>
-                        {/* <td className="text-center" style={{ color: item?.change > 0 ? "green" : "red", }}>{"item.change"}%</td> */}
-                        {/* <td className="text-center" >${item.price}</td> */}
                         <td className="text-center">{returnValue(item)}%</td>
                         <td className="text-center">
                           <Button
@@ -348,56 +422,10 @@ const DataTable = () => {
                     ))}
                 </tbody>
               </table>
-              {/* <div className="d-sm-flex text-center justify-content-between align-items-center mt-3 mb-3">
-                                <div className="dataTables_info">
-                                    Showing {activePag.current * sort + 1} to{" "}
-                                    {data.length > (activePag.current + 1) * sort
-                                        ? (activePag.current + 1) * sort
-                                        : data.length}{" "}
-                                    of {data.length} entries
-                                </div>
-                                <div
-                                    className="dataTables_paginate paging_simple_numbers mb-0"
-                                    id="application-tbl1_paginate"
-                                >
-                                    <Link
-                                        className="paginate_button previous "
-                                        onClick={() =>
-                                            activePag.current > 0 &&
-                                            onClick(activePag.current - 1)
-                                        }
-                                    >
-                                        <i className="fa fa-angle-double-left" ></i>
-                                    </Link>
-                                    <span>
-                                        {paggination.map((number, i) => (
-                                            <Link
-                                                key={i}
-
-                                                className={`paginate_button  ${activePag.current === i ? "current" : ""
-                                                    } `}
-                                                onClick={() => onClick(i)}
-                                            >
-                                                {number}
-                                            </Link>
-                                        ))}
-                                    </span>
-
-                                    <Link
-                                        className="paginate_button next"
-                                        onClick={() =>
-                                            activePag.current + 1 < paggination.length &&
-                                            onClick(activePag.current + 1)
-                                        }
-                                    >
-                                        <i className="fa fa-angle-double-right" ></i>
-                                    </Link>
-                                </div>
-                            </div> */}
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <Modal className="fade bd-example-modal-lg" show={largeModal} size="lg">
         <Modal.Header>
           <Modal.Title>Market Cap</Modal.Title>
@@ -480,11 +508,11 @@ const DataTable = () => {
                               </div>
                             </form>
                           </Col>
-                          <Col className="btn">
+                          <Col className="unitbtn" >
                             {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
                             <Button
+                            variant="light"
                               className="bttn"
-                              variant="info"
                               onClick={() =>
                                 handleClick(modalCurrentData.price)
                               }
@@ -503,6 +531,7 @@ const DataTable = () => {
                             </p>
                           </div>
                         </Row>
+
                         <div className="custom-tab-1">
                           <Tab.Container defaultActiveKey="Posts">
                             <Nav
@@ -589,29 +618,17 @@ const DataTable = () => {
                                           </div>
                                         </form>
                                       </Col>
-                                      <Col
-                                        className="btn"
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        {" "}
-                                        <Button
-                                          style={{
-                                            backgroundColor: "#3eacff",
-                                            height: "3rem",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "center",
-                                          }}
-                                          variant="info"
+                                      <Col className="unitbtn" >
+                                        <Button 
+                                       variant="light"
+                                       className="bttn"
                                         >
                                           <i className="material-icons">
                                             swap_horiz
                                           </i>
                                           Units
                                         </Button>
+                                    
                                       </Col>
                                       <Col xl={1}></Col>
                                     </Row>
@@ -658,23 +675,10 @@ const DataTable = () => {
                                           </div>
                                         </form>
                                       </Col>
-                                      <Col
-                                        className="btn"
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        {" "}
-                                        <Button
-                                          style={{
-                                            backgroundColor: "#3eacff",
-                                            height: "3rem",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "center",
-                                          }}
-                                          variant="info"
+                                      <Col className="unitbtn" >
+                                        <Button 
+                                       variant="light"
+                                       className="bttn"
                                         >
                                           <i className="material-icons">
                                             swap_horiz
@@ -695,12 +699,12 @@ const DataTable = () => {
                             </Tab.Content>
                           </Tab.Container>
                         </div>
+                        
                       </Card.Body>
                     </Card>
                     <Modal.Footer style={{ justifyContent: "center" }}>
-                      <Button
-                        style={{ backgroundColor: "#3eacff", width: "30%" }}
-                        variant="info"
+                      <Button className="open"
+                        variant="light"
                         onClick={() => openTrade()}
                       >
                         Open Trade
