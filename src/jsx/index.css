@@ -721,6 +721,8 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
     align-items: center !important;
     flex-direction: column !important;
     height: 3rem;
+    background-color: rgb(62, 172, 255)!important;
+    color: white !important;
   }
   @media screen and (max-width: 767px) {
     .unitbtn{
@@ -729,6 +731,8 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
     }
     .bttn{
       margin-top: -7rem !important;
+      background-color: rgb(62, 172, 255)!important;
+      color: white !important;
     }
     }
     @media screen and (max-width: 1202px) {
@@ -738,6 +742,8 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
       }
       .bttn{
         margin-top: -7rem !important;
+        background-color: rgb(62, 172, 255)!important;
+        color: white;
       }
       }
   
@@ -752,8 +758,9 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
      margin-top: 10px !important;;
   }
   .open{
- background-color: #3eacff; 
- width: "30%"
+ width: 30%;
+ background-color: rgb(62, 172, 255) !important;
+ color:white
   }
  .btnnotify{
   display: flex;

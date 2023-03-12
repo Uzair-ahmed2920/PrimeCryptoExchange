@@ -22,8 +22,6 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   const [data, setData] = useState(
     document.querySelectorAll("#market_wrapper tbody tr")
   );
-  }
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [show, setShow] = useState(false);
@@ -985,8 +983,9 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                           </form>
                         </Col>
                         <Col className="unitbtn">
-                          <Button className="bttn"
-                            variant="info"
+                          <Button 
+                           variant="light"
+                           className="bttn"
                           >
                             <i className="material-icons">
                               swap_horiz
@@ -994,6 +993,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                             Units
                           </Button>
                         </Col>
+                        </Row>
                         <Row>
                           <Col xl={1}></Col>
                           <Col xl={2}>
@@ -1058,7 +1058,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                           </Row>
                         </Row>
                       </div>
-                    )}
+                    }
                     <Modal.Footer style={{ justifyContent: "center" }}>
                       <Button
                         style={{ backgroundColor: "red", width: "30%" }}
@@ -1200,8 +1200,9 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                         </form>
                                       </Col>
                                       <Col className="unitbtn" >
-                                        <Button className="bttn"
-                                          variant="info"
+                                        <Button 
+                                         variant="light"
+                                         className="bttn"
                                         >
                                           <i className="material-icons">
                                             swap_horiz
@@ -1250,8 +1251,9 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                         </form>
                                       </Col>
                                       <Col className="unitbtn" >
-                                        <Button className="bttn"
-                                          variant="info"
+                                        <Button 
+                                        variant="light"
+                                        className="bttn"
                                         >
                                           <i className="material-icons">
                                             swap_horiz
@@ -1301,6 +1303,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
      
     </>
   );
+};
 
 
 

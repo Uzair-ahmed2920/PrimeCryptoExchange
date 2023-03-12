@@ -24,6 +24,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { createTrade, getAllCoin } from "../../../../Redux/coins";
 import Cookies from "universal-cookie";
 import jwt_decode from "jwt-decode";
+
 // import { change1hAction, getCoinMarketAction } from "../../../../store/actions/CoinMarketActions";
 // import { addWatchlistAction } from "../../../../store/actions/WatchlistAction";
 let columns = [
@@ -483,8 +484,8 @@ const DataTable = () => {
                           <Col className="unitbtn" >
                             {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
                             <Button
+                            variant="light"
                               className="bttn"
-                              variant="info"
                               onClick={() =>
                                 handleClick(modalCurrentData.price)
                               }
@@ -591,14 +592,16 @@ const DataTable = () => {
                                         </form>
                                       </Col>
                                       <Col className="unitbtn" >
-                                        <Button className="bttn"
-                                          variant="info"
+                                        <Button 
+                                       variant="light"
+                                       className="bttn"
                                         >
                                           <i className="material-icons">
                                             swap_horiz
                                           </i>
                                           Units
                                         </Button>
+                                    
                                       </Col>
                                       <Col xl={1}></Col>
                                     </Row>
@@ -646,8 +649,9 @@ const DataTable = () => {
                                         </form>
                                       </Col>
                                       <Col className="unitbtn" >
-                                        <Button className="bttn"
-                                          variant="info"
+                                        <Button 
+                                       variant="light"
+                                       className="bttn"
                                         >
                                           <i className="material-icons">
                                             swap_horiz
@@ -672,9 +676,8 @@ const DataTable = () => {
                       </Card.Body>
                     </Card>
                     <Modal.Footer style={{ justifyContent: "center" }}>
-                      <Button
-                        style={{ backgroundColor: "#3eacff", width: "30%" }}
-                        variant="info"
+                      <Button className="open"
+                        variant="light"
                         onClick={() => openTrade()}
                       >
                         Open Trade
