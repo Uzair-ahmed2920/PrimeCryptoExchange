@@ -13,6 +13,7 @@ import {
   getAllTrade,
   partialTradeClose,
   tradeClose,
+  updateTradeProfitLoss,
 } from "../../../../Redux/coins";
 import { useDispatch, useSelector } from "react-redux";
 import cryptoicons from "../../../../images/cryptoIcons/cryptoImg";
@@ -24,8 +25,9 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   );
 
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+
+
+
   const [show, setShow] = useState(false);
   const [largeModal, setLargeModal] = useState(false);
   const [inputValue, setInputValue] = useState();
@@ -34,8 +36,10 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   const [clicked, setClicked] = useState(false);
   const [symbol, setSymbol] = useState("");
   const [reduceData, setReduceData] = useState([]);
-  const [allCalculatedData, setAllCalculatedData] = useState([]);
-  const [noSl, setNoSl] = useState(true);
+  const [stopLoss, setStopLoss] = useState(0);
+  const [takeProfit, setTakeProfit] = useState(0)
+  //const [allCalculatedData, setAllCalculatedData] = useState([]);
+  //const [noSl, setNoSl] = useState(true);
   const navigate = useNavigate();
   const sort = 6;
   const activePag = useRef(0);
@@ -49,6 +53,25 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     setLargeModal(true);
   };
 
+  const handleClose = () => {
+    
+    setShow(false)
+
+  };
+  const handleShow = (value) => {
+    setModalCurrentData(value);
+    setShow(true);}
+    console.log(modalCurrentData,"modal current data");
+const UpdateTrade = () =>{
+
+  let body ={
+    id: modalCurrentData?.id,
+    take_profit: takeProfit,
+    stop_loss: stopLoss,
+  }
+  console.log("body from update", body);
+  dispatch(updateTradeProfitLoss(body));
+}
   console.log("modalCurrentData", modalCurrentData);
   console.log("currentPLAmount", currentPLAmount);
 
@@ -629,14 +652,14 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                           </td>
                           <td className="text-center">
                             <span className="text-center" style={{ border: "2px solid #D3D3D3", padding: "6px 15px", borderRadius: "5px" }}
-                                 onClick={handleShow}
+                                 onClick={() =>handleShow(item)}
                             >
                         {item.stop_loss}
                             </span>
                           </td>
                           <td className="text-center">
                             <span className="text-center" style={{ border: "2px solid #D3D3D3", padding: "6px 15px", borderRadius: "5px" }}
-                            onClick={handleShow}
+                            onClick={() => handleShow (item)}
                             >
 
                               {item.take_profit}
@@ -1058,13 +1081,13 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                         <Row>
                           <Col xl={2} xs={4}  >
                             <img
-                              src={cryptoicons[modalCurrentData?.symbol]}
+                              src={cryptoicons[modalCurrentData?.crypto_symbol]}
                               width="100%"
                             />
                           </Col>
 
                           <Col>
-                            <h4 className="mb-0">{modalCurrentData?.name}</h4>
+                            <h4 className="mb-0">{modalCurrentData?.crypto_name}</h4>
                             <Row>
                               <div className="d-flex justify-content-start mb-0">
                                 <p
@@ -1072,7 +1095,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                   style={{ fontSize: "20px" }}
                                 >
                                   <h3 className="mb-0">
-                                    {modalCurrentData?.price}
+                                    {modalCurrentData?.crypto_purchase_price}
                                   </h3>
                                 </p>
                                 <span
@@ -1155,6 +1178,9 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                             <input
                                               type="text"
                                               className="form-control"
+                                              onChange={(e) =>
+                                                setStopLoss(e.target.value)
+                                              }
                                             />
                                             <span className="input-group-text text-black">
                                               +
@@ -1205,6 +1231,9 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                             <input
                                               type="text"
                                               className="form-control"
+                                              onChange={(e) =>
+                                                setTakeProfit(e.target.value)
+                                              }
                                             />
                                             <span className="input-group-text text-black">
                                               +
@@ -1239,7 +1268,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                     </Card>
                     <Modal.Footer style={{ justifyContent: "center" }}>
                       <Button className="open"
-                       
+                       onClick={()=> UpdateTrade()}
                         variant="info"
       
                       >
