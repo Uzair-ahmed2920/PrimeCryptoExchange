@@ -9,11 +9,10 @@ const PageTitle = ({ motherMenu, activeMenu, pageContent }) => {
 			<div className="row page-titles mx-0">
 				<ol className="breadcrumb">
 					<li className="breadcrumb-item active"><Link to={`/${path[path.length - 1]}`}>{motherMenu}</Link></li>
-					<li className="breadcrumb-item  "><Link to={`/${path[path.length - 1]}`}>{activeMenu}</Link></li>
+					<li className="breadcrumb-item"><Link to={`/${path[path.length - 1]}`}>{activeMenu}</Link></li>
 				</ol>
 			</div>
 		</>
-    	
   );
 };
 
