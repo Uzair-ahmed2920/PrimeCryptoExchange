@@ -1,7 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Form,
+  Modal,
+  Nav,
+  Row,
+  Tab,
+} from "react-bootstrap";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import CurrencyFormat from "react-currency-format";
+import cryptoicons from "../../../images/cryptoIcons/cryptoImg";
+import { createTrade, getAllCoin } from "../../../Redux/coins";
 /// Scroll
 //import PerfectScrollbar from "react-perfect-scrollbar";
 
@@ -57,15 +71,31 @@ const NotificationBlog = ({ classChange }) => {
 };
 
 const Header = ({ onNote }) => {
+  const coinReducer = useSelector((store) => store.coinReducer);
+  const userReducer = useSelector((store) => store.userReducer);
+  const dispatch = useDispatch();
   const [isSearched, setIsSearched] = useState("");
+  const [coinMarketData, setCoinMarketData] = useState([]);
+
+  const [largeModal, setLargeModal] = useState(false);
+  const [stopLoss, setStopLoss] = useState(0);
+  const [takeProfit, setTakeProfit] = useState(0);
+  const [modalCurrentData, setModalCurrentData] = useState();
+  const [inputValue, setInputValue] = useState();
+  const [inputId, setInputId] = useState("price");
 
   const [rightSelect, setRightSelect] = useState("Eng");
   //For fix header
   const [headerFix, setheaderFix] = useState(false);
   useEffect(() => {
+    setCoinMarketData(coinReducer.coinData);
+  }, [coinReducer.coinData]);
+
+  useEffect(() => {
     window.addEventListener("scroll", () => {
       setheaderFix(window.scrollY > 50);
     });
+    setCoinMarketData(coinReducer.coinData);
   }, []);
 
   //const [searchBut, setSearchBut] = useState(false);
@@ -96,11 +126,33 @@ const Header = ({ onNote }) => {
     ? filterName.filter((f) => f !== "editor")
     : filterName;
 
-  const array = [
-    { img: "00", title: "title", text: "bitcoin", button: "trade" },
-    { img: "00", title: "title", text: "abdul", button: "trade" },
-    { img: "00", title: "title", text: "logicsyard", button: "trade" },
-  ];
+  const openTrade = (value) => {
+    let body = {
+      user_id: userReducer.currentUser.id,
+      crypto_name: modalCurrentData.name,
+      crypto_symbol: modalCurrentData.symbol,
+      crypto_purchase_price: modalCurrentData.price,
+      investment:
+        inputId === "price" ? inputValue : inputValue * modalCurrentData.price,
+      stop_loss: stopLoss,
+      take_profit: takeProfit,
+    };
+    console.log("body of trade", body);
+    const res = dispatch(createTrade(body));
+    console.log("res of trade", res);
+    setLargeModal(false);
+  };
+  const handleClick = (price) => {
+    if (inputId === "price") {
+      setInputId("units");
+      const newValue = inputValue / price;
+      setInputValue(newValue);
+    } else {
+      setInputId("price");
+      const newValue = inputValue * price;
+      setInputValue(newValue);
+    }
+  };
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -147,28 +199,35 @@ const Header = ({ onNote }) => {
                 </div>
                 {isSearched !== "" && (
                   <div
+                    className="scrollbar-container widget-media dlab-scroll p-3 height380 ps ps--active-y"
                     style={{
                       position: "absolute",
-                      top: "65px",
-                      right: "150px",
-                      background: "red",
-                      // padding: "0 100px",
-                      minWidth: "18rem",
-                      border: "1px solid black",
+                      top: "70px",
+                      //   right: "60px",
+                      background: "white",
+                      minWidth: "25rem",
                       color: "black",
+                      borderRadius: "1.2rem",
+                      boxShadow: "0 0 3.125rem 0 rgb(82 63 105 / 15%)",
                     }}
                   >
-                    <div
+                    <h4
                       className="w-100 text-left p-2"
                       style={{ background: "white" }}
                     >
                       Markets
-                    </div>
-                    {array?.filter((data) => {
+                    </h4>
+                    {coinMarketData?.filter((data) => {
                       if (isSearched === "") {
                         return data;
                       } else if (
-                        data?.text
+                        data?.name
+                          ?.toLowerCase()
+                          ?.includes(isSearched.toLowerCase())
+                      ) {
+                        return data;
+                      } else if (
+                        data?.symbol
                           ?.toLowerCase()
                           ?.includes(isSearched.toLowerCase())
                       ) {
@@ -176,12 +235,18 @@ const Header = ({ onNote }) => {
                       }
                     }).length > 0 ? (
                       <div className="w-100 text-left p-1">
-                        {array
+                        {coinMarketData
                           ?.filter((data) => {
                             if (isSearched === "") {
                               return data;
                             } else if (
-                              data?.text
+                              data?.name
+                                ?.toLowerCase()
+                                ?.includes(isSearched.toLowerCase())
+                            ) {
+                              return data;
+                            } else if (
+                              data?.symbol
                                 ?.toLowerCase()
                                 ?.includes(isSearched.toLowerCase())
                             ) {
@@ -189,7 +254,57 @@ const Header = ({ onNote }) => {
                             }
                           })
                           ?.map((item, index) => {
-                            return <div className="p-3">{item.text}</div>;
+                            return (
+                              <div className="timeline-panel" key={index}>
+                                <div className="d-flex align-items-center justify-content-between w-50 my-1">
+                                  <div className="media me-2">
+                                    <img
+                                      alt="images"
+                                      width={40}
+                                      src={cryptoicons[item.symbol]}
+                                    />
+                                  </div>
+                                  <h6 className="mb-1">
+                                    {item?.name}
+                                    <button
+                                      type="button"
+                                      className="btn"
+                                      style={{
+                                        marginLeft: "5px",
+                                        background: "#3eacff",
+                                        color: "white",
+                                        padding: "2px 4px",
+                                        borderRadius: "7px",
+                                      }}
+                                      onClick={() => {
+                                        setModalCurrentData(item);
+                                        setLargeModal(true);
+                                      }}
+                                    >
+                                      Buy Now
+                                    </button>
+                                  </h6>
+                                </div>
+                                <div className="media-body">
+                                  <div className="d-flex">
+                                    <span style={{ marginRight: "5px" }}>
+                                      {item?.symbol} | unit price :
+                                    </span>
+                                    <span style={{ fontWeight: "800" }}>
+                                      <CurrencyFormat
+                                        value={item?.price}
+                                        displayType={"text"}
+                                        decimalScale={2}
+                                        thousandSeparator={true}
+                                        prefix={"$"}
+                                        fixedDecimalScale={true}
+                                        renderText={(value) => <p>{value}</p>}
+                                      />
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            );
                           })}
                       </div>
                     ) : (
@@ -582,6 +697,327 @@ const Header = ({ onNote }) => {
           </div>
         </nav>
       </div>
+      <Modal className="fade bd-example-modal-lg" show={largeModal} size="lg">
+        <Modal.Header>
+          <Modal.Title>Market Cap</Modal.Title>
+          <Button
+            variant=""
+            className="btn-close"
+            onClick={() => setLargeModal(false)}
+          ></Button>
+        </Modal.Header>
+        <Modal.Body style={{ backgroundColor: "#f1f1f1" }}>
+          <Tab.Container defaultActiveKey="Navbuy">
+            <div className="">
+              <Tab.Content>
+                <Tab.Pane eventKey="Navbuy">
+                  <Tab.Container defaultActiveKey="Navbuymarket">
+                    <Card>
+                      <Card.Header>
+                        <Row>
+                          <Col xl={2} xs={4}>
+                            <img
+                              src={cryptoicons[modalCurrentData?.symbol]}
+                              width="100%"
+                            />
+                          </Col>
+
+                          <Col>
+                            <h4 className="mb-0">{modalCurrentData?.name}</h4>
+                            <Row>
+                              <div className="d-flex justify-content-start mb-0">
+                                <p
+                                  className="mb-0"
+                                  style={{ fontSize: "20px" }}
+                                >
+                                  <h3 className="mb-0">
+                                    {modalCurrentData?.price}
+                                  </h3>
+                                </p>
+                                <span
+                                  style={{ marginTop: "0.7rem" }}
+                                  className="text-green mb-0"
+                                >
+                                  650.89[3.04%]
+                                </span>
+                              </div>
+                              <span
+                                className="mb-0"
+                                style={{ color: "black", fontWeight: "300" }}
+                              >
+                                Price by PrimeCrypto | Market Open
+                              </span>
+                            </Row>
+                          </Col>
+                        </Row>
+                      </Card.Header>
+                      <Card.Body>
+                        <Row>
+                          <Col xl={1}></Col>
+                          <Col xl={2}>
+                            <h3 className="heading">Amount</h3>
+                          </Col>
+                          <Col xl={6}>
+                            <form style={{ marginTop: "8px" }}>
+                              <div className="input-group ">
+                                <span className="input-group-text text-black">
+                                  -
+                                </span>
+                                {/* <input type="text" className="form-control" value={inputValue}/> */}
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id={inputId}
+                                  value={inputValue}
+                                  onChange={(e) =>
+                                    setInputValue(e.target.value)
+                                  }
+                                />
+                                <span className="input-group-text text-black">
+                                  +
+                                </span>
+                              </div>
+                            </form>
+                          </Col>
+                          <Col className="btn">
+                            {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
+                            <Button
+                              className="bttn"
+                              variant="info"
+                              onClick={() =>
+                                handleClick(modalCurrentData.price)
+                              }
+                            >
+                              <i className="material-icons">swap_horiz</i>
+                              Units
+                            </Button>
+                          </Col>
+                          <Col xl={1}></Col>
+                        </Row>
+                        <Row>
+                          <div className="text-center mb-0">
+                            <p style={{ color: "black", fontWeight: "300" }}>
+                              {" "}
+                              0.24 UNITS | 5.00% of Equity | EXPOSURE $5,219.99{" "}
+                            </p>
+                          </div>
+                        </Row>
+                        <div className="custom-tab-1">
+                          <Tab.Container defaultActiveKey="Posts">
+                            <Nav
+                              as="ul"
+                              style={{ justifyContent: "space-around" }}
+                            >
+                              <Nav.Item as="li" className="nav-item">
+                                <Nav.Link
+                                  to="#nosl"
+                                  eventKey="NoSl"
+                                  style={{ color: "red" }}
+                                >
+                                  No SL
+                                </Nav.Link>
+                                <Link style={{ color: "rgb(62, 172, 255)" }}>
+                                  Stop Loss
+                                </Link>
+                              </Nav.Item>
+                              {/* <Nav.Item as="li" i className="nav-item">
+                                  <Nav.Link
+                                    to="#take-profit"
+                                    eventKey="TakeProfit" >
+                                    X1
+                                  </Nav.Link>
+                                  <Link style={{color:"rgb(62, 172, 255)"}}
+                                    onClick={() =>
+                                      onClick()
+                                    }
+                                  >
+                                    Leverage
+                                  </Link>
+                                </Nav.Item> */}
+                              <Nav.Item as="li" i className="nav-item">
+                                <Nav.Link
+                                  to="#take-profit"
+                                  eventKey="TakeProfit"
+                                  style={{ color: "green" }}
+                                >
+                                  $50,000.00
+                                </Nav.Link>
+                                <Link
+                                  style={{
+                                    color: "rgb(62, 172, 255)",
+                                    marginLeft: "2rem",
+                                  }}
+                                  //   onClick={() => onClick()}
+                                >
+                                  Take Profit
+                                </Link>
+                              </Nav.Item>
+                            </Nav>
+                            <Tab.Content>
+                              <Tab.Pane id="nosl" eventKey="NoSl">
+                                <div className="sell-element">
+                                  <div className="">
+                                    <Row>
+                                      <Col xl={1}></Col>
+                                      <Col xl={2}>
+                                        <h3
+                                          style={{
+                                            color: "#3eacff",
+                                            marginTop: "10px",
+                                          }}
+                                        >
+                                          Rate
+                                        </h3>
+                                      </Col>
+                                      <Col xl={6}>
+                                        <form style={{ marginTop: "8px" }}>
+                                          <div className="input-group ">
+                                            <span className="input-group-text text-black">
+                                              -
+                                            </span>
+                                            <input
+                                              type="text"
+                                              className="form-control"
+                                              onChange={(e) =>
+                                                setStopLoss(e.target.value)
+                                              }
+                                            />
+                                            <span className="input-group-text text-black">
+                                              +
+                                            </span>
+                                          </div>
+                                        </form>
+                                      </Col>
+                                      <Col
+                                        className="btn"
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        {" "}
+                                        <Button
+                                          style={{
+                                            backgroundColor: "#3eacff",
+                                            height: "3rem",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "center",
+                                          }}
+                                          variant="info"
+                                        >
+                                          <i className="material-icons">
+                                            swap_horiz
+                                          </i>
+                                          Units
+                                        </Button>
+                                      </Col>
+                                      <Col xl={1}></Col>
+                                    </Row>
+                                    <Row>
+                                      <div className="text-center mb-0">
+                                        <p> 100% of the Position Amount </p>
+                                      </div>
+                                    </Row>
+                                  </div>
+                                </div>
+                              </Tab.Pane>
+
+                              <Tab.Pane id="take-profit" eventKey="TakeProfit">
+                                <div className="sell-element">
+                                  <div className="">
+                                    <Row>
+                                      <Col xl={1}></Col>
+                                      <Col xl={2}>
+                                        <h3
+                                          style={{
+                                            color: "#3eacff",
+                                            marginTop: "10px",
+                                          }}
+                                        >
+                                          Rate
+                                        </h3>
+                                      </Col>
+                                      <Col xl={6}>
+                                        <form style={{ marginTop: "8px" }}>
+                                          <div className="input-group ">
+                                            <span className="input-group-text text-black">
+                                              -
+                                            </span>
+                                            <input
+                                              type="text"
+                                              className="form-control"
+                                              onChange={(e) =>
+                                                setTakeProfit(e.target.value)
+                                              }
+                                            />
+                                            <span className="input-group-text text-black">
+                                              +
+                                            </span>
+                                          </div>
+                                        </form>
+                                      </Col>
+                                      <Col
+                                        className="btn"
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        {" "}
+                                        <Button
+                                          style={{
+                                            backgroundColor: "#3eacff",
+                                            height: "3rem",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "center",
+                                          }}
+                                          variant="info"
+                                        >
+                                          <i className="material-icons">
+                                            swap_horiz
+                                          </i>
+                                          Units
+                                        </Button>
+                                      </Col>
+                                      <Col xl={1}></Col>
+                                    </Row>
+                                    <Row>
+                                      <div className="text-center mb-0">
+                                        <p> 100% of the Position Amount </p>
+                                      </div>
+                                    </Row>
+                                  </div>
+                                </div>
+                              </Tab.Pane>
+                            </Tab.Content>
+                          </Tab.Container>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                    <Modal.Footer style={{ justifyContent: "center" }}>
+                      <Button
+                        style={{ backgroundColor: "#3eacff", width: "30%" }}
+                        variant="info"
+                        onClick={() => openTrade()}
+                      >
+                        Open Trade
+                      </Button>
+                    </Modal.Footer>
+                    <p style={{ justifyContent: "center", display: "flex" }}>
+                      By the Crytocurrencies your Accepting Our
+                      <Link style={{ color: "rgb(62, 172, 255)" }}>
+                        Crytocurrencies Addendum
+                      </Link>
+                    </p>
+                  </Tab.Container>
+                </Tab.Pane>
+              </Tab.Content>
+            </div>
+          </Tab.Container>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

@@ -146,9 +146,9 @@ import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import ManageCoins from "./components/Pages/ManageCoins";
 import DepositRequests from "./components/Pages/DepositRequests";
 import WithdrawalRequest from "./components/Pages/WithdrawalRequest";
+import SendNotify from "./components/Pages/SendNotify";
+import UserManagment from "./components/Pages/UserManagment";
 
-import SendNotify from './components/Dashboard/SendNotify';
-import UserManagment from './components/Dashboard/UserManagment';
 const AdminIndex = () => {
   const allroutes = [
     //Admin

@@ -23,7 +23,6 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   const [data, setData] = useState(
     document.querySelectorAll("#market_wrapper tbody tr")
   );
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [show, setShow] = useState(false);
@@ -1626,8 +1625,47 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                       checked={isChecked}
                       onChange={() => setIsChecked(!isChecked)}
                     />
-                    {isChecked && (
-                      <div>
+                    {isChecked && <div> 
+                      
+                      <Row>
+                        <Col xl={1}></Col>
+                        <Col xl={2}>
+                          <h3 style={{ color: "rgb(62, 172, 255)", fontSize: "large", fontWeight: "600", marginTop: "1rem" }}>Amount</h3>
+                        </Col>
+                        <Col xl={6}>
+                          <form style={{ marginTop: "8px" }}>
+                            <div className="input-group ">
+                              <span className="input-group-text text-black">
+                                -
+                              </span>
+                              {/* <input type="text" className="form-control" value={inputValue}/> */}
+                              <input
+                                type="text"
+                                className="form-control"
+                                value={inputValue}
+                                    onChange={(e) =>
+                                      setInputValue(e.target.value)
+                                    }
+
+                              />
+                              <span className="input-group-text text-black">
+                                +
+                              </span>
+                            </div>
+                          </form>
+                        </Col>
+                        <Col className="unitbtn">
+                          <Button 
+                           variant="light"
+                           className="bttn"
+                          >
+                            <i className="material-icons">
+                              swap_horiz
+                            </i>
+                            Units
+                          </Button>
+                        </Col>
+                        </Row>
                         <Row>
                           <Col xl={1}></Col>
                           <Col xl={2}>
@@ -1692,7 +1730,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                           </Row>
                         </Row>
                       </div>
-                    )}
+                    }
                     <Modal.Footer style={{ justifyContent: "center" }}>
                       <Button
                         style={{ backgroundColor: "red", width: "30%" }}
@@ -1845,8 +1883,11 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                           </div>
                                         </form>
                                       </Col>
-                                      <Col className="btn">
-                                        <Button className="bttn" variant="info">
+                                      <Col className="unitbtn" >
+                                        <Button 
+                                         variant="light"
+                                         className="bttn"
+                                        >
                                           <i className="material-icons">
                                             swap_horiz
                                           </i>
@@ -1888,8 +1929,11 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                           </div>
                                         </form>
                                       </Col>
-                                      <Col className="btn">
-                                        <Button className="bttn" variant="info">
+                                      <Col className="unitbtn" >
+                                        <Button 
+                                        variant="light"
+                                        className="bttn"
+                                        >
                                           <i className="material-icons">
                                             swap_horiz
                                           </i>
@@ -1929,8 +1973,12 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
           </Tab.Container>
         </Modal.Body>
       </Modal>
+
+     
     </>
   );
 };
+
+
 
 export default DataTable;

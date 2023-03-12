@@ -25,6 +25,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { createTrade, getAllCoin } from "../../../../Redux/coins";
 import Cookies from "universal-cookie";
 import jwt_decode from "jwt-decode";
+
 // import { change1hAction, getCoinMarketAction } from "../../../../store/actions/CoinMarketActions";
 // import { addWatchlistAction } from "../../../../store/actions/WatchlistAction";
 let columns = [
@@ -507,11 +508,11 @@ const DataTable = () => {
                               </div>
                             </form>
                           </Col>
-                          <Col className="btn">
+                          <Col className="unitbtn" >
                             {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
                             <Button
+                            variant="light"
                               className="bttn"
-                              variant="info"
                               onClick={() =>
                                 handleClick(modalCurrentData.price)
                               }
@@ -530,6 +531,7 @@ const DataTable = () => {
                             </p>
                           </div>
                         </Row>
+
                         <div className="custom-tab-1">
                           <Tab.Container defaultActiveKey="Posts">
                             <Nav
@@ -616,29 +618,17 @@ const DataTable = () => {
                                           </div>
                                         </form>
                                       </Col>
-                                      <Col
-                                        className="btn"
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        {" "}
-                                        <Button
-                                          style={{
-                                            backgroundColor: "#3eacff",
-                                            height: "3rem",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "center",
-                                          }}
-                                          variant="info"
+                                      <Col className="unitbtn" >
+                                        <Button 
+                                       variant="light"
+                                       className="bttn"
                                         >
                                           <i className="material-icons">
                                             swap_horiz
                                           </i>
                                           Units
                                         </Button>
+                                    
                                       </Col>
                                       <Col xl={1}></Col>
                                     </Row>
@@ -685,23 +675,10 @@ const DataTable = () => {
                                           </div>
                                         </form>
                                       </Col>
-                                      <Col
-                                        className="btn"
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        {" "}
-                                        <Button
-                                          style={{
-                                            backgroundColor: "#3eacff",
-                                            height: "3rem",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "center",
-                                          }}
-                                          variant="info"
+                                      <Col className="unitbtn" >
+                                        <Button 
+                                       variant="light"
+                                       className="bttn"
                                         >
                                           <i className="material-icons">
                                             swap_horiz
@@ -722,12 +699,12 @@ const DataTable = () => {
                             </Tab.Content>
                           </Tab.Container>
                         </div>
+                        
                       </Card.Body>
                     </Card>
                     <Modal.Footer style={{ justifyContent: "center" }}>
-                      <Button
-                        style={{ backgroundColor: "#3eacff", width: "30%" }}
-                        variant="info"
+                      <Button className="open"
+                        variant="light"
                         onClick={() => openTrade()}
                       >
                         Open Trade
