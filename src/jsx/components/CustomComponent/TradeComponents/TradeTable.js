@@ -480,7 +480,7 @@ const DataTable = () => {
                               </div>
                             </form>
                           </Col>
-                          <Col className="btn">
+                          <Col className="unitbtn" >
                             {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
                             <Button
                               className="bttn"
@@ -503,6 +503,7 @@ const DataTable = () => {
                             </p>
                           </div>
                         </Row>
+
                         <div className="custom-tab-1">
                           <Tab.Container defaultActiveKey="Posts">
                             <Nav
@@ -589,22 +590,8 @@ const DataTable = () => {
                                           </div>
                                         </form>
                                       </Col>
-                                      <Col
-                                        className="btn"
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        {" "}
-                                        <Button
-                                          style={{
-                                            backgroundColor: "#3eacff",
-                                            height: "3rem",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "center",
-                                          }}
+                                      <Col className="unitbtn" >
+                                        <Button className="bttn"
                                           variant="info"
                                         >
                                           <i className="material-icons">
@@ -658,22 +645,8 @@ const DataTable = () => {
                                           </div>
                                         </form>
                                       </Col>
-                                      <Col
-                                        className="btn"
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        {" "}
-                                        <Button
-                                          style={{
-                                            backgroundColor: "#3eacff",
-                                            height: "3rem",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "center",
-                                          }}
+                                      <Col className="unitbtn" >
+                                        <Button className="bttn"
                                           variant="info"
                                         >
                                           <i className="material-icons">
@@ -695,6 +668,7 @@ const DataTable = () => {
                             </Tab.Content>
                           </Tab.Container>
                         </div>
+                        
                       </Card.Body>
                     </Card>
                     <Modal.Footer style={{ justifyContent: "center" }}>
