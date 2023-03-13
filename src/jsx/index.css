@@ -741,6 +741,9 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
       background-color: rgb(62, 172, 255)!important;
       color: white !important;
     }
+    .open{
+      width: 45% !important
+    }
     }
     @media screen and (max-width: 1202px) {
       .unitbtn{
@@ -767,7 +770,7 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
   .open{
  width: 30%;
  background-color: rgb(62, 172, 255) !important;
- color:white
+ color:white !important
   }
  .btnnotify{
   display: flex;
@@ -804,3 +807,8 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
   font-size: medium;
    font-weight: 500
 }
+/* .badge{
+  display: flex !important;
+  color: red !important;
+  font-size: 20px !important
+} */

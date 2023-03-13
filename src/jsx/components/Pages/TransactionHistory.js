@@ -51,49 +51,52 @@ const TransactionHistory = () => {
   const [withdraw, setWithdraw] = useState(false);
   return (
     <>
-      <PageTitle activeMenu="Transaction History" motherMenu="Home" />
-      <Row>
-        <ButtonGroup
-          style={{
-            width: "30%",
-            marginBottom: "30px",
-            "@media (maxWidth: 575px)": {
-              marginTop: "50%",
-            },
-          }}
-          aria-label="Basic example"
-        >
-          <Button
-            onClick={() => {
-              setDeposit(true);
-              setWithdraw(false);
-            }}
+      <Col xl="12">
+        <Row>
+          <PageTitle activeMenu="Transaction History" motherMenu="Home" />
+        </Row>
+        <Row>
+          <ButtonGroup
             style={{
-              backgroundColor: deposit ? "#0d6efd" : "#fff",
-              color: deposit ? "#fff" : "#0d6efd",
-              borderColor: "white",
+              width: "30%",
+              marginBottom: "30px",
+              "@media (maxWidth: 575px)": {
+                marginTop: "50%",
+              },
             }}
-            variant="secondary"
+            aria-label="Basic example"
           >
-            Deposit Requests
-          </Button>
-          <Button
-            onClick={() => {
-              setDeposit(false);
-              setWithdraw(true);
-            }}
-            style={{
-              backgroundColor: withdraw ? "#0d6efd" : "#fff",
-              color: withdraw ? "#fff" : "#0d6efd",
-              borderColor: "white",
-            }}
-            variant="secondary"
-          >
-            Withdraw Requests
-          </Button>
-        </ButtonGroup>
-      </Row>
-      {deposit ? (
+            <Button
+              onClick={() => {
+                setDeposit(true);
+                setWithdraw(false);
+              }}
+              style={{
+                backgroundColor: deposit ? "#0d6efd" : "#fff",
+                color: deposit ? "#fff" : "#0d6efd",
+                borderColor: "white",
+              }}
+              variant="secondary"
+            >
+              Deposit Requests
+            </Button>
+            <Button
+              onClick={() => {
+                setDeposit(false);
+                setWithdraw(true);
+              }}
+              style={{
+                backgroundColor: withdraw ? "#0d6efd" : "#fff",
+                color: withdraw ? "#fff" : "#0d6efd",
+                borderColor: "white",
+              }}
+              variant="secondary"
+            >
+              Withdraw Requests
+            </Button>
+          </ButtonGroup>
+        </Row>
+        {deposit ? (
         <Row>
           <DataTable
             header="Deposit Requests"
@@ -110,6 +113,7 @@ const TransactionHistory = () => {
           />
         </Row>
       )}
+      </Col>
     </>
   );
 };

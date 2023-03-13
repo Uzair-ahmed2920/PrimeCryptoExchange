@@ -157,6 +157,7 @@ const Markup = () => {
     {url:"/withdrawal", component: <Withdrawal />},
     {url:"/watchlist", component: <WatchList />},
     {url:"/portfolio", component: <Portfolio />},
+    {url:"/home", component: <Home />},
     {url:"/tradehistory", component: <TradeHistory />},
     {url:"/transactionhistory", component: <TransactionHistory />},
 

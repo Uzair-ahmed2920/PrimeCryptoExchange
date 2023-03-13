@@ -3,32 +3,17 @@ import PageTitle from "../../layouts/PageTitle";
 import DataTable from "../CustomComponent/PortFolioComponents/PortfolioTable";
 import TabelComponent from "../../layouts/TabelComponent";
 const Portfolio = () => {
-  const tableData = [
-    {
-      title: "ZEC",
-      markets: "ZCash",
-      price: "$0.9632",
-      change: "-9",
-      open: "yes",
-      pl: "3.49",
-    },
-    {
-      title: "AUD",
-      markets: "Australian Doller",
-      price: "$0.6932",
-      change: "+22",
-      open: "yes",
-      pl: "-0.15",
-    },
-  ];
-  let columns = [
-    { label: "Available Assets", columnName: "available_assets", sort: true },
-    { label: "Amount", columnName: "amount", sort: true },
-    { label: "Units", columnName: "sort", sort: false },
-    { label: "Open", columnName: "open", sort: true },
-    { label: "P/L($)", columnName: "pl", sort: false },
-  ];
-
+    const tableData = [
+        { title: 'ZEC', markets: 'ZCash', price: '$0.9632', change: '-9', open: "yes", pl: '3.49' },
+        { title: 'AUD', markets: 'Australian Doller', price: '$0.6932', change: '+22', open: "yes", pl: '-0.15' }
+    ];
+    let columns = [
+        { label: 'Available Assets', columnName: 'available_assets', sort: true },
+        { label: 'Amount', columnName: 'amount', sort: true },
+        { label: 'Units', columnName: 'sort', sort: false },
+        { label: 'Open', columnName: 'open', sort: true },
+        { label: 'P/L($)', columnName: 'pl', sort: false },
+    ];
   return (
     <>
       <PageTitle activeMenu="Portfolio" motherMenu="Home" />
