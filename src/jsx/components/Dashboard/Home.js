@@ -212,7 +212,7 @@ const Home = () => {
 											<Card className="border bg-white">
 												<Card.Body className="d-flex justify-content-center">
 													<Card.Text>
-														<h4>{requests.getUserWallet}</h4>
+														<h4>{requests.getUserWallet.toLocaleString()}</h4>
 														<p>Available</p>
 													</Card.Text>
 												</Card.Body>

@@ -8,6 +8,7 @@ const initialState = {
   getUserRewards: [],
   getAllUserDeposits: [{}],
   getAllUserWithdrawals: [{}],
+  getAllAdminWatchlist: [{}],
   allUsers: [],
   getUserWallet: 0,
   getAdminDefaultPer: {},
@@ -89,7 +90,7 @@ export const getAllDepositsByUserId = createAsyncThunk(
     try { 
       const res = await axiosInstance.get(`/api/deposit/${userId}`);
       if (res.status === 200) {
-        successMessage("successfully get all deposits by user id");
+       // successMessage("successfully get all deposits by user id");
         return res.data;
       }
     } catch (err) {
@@ -106,9 +107,64 @@ export const getAllWithdrawalsByUserId = createAsyncThunk(
     try {
       const res = await axiosInstance.get(`/api/withdraw/${userId}`);
       if (res.status === 200) {
-        successMessage("successfully get all withdrawals by user id");
+       // successMessage("successfully get all withdrawals by user id");
         return res.data;
       }
+    } catch (err) {
+      errorMessage(err.response.data || err.message);
+      console.log(err);
+    }
+  }
+);
+
+// get all admin watchlist
+export const getAllAdminWatchlist = createAsyncThunk(
+  "getAllAdminWatchlist",
+  async () => {
+    try {
+      const res = await axiosInstance.get(`/api/adminwatchlist/`);
+      if (res.status === 200) {
+       // successMessage("successfully get all admin watchlist");
+        return res.data;
+      }
+    } catch (err) {
+      errorMessage(err.response.data || err.message);
+      console.log(err);
+    }
+  }
+);
+
+// add to admin watchlist
+
+export const addToAdminWatchlist = createAsyncThunk(
+  "addToAdminWatchlist",
+  async (formData) => {
+    try {
+      const res = await axiosInstance.post(`/api/adminwatchlist/`, formData);
+      if (res.status === 200) {
+        successMessage("successfully added to admin watchlist");
+        return res.data;
+      }
+    } catch (err) {
+      errorMessage(err.response.data || err.message);
+      console.log(err);
+    }
+  }
+);
+//  remove from admin watchlist
+export const removeFromAdminWatchlist = createAsyncThunk(
+  "removeFromAdminWatchlist",
+  async (formData) => {
+    try {
+      const res = await axiosInstance.delete(
+        `/api/adminwatchlist/${formData?.watchlist_item_id}`
+      );
+      if (res.status === 200) {
+        successMessage("successfully removed from admin watchlist");
+        return res.data;
+      }
+
+
     } catch (err) {
       errorMessage(err.response.data || err.message);
       console.log(err);
@@ -203,7 +259,39 @@ export const userReducer = createSlice({
       state.isloading = false;
       console.log("rejected", action);
     },
-
+    [getAllAdminWatchlist.fulfilled]: (state, action) => {
+      state.isloading = false;
+      state.getAllAdminWatchlist = action.payload;
+    },
+    [getAllAdminWatchlist.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [getAllAdminWatchlist.rejected]: (state, action) => {
+      state.isloading = false;
+      console.log("rejected", action);
+    },
+    [addToAdminWatchlist.fulfilled]: (state, action) => {
+      state.isloading = false;
+      //state.getAllAdminWatchlist = action.payload;
+    },
+    [addToAdminWatchlist.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [addToAdminWatchlist.rejected]: (state, action) => {
+      state.isloading = false;
+      console.log("rejected", action);
+    },
+    [removeFromAdminWatchlist.fulfilled]: (state, action) => {
+      state.isloading = false;
+      //state.getAllAdminWatchlist = action.payload;
+    },
+    [removeFromAdminWatchlist.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [removeFromAdminWatchlist.rejected]: (state, action) => {
+      state.isloading = false;
+      console.log("rejected", action);
+    },
   },
 });
 // Action creators are generated for each case reducer function

@@ -30,20 +30,32 @@ const TabelComponent = ({ cols, data, tabeltitle, itemsPerPage }) => {
         </Card.Header>
         <Card.Body>
           <div id="job_data" className="dataTables_wrapper">
-            <Table responsive>
+            <Table responsive className="table dataTable  shadow-hover display">
               <thead>
                 <tr>
-                  {cols.map((headerItem, index) => (
-                    <th key={index}>{headerItem.title}</th>
-                  ))}
+                  {cols.map((headerItem, index) => {
+                    if(headerItem?.title === "Markets" || headerItem?.title === "Available Assets"){
+                      return <th key={index} style={{textAlign:"left"}}>{headerItem.title}</th>
+                    }
+                    else{
+                      return <th key={index} style={{textAlign:"center"}}>{headerItem.title}</th>
+                    }
+                  }
+                  )}
                 </tr>
               </thead>
               <tbody>
                 {currentItems?.map((item, index) => (
                   <tr key={index}>
-                    {cols.map((col, key) => (
-                      <td key={key}>{col?.render(item)}</td>
-                    ))}
+                    {cols.map((col, key) => {
+                      if(col?.title === "Markets" || col?.title === "Available Assets"){
+                        return <td key={key}>{col?.render(item)}</td>
+                      }
+                      else{
+                        return <td key={key} className="text-center">{col?.render(item)}</td>
+                      }
+                    })}
+
                   </tr>
                 ))}
               </tbody>

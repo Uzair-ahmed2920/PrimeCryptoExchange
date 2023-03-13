@@ -9,6 +9,7 @@ const initialState = {
   isloading: false, 
   data: [{}],
   withdrawRequest: [{}],
+  userWatchlist: [{}],
   coinData: [{}],
   tradeData: [{}],
   tradeHistory: [{}],
@@ -33,7 +34,7 @@ export const getAllCoin = createAsyncThunk("getAllCoin", async () => {
   try {
     const res = await axiosInstance.get(`/coinmarket`);
     if (res.status === 200) {
-      successMessage("Successfully get All Coin !");
+      //successMessage("Successfully get All Coin !");
       console.log(res.data , "coin data");
       const filterData= res.data.filter(item => cryptoicons[item.symbol])
       return filterData;
@@ -51,7 +52,7 @@ export const getAllTrade = createAsyncThunk("getAllTrade", async (postData) => {
     const res = await axiosInstance.get(`/api/activetrade/${postData.user_id}}`);
     if (res.status === 200) {
       console.log(res.data , "trade data");
-      successMessage("Successfully get All Trade !");
+     // successMessage("Successfully get All Trade !");
       return res.data;
     }
   } catch (err) {
@@ -104,7 +105,7 @@ export const getTradeHistory = createAsyncThunk(
     try {
       const res = await axiosInstance.get(`/api/tradehistory/${postData.user_id}`);
       if (res.status === 200) {
-        successMessage("Successfully get All Trade History !");
+       // successMessage("Successfully get All Trade History !");
         return res.data;
       }
     } catch (err) {
@@ -142,7 +143,7 @@ export const updateTradeProfitLoss = createAsyncThunk(
       try {
         const res = await axiosInstance.get(`/api/deposit/`);
         if (res.status === 200) {
-          successMessage("Successfully get All Deposit Request !");
+         // successMessage("Successfully get All Deposit Request !");
           return res.data;
         }
       } catch (err) {
@@ -158,7 +159,7 @@ export const updateTradeProfitLoss = createAsyncThunk(
       try {
         const res = await axiosInstance.get(`/api/withdraw/`);
         if (res.status === 200) {
-          successMessage("Successfully get All Withdraw Request !");
+         // successMessage("Successfully get All Withdraw Request !");
           return res.data;
         }
       } catch (err) {
@@ -231,7 +232,56 @@ export const updateTradeProfitLoss = createAsyncThunk(
       }
     }
   );
+// add to watchlist
+export const addToWatchList = createAsyncThunk(
+  "addToWatchList",
+  async (postData) => {
+    try {
+      const res = await axiosInstance.post(`/api/userwatchlist/`,postData);
+      console.log(res);
+      if (res.data) {
+        successMessage("Added to Watchlist Successfully !");
+      }
+      return res.data;
+    } catch (err) {
+      errorMessage(err.response.data || err.message);
+    }
+  }
+);
+// get watchlist
+export const getWatchList = createAsyncThunk(
+  "getWatchList",
+  async (postData) => {
+    try {
+      const res = await axiosInstance.get(`/api/userwatchlist/${postData.user_id}`);
+      if (res.status === 200) {
+        // successMessage("Successfully get All Watchlist !");
+        return res.data;
+      }
+    } catch (err) {
+      errorMessage(err.response.data || err.message);
+      console.log(err);
+    }
+  }
+);
+// remove from watchlist
+export const removeFromWatchList = createAsyncThunk(
+  "removeFromWatchList",
+  async (postData) => {
 
+    let body = { coin_name: postData.coin_name };
+    try {
+      const res = await axiosInstance.delete(`/api/userwatchlist/${postData.user_id}`, { data: body });
+      if (res.status === 200) {
+        successMessage("Removed from Watchlist Successfully !");
+        return res.data;
+      }
+    } catch (err) {
+      errorMessage(err.response.data || err.message);
+      console.log(err);
+    }
+  }
+);
 
 
   // create trade
@@ -424,8 +474,41 @@ export const coinReducer = createSlice({
     [updateTradeProfitLoss.rejected]: (state, action) =>{
       state.isloading = false;
       console.log("rejected", action);
-
-    }
+    },
+    [addToWatchList.fulfilled]: (state, action) =>{
+      console.log("action.payload", action.payload);
+      state.isloading = false;
+    },
+    [addToWatchList.pending]: (state, action) =>{
+      state.isloading = true;
+    },
+    [addToWatchList.rejected]: (state, action) =>{
+      state.isloading = false;
+      console.log("rejected", action);
+    },
+    [getWatchList.fulfilled]: (state, action) =>{
+      state.isloading = false;
+      state.userWatchlist = action.payload;
+      console.log("action.payload from watch  list", action.payload);
+    },
+    [getWatchList.pending]: (state, action) =>{
+      state.isloading = true;
+    },
+    [getWatchList.rejected]: (state, action) =>{
+      state.isloading = false;
+      console.log("rejected", action);
+    },
+    [removeFromWatchList.fulfilled]: (state, action) =>{
+      state.isloading = false;
+      console.log("action.payload", action.payload);
+    },
+    [removeFromWatchList.pending]: (state, action) =>{
+      state.isloading = true;
+    },
+    [removeFromWatchList.rejected]: (state, action) =>{
+      state.isloading = false;
+      console.log("rejected", action);
+    },
 
 
     
