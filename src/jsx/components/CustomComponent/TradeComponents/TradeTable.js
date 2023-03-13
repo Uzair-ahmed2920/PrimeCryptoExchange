@@ -329,8 +329,8 @@ const DataTable = () => {
                         <td className="text-center">{returnValue(item)}%</td>
                         <td className="text-center">
                           <Button
-                            style={{ backgroundColor: "#3eacff" }}
-                            className="btn-sm"
+                            style={{ backgroundColor:"rgb(62, 172, 255)",color:"white" }}
+                          variant="light"
                             onClick={() => buyNow(item)}
                           >
                             Buy Now
@@ -338,8 +338,8 @@ const DataTable = () => {
                         </td>
                         <td className="text-center">
                           <Button
-                            style={{ backgroundColor: "black" }}
-                            className="btn-sm text-white"
+                            style={{ backgroundColor: "black",color:"white" }}
+                       variant="light"
                             onClick={() => addToWatchlist(item)}
                           >
                             Add to WatchList

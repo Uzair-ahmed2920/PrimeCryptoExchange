@@ -17,7 +17,7 @@ const Portfolio = () => {
         <>
             <Col xl="12">   
                 <Row>
-                    <PageTitle activeMenu="Portfolio" motherMenu="Home" />
+                    <PageTitle activeMenu="Portfolio" motherMenu="Dashboard" link="dashboard" />
                 </Row>
                 <Row>
                     <DataTable header="" rows={tableData} columns={columns} />

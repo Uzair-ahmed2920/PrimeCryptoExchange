@@ -40,7 +40,7 @@ const ManageCoins = () => {
   const data = ["", "", ""];
   return (
     <>
-      <PageTitle activeMenu="Manage Coins" motherMenu="Admin" />
+      <PageTitle activeMenu="Manage Coins" motherMenu="Admin" link="admin-dashboard" />
       <TabelComponent
         cols={buyTablePending()}
         data={data}

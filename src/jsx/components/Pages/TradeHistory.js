@@ -22,7 +22,7 @@ const TradeHistory = () => {
         <>
             <Col xl="12">
                 <Row>
-                    <PageTitle activeMenu="Trade History" motherMenu="Home" />
+                    <PageTitle activeMenu="Trade History" motherMenu="Dashboard" link="dashboard" />
                 </Row>
                 <Row>
                     <DataTable header="" rows={tableData} columns={columns} />

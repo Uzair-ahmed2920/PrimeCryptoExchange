@@ -12,6 +12,7 @@ const initialState = {
   getUserWallet: 0,
   getAdminDefaultPer: {},
   isloading: false, 
+  notification: [],
 };
 // get requests
 // export const allUsers = createAsyncThunk("allUsers", async () => {
@@ -115,6 +116,22 @@ export const getAllWithdrawalsByUserId = createAsyncThunk(
     }
   }
 );
+export const getNotifcation = createAsyncThunk(
+  "getNotifcation",
+  async () => {
+    try {
+      const res = await axiosInstance.get(`/api/admin/notification/`);
+      if (res.status === 200) {
+        successMessage("successfully get all notifications by user id");
+        return res.data;
+      }
+    } catch (err) {
+      errorMessage(err.response.data || err.message);
+      console.log(err);
+    }
+  }
+);
+
 
 
 
@@ -187,6 +204,7 @@ export const userReducer = createSlice({
     },
     [getAllDepositsByUserId.pending]: (state, action) => {
       state.isloading = true;
+
     },
     [getAllDepositsByUserId.rejected]: (state, action) => {
       state.isloading = false;
@@ -203,6 +221,15 @@ export const userReducer = createSlice({
       state.isloading = false;
       console.log("rejected", action);
     },
+    [getNotifcation.fulfilled]: (state, action) => {
+      state.isloading = false;
+      state.notification = action.payload;
+    },
+    [getNotifcation.rejected]: (state, action) => {
+      state.isloading = false;
+      console.log("rejected", action);
+    }
+
 
   },
 });

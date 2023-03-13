@@ -151,9 +151,7 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
                                             </th>
 
                                         ))}
-
                                     </tr>
-
                                 </thead>
                                 <tbody >
                                     {sortData( header === "Deposit Requests"? requests?.getAllUserDeposits : requests?.getAllUserWithdrawals, sortD.columnName, sortD.sortType).map((item, index) => (

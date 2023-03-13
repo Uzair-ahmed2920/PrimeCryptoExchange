@@ -47,12 +47,12 @@ const WithdrawalOrderForm = () => {
 
 					<div className="input-group  d-flex justify-content-center">
 
-						<input type="text" value={data} onChange={(e)=>setData(e.target.value)} className="form-control form-control-sm" placeholder="Amount" />
-						<span className="input-group-text">USD</span>
+						<input type="text" value={data} onChange={(e)=>setData(e.target.value)} className="form-control form-control-sm"  style={{backgroundColor:"rgb(62 172 255 / 9%)"}} placeholder="Amount" />
+						<span className="input-group-text" style={{color:"rgb(62, 172, 255)" }} >USD</span>
 					</div>
 				</div>
 				<div className="text-center  d-flex justify-content-center " style={{ marginTop: '2rem', marginLeft:'1rem' }}>
-					<Button type="submit" className="btn w-50 text-white" style={{backgroundColor:'#3eacff'}}>Withdraw</Button>
+					<Button type="submit" variant='light' style={{ backgroundColor:"rgb(62, 172, 255)",color:"white",width:"50%" }}>Withdraw</Button>
 				</div>
 				<ToastContainer />
 			</form>

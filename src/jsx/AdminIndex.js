@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 
 /// React router dom
 import { Routes, Route, Outlet } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 /// Css
 import "./index.css";
@@ -212,6 +213,7 @@ function MainLayout() {
         </div>
       </div>
       <Footer />
+      <ToastContainer></ToastContainer>
     </div>
   );
 }

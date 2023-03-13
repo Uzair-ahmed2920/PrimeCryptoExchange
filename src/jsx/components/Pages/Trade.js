@@ -58,7 +58,7 @@ const Trade = (props) => {
     <>
       <Col xl="12">
         <Row>
-          <PageTitle activeMenu="Trade" motherMenu="Home" />
+          <PageTitle activeMenu="Trade" motherMenu="Dashboard" link="dashboard"/>
         </Row>
         <Row><DataTable /></Row>
         {/* <Row>

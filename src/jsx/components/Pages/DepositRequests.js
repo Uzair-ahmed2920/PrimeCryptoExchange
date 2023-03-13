@@ -89,7 +89,7 @@ const DepositRequests = () => {
   const data = ["", "", ""];
   return (
     <>
-      <PageTitle activeMenu="Deposit Request" motherMenu="Admin" />
+      <PageTitle activeMenu="Deposit Request" motherMenu="Admin" link="admin-dashboard" />
       <TabelComponent
         cols={renderTabelPending()}
         data={data}

@@ -53,7 +53,7 @@ const UserManagment = () => {
   const data = ["", "", ""];
   return (
     <>
-      <PageTitle activeMenu="User Management" motherMenu="Admin" />
+      <PageTitle activeMenu="User Management" motherMenu="Admin" link="admin-dashboard" />
       <TabelComponent
         cols={renderTabelPending()}
         data={data}
