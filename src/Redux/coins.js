@@ -113,7 +113,27 @@ export const getTradeHistory = createAsyncThunk(
     }
   }
 );
+
+// update trade 
+
+export const updateTradeProfitLoss = createAsyncThunk(
+  "updateTradeProfitLoss",
   
+  async (postData) => {
+   let reqBody = { take_profit: postData.take_profit, stop_loss: postData.stop_loss };
+    try {
+      const res = await axiosInstance.put(`/api/activetrade/${postData.id}`, reqBody);
+      if (res.status === 200) {
+        console.log(res.data);
+        successMessage("Trade Updated Successfully !");
+        return res.data;
+      }
+    } catch (err) {
+      console.log(err);
+      errorMessage(err.response.data || err.message);
+    }
+  }
+);
 
 // get requests
  export const getAllDepositRequest = createAsyncThunk(
@@ -394,6 +414,19 @@ export const coinReducer = createSlice({
       state.isloading = false;
       console.log("rejected", action);
     },
+    [updateTradeProfitLoss.fulfilled]: (state, action) =>{
+      state.isloading = false;
+
+    },
+    [updateTradeProfitLoss.pending]: (state, action) =>{
+      state.isloading = true;
+    },
+    [updateTradeProfitLoss.rejected]: (state, action) =>{
+      state.isloading = false;
+      console.log("rejected", action);
+
+    }
+
 
     
 
