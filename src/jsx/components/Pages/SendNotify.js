@@ -1,5 +1,6 @@
 import React from "react";
-
+import axiosInstance from "../../../services/AxiosInstance";
+import { errorMessage, successMessage } from "../../../utils/message";
 import {
   Button,
   Card,
@@ -8,15 +9,31 @@ import {
   Tab,
 } from "react-bootstrap";
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import { Col, Row } from "react-bootstrap";
 import PageTitle from "../../layouts/PageTitle"
 
-function
-  SendNotify() { 
+function SendNotify() {
+  const [contant, setContant] = React.useState("");
+    const semdNotify = async () => {
+      try {
+        const res = await axiosInstance.post(`/api/admin/notification/`,{content:contant}).catch((err) => {
+          console.log(err.response.data, "err.response.data");
+        });
+        if (res.status === 200) {
+          console.log(res.data , "notification send successfully");
+          successMessage("Notification end successfully");
+          return res.data;
+        }
+      } catch (err) {
+        errorMessage(err.response.data || err.message);
+        console.log(err);
+    }
+
+    }
+
   return (
     <>
   
-          <PageTitle activeMenu="Portfolio" motherMenu="Home" />
+          <PageTitle activeMenu="Portfolio" motherMenu="Admin" link="admin-dashboard" />
        
   <div className="col-xl-12">
       <div className="card">
@@ -37,7 +54,7 @@ function
 
                       <div className="textarea">
                         <FloatingLabel controlId="floatingTextarea2" label="Write a Notification here" className="textarea2" >
-                          <Form.Control
+                          <Form.Control onChange={(e) => setContant(e.target.value)}
                             as="textarea"
                             placeholder="Leave a comment here"
                             style={{ height: '100px' }}
@@ -45,9 +62,9 @@ function
                         </FloatingLabel>
                       </div>
                       <div className="open2" >
-                        <Button
+                        <Button onClick={semdNotify}
                           className="open2"
-                          variant="light" style={{backgroundColor:'#3eacff'}}
+                          variant="light" style={{backgroundColor:'#3eacff' ,color:'white'}}
                         >
                           Send
                         </Button>
@@ -68,6 +85,7 @@ function
 
 
 </div>
+
 </div>
 
     </>

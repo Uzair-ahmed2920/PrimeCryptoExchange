@@ -221,6 +221,19 @@ const DepositRequests = () => {
 
   return (
     <>
+      <PageTitle activeMenu="Deposit Request" motherMenu="Admin" link="admin-dashboard" />
+      <TabelComponent
+        cols={renderTabelPending()}
+        data={data}
+        tabeltitle={"Deposit Request"}
+        itemsPerPage={1}
+      />
+      <TabelComponent
+        cols={renderTabelAccepted()}
+        data={data}
+        tabeltitle={"Deposit Request"}
+        itemsPerPage={1}
+      />
       <PageTitle activeMenu="Deposit Request" motherMenu="Admin" />
 
       <ButtonGroup
