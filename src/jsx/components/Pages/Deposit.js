@@ -7,7 +7,7 @@ const Deposit = () => {
     return (
         <Col >
             <Row>
-                <PageTitle activeMenu="Deposit" motherMenu="Dashboard" link="dashboard" />
+                <PageTitle activeMenu="Deposit" motherMenu="Home" />
             </Row>
             <Row >
                 <Col xs={3}></Col>

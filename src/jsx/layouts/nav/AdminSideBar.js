@@ -118,15 +118,6 @@ const AdminSideBar = () => {
   let path = window.location.pathname;
   path = path.split("/");
   path = path[path.length - 1];
-  useEffect(() => {
-    debugger; 
-    // get the active path title from the menu list
-    const PathTitle = AdminMenueList.find((item) => item.to === path);
-    let activePath = AdminMenueList.find((item) => item.title === PathTitle.title);
-    if (activePath) {
-      setState({active : activePath.title});
-    }  
-  } , [path]);
   /// Active menu
   // let deshBoard = [
   //     "",

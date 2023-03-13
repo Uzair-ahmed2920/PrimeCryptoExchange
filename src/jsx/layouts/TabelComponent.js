@@ -34,7 +34,7 @@ const TabelComponent = ({ cols, data, tabeltitle, itemsPerPage }) => {
               <thead>
                 <tr>
                   {cols.map((headerItem, index) => {
-                    if(headerItem?.title === "Markets" || headerItem?.title === "Available Assets" || headerItem?.title === "Asset"){
+                    if(headerItem?.title === "Markets" || headerItem?.title === "Available Assets"){
                       return <th key={index} style={{textAlign:"left"}}>{headerItem.title}</th>
                     }
                     else{
@@ -48,7 +48,7 @@ const TabelComponent = ({ cols, data, tabeltitle, itemsPerPage }) => {
                 {currentItems?.map((item, index) => (
                   <tr key={index}>
                     {cols.map((col, key) => {
-                      if(col?.title === "Markets" || col?.title === "Available Assets" || col?.title === "Asset"){
+                      if(col?.title === "Markets" || col?.title === "Available Assets"){
                         return <td key={key}>{col?.render(item)}</td>
                       }
                       else{

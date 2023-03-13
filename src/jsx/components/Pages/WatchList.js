@@ -15,7 +15,7 @@ const WatchList = () => {
         <>
             <Col xl="12">
                 <Row>
-                    <PageTitle activeMenu="Watch list" motherMenu="Dashboard" />
+                    <PageTitle activeMenu="Watch list" motherMenu="Home" />
                 </Row>
                 <Row>
                     <DataTable  />

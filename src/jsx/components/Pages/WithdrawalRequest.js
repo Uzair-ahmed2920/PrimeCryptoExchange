@@ -89,7 +89,7 @@ const WithdrawalRequest = () => {
   const data = ["", "", ""];
   return (
     <>
-      <PageTitle activeMenu="Withdrawal Request" motherMenu="Admin" link="admin-dashboard" />
+      <PageTitle activeMenu="Withdrawal Request" motherMenu="Admin" />
       <TabelComponent
         cols={renderTabelPending()}
         data={data}

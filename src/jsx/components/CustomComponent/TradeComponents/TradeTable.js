@@ -257,7 +257,7 @@ const DataTable = () => {
                 color: GetColor(rowData.id, rowData.price),
               }}
             >
-              ${rowData.price?.toLocaleString()}
+              ${rowData.price.toLocaleString()}
             </span>
           );
         },
@@ -436,8 +436,8 @@ const DataTable = () => {
                         <td className="text-center">{returnValue(item)}%</td>
                         <td className="text-center">
                           <Button
-                            style={{ backgroundColor:"rgb(62, 172, 255)",color:"white" }}
-                          variant="light"
+                            style={{ backgroundColor: "#3eacff" }}
+                            className="btn-sm"
                             onClick={() => buyNow(item)}
                           >
                             Buy Now
@@ -445,8 +445,8 @@ const DataTable = () => {
                         </td>
                         <td className="text-center">
                           <Button
-                            style={{ backgroundColor: "black",color:"white" }}
-                       variant="light"
+                            style={{ backgroundColor: "black" }}
+                            className="btn-sm text-white"
                             onClick={() => addToWatchlist(item)}
                           >
                             Add to WatchList

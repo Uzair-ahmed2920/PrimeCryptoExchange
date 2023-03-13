@@ -5,7 +5,7 @@ const Withdrawal = () => {
     return (
         <Col >
             <Row>
-                <PageTitle activeMenu="Withdrawal" motherMenu="Dashboard" link="dashboard"/>
+                <PageTitle activeMenu="Withdrawal" motherMenu="Home" />
             </Row>
             <Row >
                 <Col xs={3}></Col>

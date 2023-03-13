@@ -9,26 +9,25 @@ export const MenuList = [
     {
         title: 'Trade',	
         classsChange: 'mm-collapse',		
-        iconStyle: <i className="material-icons">poll</i>,
+        iconStyle: <i className="material-icons">trending_up</i>,
         to: 'trade',					
     },
     {
         title: 'Deposit',	
         classsChange: 'mm-collapse',		
-        iconStyle:<i className="material-icons">account_balance_wallet</i>,
+        iconStyle:<i className="material-icons">library_add</i>,
         to: 'deposit',					
     },
     {
-        title: 'Withdraw',	
+        title: 'Withdrawal',	
         classsChange: 'mm-collapse',		
-        iconStyle:<i className="material-icons-round">payments</i>,
+        iconStyle:<i className="material-icons">present_to_all</i>,
         to: 'withdrawal',					
     },
-
     {
         title: 'WatchList',	
         classsChange: 'mm-collapse',		
-        iconStyle:<i className="material-icons">bookmark_add</i>,
+        iconStyle:<i className="material-icons">present_to_all</i>,
         to: 'watchlist',					
     },
     {
@@ -38,15 +37,15 @@ export const MenuList = [
         to: 'portfolio',					
     },
     {
-        title: 'Trading History',	
+        title: 'Trade History',	
         classsChange: 'mm-collapse',		
-        iconStyle:<i className="material-icons">insights</i>,
+        iconStyle:<i className="material-icons">show_chart</i>,
         to: 'tradehistory',					
     },
     {
         title: 'Transaction History',	
         classsChange: 'mm-collapse',		
-        iconStyle:<i className="material-icons">history
+        iconStyle:<i className="material-icons">watch_later
         </i>,
         to: 'transactionhistory',					
     },

@@ -118,14 +118,6 @@ const SideBar = () => {
   let path = window.location.pathname;
   path = path.split("/");
   path = path[path.length - 1];
-  useEffect(() => {
-    const PathTitle = MenuList.find((item) => item.to === path);
-    let activePath = MenuList.find((item) => item.title === PathTitle.title);
-    if (activePath) {
-      setState({active : activePath.title});
-    }  
-  } , [path]);
-
   /// Active menu
   // let deshBoard = [
   //     "",

@@ -13122,13 +13122,13 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
           left: auto;
           right: 13rem; }
     [data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a {
-      background: rgb(62 172 255 / 44%);
+      background: var(--rgba-primary-1);
       color: #fff;
       border-radius: 1.25rem; }
       [data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a i {
         color: var(--primary); }
     [data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li:hover > a {
-      background: rgb(62 172 255 / 44%);
+      background: var(--rgba-primary-1);
       color: var(--primary);
       /* box-shadow:0 12px 15px 0 var(--rgba-primary-1); */
       border-radius: 1.25rem;

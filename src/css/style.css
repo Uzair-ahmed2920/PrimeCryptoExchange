@@ -8521,7 +8521,7 @@ label {
     font-weight: 700; }
     @media only screen and (max-width: 87.5rem) {
       .nav-header .brand-logo {
-        padding-left: 2.25rem;
+        padding-left: 1.25rem;
         padding-right: 1.25rem; } }
     [data-sidebar-style="compact"] .nav-header .brand-logo,
     [data-sidebar-style="mini"] .nav-header .brand-logo {
@@ -8716,14 +8716,14 @@ label {
       padding-right: 0px; } }
   .header .header-content {
     height: 100%;
-    padding-left: 8rem;
+    padding-left: 7rem;
     padding-right: 1.075rem;
     align-items: center;
     display: flex;
     position: relative; }
     @media only screen and (max-width: 87.5rem) {
       .header .header-content {
-        padding-left: 8rem; } }
+        padding-left: 7rem; } }
     @media only screen and (max-width: 47.9375rem) {
       .header .header-content {
         padding-left: 3.75rem;
@@ -11744,7 +11744,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
       display: flex;
       flex-direction: column; }
       .deznav .metismenu > li a > i {
-        font-size: 26px;
+        font-size: 1.375rem;
         display: inline-block;
         vertical-align: middle;
         position: relative;
@@ -12624,13 +12624,13 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
           left: auto;
           right: 13rem; }
     [data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a {
-      background: rgb(62, 172, 255);
-      color: rgb(62, 172, 255);
+      background: var(--primary);
+      color: #fff;
       border-radius: 0.625rem; }
       [data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a i {
-        color: rgb(62, 172, 255); }
+        color: #fff; }
     [data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li:hover > a {
-      background: rgb(62, 172, 255);
+      background: var(--primary);
       color: var(--primary);
       /* box-shadow:0 12px 15px 0 var(--rgba-primary-1); */
       border-radius: 0.625rem;
@@ -18741,7 +18741,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   --rgba-primary-9: rgba(54, 36, 101, 0.9); }
 
 [data-primary="color_5"] {
-  --primary:  rgb(62, 172, 255);
+  --primary: #3250ff;
   --primary-hover: #0025fe;
   --primary-dark: #001698;
   --rgba-primary-1: rgba(50, 80, 255, 0.1);

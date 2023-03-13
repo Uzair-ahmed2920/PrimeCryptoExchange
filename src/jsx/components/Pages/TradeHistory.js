@@ -39,21 +39,6 @@ const TradeHistory = () => {
       <DataTable header="" rows={tableData} columns={columns} />
     </>
   );
+};
 
-
-    
-    return (
-        <>
-            <Col xl="12">
-                <Row>
-                    <PageTitle activeMenu="Trade History" motherMenu="Dashboard" link="dashboard" />
-                </Row>
-                <Row>
-                    <DataTable header="" rows={tableData} columns={columns} />
-                </Row>
-            </Col>
-        </>
-    )
-
-    }
 export default TradeHistory;
