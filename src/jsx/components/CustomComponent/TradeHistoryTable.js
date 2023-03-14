@@ -14,7 +14,6 @@ import cryptoicons from "../../../images/cryptoIcons/cryptoImg";
 import Cookies from "universal-cookie";
 
 import { getTradeHistory } from "../../../Redux/coins";
-import TabelComponent from "../../layouts/TabelComponent";
 
 const DataTable = ({ header, description, rows, columns, trade = false }) => {
   const [data, setData] = useState(
@@ -117,341 +116,184 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     console.log(ProfitLoss, "ProfitLoss");
     return profitLossPercent;
   };
-  const renderTabel = () => {
-    return [
-      {
-        title: "Asset",
-        render: (rowData) => {
-          return (
-            <div className="market-title d-flex align-items-center ">
-              <img src={cryptoicons[rowData.crypto_symbol]} width="12%" />
-              <Col>
-                <h5 className="mb-0 ms-2">{rowData.crypto_name}</h5>
-                <span className="text-muted ms-2">{rowData.crypto_symbol}</span>
-              </Col>
-            </div>
-          );
-        },
-      },
-      {
-        title: "Invested",
-        render: (rowData) => {
-          return <span>{rowData.investment}</span>;
-        },
-      },
-      {
-        title: "Units",
-        render: (rowData) => {
-          return (
-            <span style={{ color: rowData.change > 0 ? "green" : "red" }}>
-              {rowData.purchase_units}
-            </span>
-          );
-        },
-      },
-      {
-        title: "Open",
-        render: (rowData) => {
-          return (
-            <span style={{ color: rowData.pl > 0 ? "green" : "red" }}>
-              {" "}
-              {rowData.open_trade}
-            </span>
-          );
-        },
-      },
-      {
-        title: "Date Open",
-        render: (rowData) => {
-          return <span>{rowData.open_at}</span>;
-        },
-      },
-      {
-        title: "Close",
-        render: (rowData) => {
-          return (
-            <span>
-              {" "}
-              {rowData.partial_user_value
-                ? rowData.partial_user_value
-                : rowData.close_trade}
-            </span>
-          );
-        },
-      },
-      {
-        title: "Date close",
-        render: (rowData) => {
-          return <span>{rowData.closed_at}</span>;
-        },
-      },
-      {
-        title: "P/L($)",
-        render: (rowData) => {
-          return (
-            <span
-              style={{
-                color:
-                  profitLossAmount(
-                    rowData.purchase_units,
-                    rowData.crypto_purchase_price,
-                    rowData.crypto_sale_price
-                  ) > 0
-                    ? "green"
-                    : "red",
-              }}
-            >
-              $
-              {Math.round(
-                profitLossAmount(
-                  rowData.purchase_units,
-                  rowData.crypto_purchase_price,
-                  rowData.crypto_sale_price
-                ) * 1000
-              ) / 1000}
-            </span>
-          );
-        },
-      },
-      {
-        title: "P/L(%)",
-        render: (rowData) => {
-          return (
-            <span
-              style={{
-                color:
-                  profitLossPercentage(
-                    rowData.purchase_units,
-                    rowData.crypto_purchase_price,
-                    rowData.crypto_sale_price,
-                    rowData.open_trade
-                  ) > 0
-                    ? "green"
-                    : "red",
-              }}
-            >
-              {Math.round(
-                profitLossPercentage(
-                  rowData.purchase_units,
-                  rowData.crypto_purchase_price,
-                  rowData.crypto_sale_price,
-                  rowData.open_trade
-                ) * 1000
-              ) / 1000}
-              %
-            </span>
-          );
-        },
-      },
-    ];
-  };
 
   return (
     <>
-      <ToastContainer />
-      <TabelComponent
-        cols={renderTabel()}
-        data={requests?.tradeHistory}
-        tabeltitle={"Withdrawal Request"}
-        itemsPerPage={10}
-      />
-      {/* <div className="col-xl-12">
-        <div className="card">
-          <div className="card-header border-0">
-            <Col xl={12}>
-              <Row>
-                <h3>{header}</h3>
-              </Row>
-              <Row>
-                <p className="">{description}</p>
-              </Row>
-            </Col>
-          </div>
-          <div className="card-body pt-0">
-            <div className="table-responsive dataTablemarket">
-              <div id="market_wrapper" className="dataTables_wrapper no-footer">
-                <table
-                  className="table dataTable  shadow-hover display"
-                  style={{ minWidth: "845px" }}
-                >
-                  <thead>
-                    <tr>
-                      {columns.map((column, index) => (
-                        <th
-                          key={index}
-                          style={{
-                            textAlign:
-                              column.label === "Asset" ? "left" : "center",
-                          }}
-                        >
-                          {column.label}
-                          {column.sort ? (
-                            <span
-                              type="button"
-                              onClick={() =>
-                                column.sort ? onSort(column.columnName) : ""
-                              }
-                            >
-                              {sortD.columnName === column.columnName &&
-                              sortD.sortType === "asc" ? (
-                                <i
-                                  className="fa fa-arrow-down ms-2 fs-14"
-                                  style={{ opacity: "0.7" }}
-                                />
-                              ) : (
-                                <i
-                                  className="fa fa-arrow-up ms-2 fs-14"
-                                  style={{ opacity: "0.7" }}
-                                />
-                              )}
-                            </span>
-                          ) : null}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sortData(
-                      requests?.tradeHistory,
-                      sortD.columnName,
-                      sortD.sortType
-                    ).map((item, index) => (
-                      <tr key={index}>
-                        <td style={{ width: "30%" }}>
-                          <div className="market-title d-flex align-items-center ">
-                            <img
-                              src={cryptoicons[item.crypto_symbol]}
-                              width="12%"
-                            />
-                            <Col>
-                              <h5 className="mb-0 ms-2">{item.crypto_name}</h5>
-                              <span className="text-muted ms-2">
-                                {item.crypto_symbol}
-                              </span>
-                            </Col>
-                          </div>
-                        </td>
-
-                        <td className="text-center">{item.investment}</td>
-                        <td
-                          className="text-center"
-                          style={{ color: item.change > 0 ? "green" : "red" }}
-                        >
-                          {item.purchase_units}
-                        </td>
-                        <td
-                          className="text-center"
-                          style={{ color: item.pl > 0 ? "green" : "red" }}
-                        >
-                          {item.open_trade}
-                        </td>
-                        <td className="text-center">{item.open_at}</td>
-                        <td className="text-center">
-                          {item.partial_user_value
-                            ? item.partial_user_value
-                            : item.close_trade}
-                        </td>
-                        <td className="text-center">{item.closed_at}</td>
-                        <td
-                          className="text-center"
-                          style={{
-                            color:
-                              profitLossAmount(
-                                item.purchase_units,
-                                item.crypto_purchase_price,
-                                item.crypto_sale_price
-                              ) > 0
-                                ? "green"
-                                : "red",
-                          }}
-                        >
-                          $
-                          {Math.round(
-                            profitLossAmount(
-                              item.purchase_units,
-                              item.crypto_purchase_price,
-                              item.crypto_sale_price
-                            ) * 1000
-                          ) / 1000}
-                        </td>
-                        <td
-                          className="text-center"
-                          style={{
-                            color:
-                              profitLossPercentage(
-                                item.purchase_units,
-                                item.crypto_purchase_price,
-                                item.crypto_sale_price,
-                                item.open_trade
-                              ) > 0
-                                ? "green"
-                                : "red",
-                          }}
-                        >
-                          {Math.round(
-                            profitLossPercentage(
-                              item.purchase_units,
-                              item.crypto_purchase_price,
-                              item.crypto_sale_price,
-                              item.open_trade
-                            ) * 1000
-                          ) / 1000}
-                          %
-                        </td>
-                      </tr>
+    <ToastContainer/>
+    <div className="col-xl-12">
+      <div className="card">
+        <div className="card-header border-0">
+          <Col xl={12}>
+            <Row>
+              <h3>{header}</h3>
+            </Row>
+            <Row>
+              <p className="">{description}</p>
+            </Row>
+          </Col>
+        </div>
+        <div className="card-body pt-0">
+          <div className="table-responsive dataTablemarket">
+            <div id="market_wrapper" className="dataTables_wrapper no-footer">
+              <table
+                className="table dataTable  shadow-hover display"
+                style={{ minWidth: "845px" }}
+              >
+                <thead>
+                  <tr>
+                    {columns.map((column, index) => (
+                      <th
+                        key={index}
+                        style={{
+                          textAlign:
+                            column.label === "Asset" ? "left" : "center",
+                        }}
+                      >
+                        {column.label}
+                        {column.sort ? (
+                          <span
+                            type="button"
+                            onClick={() =>
+                              column.sort ? onSort(column.columnName) : ""
+                            }
+                          >
+                            {sortD.columnName === column.columnName &&
+                            sortD.sortType === "asc" ? (
+                              <i
+                                className="fa fa-arrow-down ms-2 fs-14"
+                                style={{ opacity: "0.7" }}
+                              />
+                            ) : (
+                              <i
+                                className="fa fa-arrow-up ms-2 fs-14"
+                                style={{ opacity: "0.7" }}
+                              />
+                            )}
+                          </span>
+                        ) : null}
+                      </th>
                     ))}
-                  </tbody>
-                </table>
-                <div className="d-sm-flex text-center justify-content-between align-items-center mt-3 mb-3">
-                  <div className="dataTables_info">
-                    Showing {activePag.current * sort + 1} to{" "}
-                    {data.length > (activePag.current + 1) * sort
-                      ? (activePag.current + 1) * sort
-                      : data.length}{" "}
-                    of {data.length} entries
-                  </div>
-                  <div
-                    className="dataTables_paginate paging_simple_numbers mb-0"
-                    id="application-tbl1_paginate"
-                  >
-                    <Link
-                      className="paginate_button previous "
-                      onClick={() =>
-                        activePag.current > 0 && onClick(activePag.current - 1)
-                      }
-                    >
-                      <i className="fa fa-angle-double-left"></i>
-                    </Link>
-                    <span>
-                      {paggination.map((number, i) => (
-                        <Link
-                          key={i}
-                          className={`paginate_button  ${
-                            activePag.current === i ? "current" : ""
-                          } `}
-                          onClick={() => onClick(i)}
-                        >
-                          {number}
-                        </Link>
-                      ))}
-                    </span>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortData(
+                    requests?.tradeHistory,
+                    sortD.columnName,
+                    sortD.sortType
+                  ).map((item, index) => (
+                    <tr key={index}>
+                      <td style={{ width: "30%" }}>
+                        <div className="market-title d-flex align-items-center ">
+                          <img
+                            src={cryptoicons[item.crypto_symbol]}
+                            width="12%"
+                          />
+                          <Col>
+                            <h5 className="mb-0 ms-2">{item.crypto_name}</h5>
+                            <span className="text-muted ms-2">
+                              {item.crypto_symbol}
+                            </span>
+                          </Col>
+                        </div>
+                      </td>
 
-                    <Link
-                      className="paginate_button next"
-                      onClick={() =>
-                        activePag.current + 1 < paggination.length &&
-                        onClick(activePag.current + 1)
-                      }
-                    >
-                      <i className="fa fa-angle-double-right"></i>
-                    </Link>
-                  </div>
+                      <td className="text-center">{item.investment}</td>
+                      <td
+                        className="text-center"
+                        style={{ color: item.change > 0 ? "green" : "red" }}
+                      >
+                        {item.purchase_units}
+                      </td>
+                      <td
+                        className="text-center"
+                        style={{ color: item.pl > 0 ? "green" : "red" }}
+                      >
+                        {item.open_trade}
+                      </td>
+                      <td className="text-center">{item.open_at}</td>
+                      <td className="text-center">{item.partial_user_value? item.partial_user_value : item.close_trade}</td>
+                      <td className="text-center">{item.closed_at}</td>
+                      <td
+                        className="text-center"
+                        style={{ color: profitLossAmount(item.purchase_units,
+                            item.crypto_purchase_price,
+                            item.crypto_sale_price) > 0 ? "green" : "red" }}
+                      >
+                        $
+                        {Math.round(profitLossAmount(
+                          item.purchase_units,
+                          item.crypto_purchase_price,
+                          item.crypto_sale_price
+                        )*1000)/1000}
+                      </td>
+                      <td
+                        className="text-center"
+                        style={{ color: profitLossPercentage(item.purchase_units,
+                            item.crypto_purchase_price,
+                            item.crypto_sale_price,
+                            item.open_trade) > 0 ? "green" : "red" }}
+                      >
+                        {Math.round(profitLossPercentage(
+                          item.purchase_units,
+                          item.crypto_purchase_price,
+                          item.crypto_sale_price,
+                          item.open_trade
+                        )*1000)/1000}%
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="d-sm-flex text-center justify-content-between align-items-center mt-3 mb-3">
+                <div className="dataTables_info">
+                  Showing {activePag.current * sort + 1} to{" "}
+                  {data.length > (activePag.current + 1) * sort
+                    ? (activePag.current + 1) * sort
+                    : data.length}{" "}
+                  of {data.length} entries
+                </div>
+                <div
+                  className="dataTables_paginate paging_simple_numbers mb-0"
+                  id="application-tbl1_paginate"
+                >
+                  <Link
+                    className="paginate_button previous "
+                    onClick={() =>
+                      activePag.current > 0 && onClick(activePag.current - 1)
+                    }
+                  >
+                    <i className="fa fa-angle-double-left"></i>
+                  </Link>
+                  <span>
+                    {paggination.map((number, i) => (
+                      <Link
+                        key={i}
+                        className={`paginate_button  ${
+                          activePag.current === i ? "current" : ""
+                        } `}
+                        onClick={() => onClick(i)}
+                      >
+                        {number}
+                      </Link>
+                    ))}
+                  </span>
+
+                  <Link
+                    className="paginate_button next"
+                    onClick={() =>
+                      activePag.current + 1 < paggination.length &&
+                      onClick(activePag.current + 1)
+                    }
+                  >
+                    <i className="fa fa-angle-double-right"></i>
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
+    </div>
     </>
   );
 };

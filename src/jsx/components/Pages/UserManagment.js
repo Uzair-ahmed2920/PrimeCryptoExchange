@@ -3,7 +3,8 @@ import PageTitle from "../../layouts/PageTitle";
 import TabelComponent from "../../layouts/TabelComponent";
 
 const UserManagment = () => {
-  const renderTabel = () => {
+    
+  const renderTabelPending = () => {
     return [
       {
         title: "User",
@@ -54,7 +55,7 @@ const UserManagment = () => {
     <>
       <PageTitle activeMenu="User Management" motherMenu="Admin" link="admin-dashboard" />
       <TabelComponent
-        cols={renderTabel()}
+        cols={renderTabelPending()}
         data={data}
         tabeltitle={"Users"}
         itemsPerPage={1}

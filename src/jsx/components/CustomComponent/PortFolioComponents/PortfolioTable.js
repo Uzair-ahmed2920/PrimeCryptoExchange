@@ -13,19 +13,17 @@ import {
   getAllTrade,
   partialTradeClose,
   tradeClose,
-  updateTradeProfitLoss,
 } from "../../../../Redux/coins";
 import { useDispatch, useSelector } from "react-redux";
 import cryptoicons from "../../../../images/cryptoIcons/cryptoImg";
 import { ToastContainer } from "react-toastify";
-import TabelComponent from "../../../layouts/TabelComponent";
 
 const DataTable = ({ header, description, rows, columns, trade = false }) => {
   const [data, setData] = useState(
     document.querySelectorAll("#market_wrapper tbody tr")
   );
-  //const handleClose = () => setShow(false);
-  //const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const [show, setShow] = useState(false);
   const [largeModal, setLargeModal] = useState(false);
   const [inputValue, setInputValue] = useState();
@@ -34,10 +32,8 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
   const [clicked, setClicked] = useState(false);
   const [symbol, setSymbol] = useState("");
   const [reduceData, setReduceData] = useState([]);
-  const [stopLoss, setStopLoss] = useState(0);
-  const [takeProfit, setTakeProfit] = useState(0)
-  //const [allCalculatedData, setAllCalculatedData] = useState([]);
-  //const [noSl, setNoSl] = useState(true);
+  const [allCalculatedData, setAllCalculatedData] = useState([]);
+  const [noSl, setNoSl] = useState(true);
   const navigate = useNavigate();
   const sort = 6;
   const activePag = useRef(0);
@@ -51,25 +47,6 @@ const DataTable = ({ header, description, rows, columns, trade = false }) => {
     setLargeModal(true);
   };
 
-  const handleClose = () => {
-    
-    setShow(false)
-
-  };
-  const handleShow = (value) => {
-    setModalCurrentData(value);
-    setShow(true);}
-    console.log(modalCurrentData,"modal current data");
-const UpdateTrade = () =>{
-
-  let body ={
-    id: modalCurrentData?.id,
-    take_profit: takeProfit,
-    stop_loss: stopLoss,
-  }
-  console.log("body from update", body);
-  dispatch(updateTradeProfitLoss(body));
-}
   console.log("modalCurrentData", modalCurrentData);
   console.log("currentPLAmount", currentPLAmount);
 
@@ -107,70 +84,72 @@ const UpdateTrade = () =>{
   };
 
   useEffect(() => {
+
+
     let body = {
       user_id: id,
     };
     dispatch(getAllCoin());
 
-    Promise.all([dispatch(getAllCoin()), dispatch(getAllTrade(body))]).then(
-      ([coinDataAction, tradeDataAction]) => {
-        const coinData = coinDataAction.payload;
-        const tradeData = tradeDataAction.payload;
+    Promise.all([dispatch(getAllCoin()), dispatch(getAllTrade(body))])
+    .then(([coinDataAction, tradeDataAction]) => {
+      const coinData = coinDataAction.payload;
+      const tradeData = tradeDataAction.payload;
+      
+      console.log(coinData, "coinData from reducer");
+      console.log(tradeData, "tradeData from reducer");
 
-        console.log(coinData, "coinData from reducer");
-        console.log(tradeData, "tradeData from reducer");
+      const result = Object.values(
+        tradeData.reduce((acc, cur) => {
+          let previousPrice = coinData.find(
+            (item) => item.symbol === cur.crypto_symbol
+          );
+          console.log(previousPrice, "previousPrice from reducer");
 
-        const result = Object.values(
-          tradeData.reduce((acc, cur) => {
-            let previousPrice = coinData.find(
-              (item) => item.symbol === cur.crypto_symbol
-            );
-            console.log(previousPrice, "previousPrice from reducer");
-
-            const key = cur.crypto_symbol;
-            if (!acc[key]) {
-              acc[key] = {
-                crypto_symbol: cur.crypto_symbol,
-                trade: cur.trade,
-                Count: 1,
-                total_trade: cur.trade,
-                admin_profit: cur.admin_profit,
-                crypto_name: cur.crypto_name,
-                crypto_purchase_price: cur.crypto_purchase_price,
-                id: cur.id,
-                invested_date: cur.invested_date,
-                investment: cur.investment,
-                purchase_units: cur.purchase_units,
-                stop_loss: cur.stop_loss,
-                take_profit: cur.take_profit,
-                user_id: cur.user_id,
-                profitLoss:
-                  (previousPrice?.price - cur.crypto_purchase_price) *
-                  cur.purchase_units,
-              };
-            } else {
-              acc[key].investment += cur.investment;
-              acc[key].purchase_units += cur.purchase_units;
-              acc[key].Count++;
-              acc[key].total_trade += cur.trade;
-              acc[key].profitLoss +=
+          const key = cur.crypto_symbol;
+          if (!acc[key]) {
+            acc[key] = {
+              crypto_symbol: cur.crypto_symbol,
+              trade: cur.trade,
+              Count: 1,
+              total_trade: cur.trade,
+              admin_profit: cur.admin_profit,
+              crypto_name: cur.crypto_name,
+              crypto_purchase_price: cur.crypto_purchase_price,
+              id: cur.id,
+              invested_date: cur.invested_date,
+              investment: cur.investment,
+              purchase_units: cur.purchase_units,
+              stop_loss: cur.stop_loss,
+              take_profit: cur.take_profit,
+              user_id: cur.user_id,
+              profitLoss:
                 (previousPrice?.price - cur.crypto_purchase_price) *
-                cur.purchase_units;
-            }
+                cur.purchase_units,
+            };
+          } else {
+            acc[key].investment += cur.investment;
+            acc[key].purchase_units += cur.purchase_units;
+            acc[key].Count++;
+            acc[key].total_trade += cur.trade;
+            acc[key].profitLoss +=
+              (previousPrice?.price - cur.crypto_purchase_price) *
+              cur.purchase_units;
+          }
 
-            return acc;
-          }, {})
-        ).map((obj) => {
-          obj.trade = obj.total_trade / obj.Count;
-          obj.profitLoss = obj.profitLoss / obj.Count;
-          delete obj.total_trade;
-          delete obj.Count;
-          return obj;
-        });
-        setReduceData(result);
-        console.log(result, "reduce from portfolio");
-      }
-    );
+          return acc;
+          
+        }, {})
+      ).map((obj) => {
+        obj.trade = obj.total_trade / obj.Count;
+        obj.profitLoss = obj.profitLoss / obj.Count;
+        delete obj.total_trade;
+        delete obj.Count;
+        return obj;
+      });
+      setReduceData(result);
+      console.log(result, "reduce from portfolio");
+    });
 
     // const resp = dispatch(getAllTrade(body)).then((res) => {
     //   console.log(res, "res from portfolio");
@@ -361,233 +340,6 @@ const UpdateTrade = () =>{
 
   const [isChecked, setIsChecked] = useState(false);
 
-  const renderTabel = () => {
-    return [
-      {
-        title: "Available Assets",
-        render: (rowData) => {
-          return (
-            <span>
-              <div className="market-title d-flex align-items-center ">
-                <img src={cryptoicons[rowData.crypto_symbol]} width="12%" />
-                <Col onClick={() => handleClick(rowData)}>
-                  <h5 className="mb-0 ms-2">{rowData.crypto_name}</h5>
-                  <span className="text-muted ms-2">
-                    {rowData.crypto_symbol}
-                  </span>
-                </Col>
-              </div>
-            </span>
-          );
-        },
-      },
-      {
-        title: "Amount",
-        render: (rowData) => {
-          return <span>{rowData.trade}</span>;
-        },
-      },
-      {
-        title: "Units",
-        render: (rowData) => {
-          return (
-            <span style={{ color: rowData.change > 0 ? "green" : "red" }}>
-              {" "}
-              {rowData.purchase_units}%
-            </span>
-          );
-        },
-      },
-      {
-        title: "Open",
-        render: (rowData) => {
-          return <span> {rowData.crypto_purchase_price}</span>;
-        },
-      },
-      {
-        title: "P/L($)",
-        render: (rowData) => {
-          return (
-            <span
-              style={{
-                color: rowData.profitLoss > 0 ? "green" : "red",
-              }}
-            >
-              ${rowData.profitLoss}
-            </span>
-          );
-        },
-      },
-    ];
-  };
-
-  const renderTabel2 = () => {
-    return [
-      {
-        title: "Available Assets",
-        render: (rowData) => {
-          return (
-            <div className="market-title d-flex align-items-center ">
-              <img src={cryptoicons[rowData.crypto_symbol]} width="12%" />
-              <Col>
-                <h5 className="mb-0 ms-2">{rowData.crypto_name}</h5>
-                <span className="text-muted ms-2">{rowData.crypto_symbol}</span>
-              </Col>
-            </div>
-          );
-        },
-      },
-      {
-        title: "Amount",
-        render: (rowData) => {
-          return <span>{rowData.trade}</span>;
-        },
-      },
-      {
-        title: "Units",
-        render: (rowData) => {
-          return (
-            <span style={{ color: rowData.change > 0 ? "green" : "red" }}>
-              {rowData.purchase_units}%
-            </span>
-          );
-        },
-      },
-      {
-        title: "Open",
-        render: (rowData) => {
-          return <span> {rowData.crypto_purchase_price}</span>;
-        },
-      },
-      {
-        title: "SL",
-        render: (rowData) => {
-          return (
-            <span
-              className="text-center"
-              style={{
-                border: "2px solid #D3D3D3",
-                padding: "6px 15px",
-                borderRadius: "5px",
-              }}
-              onClick={handleShow}
-            >
-              {rowData.stop_loss}
-            </span>
-          );
-        },
-      },
-      {
-        title: "TP",
-        render: (rowData) => {
-          return (
-            <span
-              className="text-center"
-              style={{
-                border: "2px solid #D3D3D3",
-                padding: "6px 15px",
-                borderRadius: "5px",
-              }}
-              onClick={handleShow}
-            >
-              {rowData.take_profit}
-            </span>
-          );
-        },
-      },
-      {
-        title: "P/L($)",
-        render: (rowData) => {
-          return (
-            <span
-              style={{
-                color:
-                  profitLossAmount(
-                    rowData.purchase_units,
-                    rowData.crypto_purchase_price,
-                    rowData.crypto_symbol
-                  ) > 0
-                    ? "green"
-                    : "red",
-              }}
-            >
-              {Math.round(
-                profitLossAmount(
-                  rowData.purchase_units,
-                  rowData.crypto_purchase_price,
-                  rowData.crypto_symbol
-                ) * 10000
-              ) / 10000}
-            </span>
-          );
-        },
-      },
-      {
-        title: "P/L(%)",
-        render: (rowData) => {
-          return (
-            <span
-              style={{
-                color:
-                  profitLossPercentage(
-                    rowData.purchase_units,
-                    rowData.crypto_purchase_price,
-                    rowData.crypto_symbol,
-                    rowData.trade
-                  ) > 0
-                    ? "green"
-                    : "red",
-              }}
-            >
-              {Math.round(
-                profitLossPercentage(
-                  rowData.purchase_units,
-                  rowData.crypto_purchase_price,
-                  rowData.crypto_symbol,
-                  rowData.trade
-                ) * 100
-              ) / 100}
-              %
-            </span>
-          );
-        },
-      },
-      {
-        title: "P/L(%)",
-        render: (rowData) => {
-          return (
-            <span>
-              <Button
-                variant="outline-danger"
-                style={{
-                  borderRadius: "50px ",
-                  padding: "5px 15px",
-                  fontSize: "10px bold",
-                  //   '&:hover': {
-                  //     backgroundColor: 'red',
-                  //     color: 'black',
-                  //   }
-                }}
-                onClick={() =>
-                  buyNow(
-                    rowData,
-                    profitLossAmount(
-                      rowData.purchase_units,
-                      rowData.crypto_purchase_price,
-                      rowData.crypto_symbol
-                    )
-                  )
-                }
-              >
-                Close
-              </Button>
-            </span>
-          );
-        },
-      },
-    ];
-  };
-
   return (
     <>
       <ToastContainer />
@@ -606,441 +358,6 @@ const UpdateTrade = () =>{
         </Button>
       )}
       <div className="col-xl-12">
-        {clicked === false ? (
-          <>
-            <TabelComponent
-              cols={renderTabel()}
-              data={reduceData}
-              tabeltitle={"Withdrawal Request"}
-              itemsPerPage={10}
-            />
-          </>
-        ) : (
-          // <div className="card">
-          //   <div className="card-header border-0">
-          //     <Col xl={12}>
-          //       <Row>
-          //         <h3>{header}</h3>
-          //       </Row>
-          //       <Row>
-          //         <p className="">{description}</p>
-          //       </Row>
-          //     </Col>
-          //   </div>
-          //   <div className="card-body pt-0">
-          //     <div className="table-responsive dataTablemarket">
-          //       <div
-          //         id="market_wrapper"
-          //         className="dataTables_wrapper no-footer"
-          //       >
-          //         <table
-          //           className="table dataTable  shadow-hover display"
-          //           style={{ minWidth: "845px" }}
-          //         >
-          //           <thead>
-          //             <tr>
-          //               {columns.map((column, index) => (
-          //                 <th
-          //                   key={index}
-          //                   style={{
-          //                     textAlign:
-          //                       column.label === "Available Assets"
-          //                         ? ""
-          //                         : "center",
-          //                   }}
-          //                 >
-          //                   {column.label}
-          //                   {column.sort ? (
-          //                     <span
-          //                       type="button"
-          //                       onClick={() =>
-          //                         column.sort ? onSort(column.columnName) : ""
-          //                       }
-          //                     >
-          //                       {sortD.columnName === column.columnName &&
-          //                       sortD.sortType === "asc" ? (
-          //                         <i
-          //                           className="fa fa-arrow-down ms-2 fs-14"
-          //                           style={{ opacity: "0.7" }}
-          //                         />
-          //                       ) : (
-          //                         <i
-          //                           className="fa fa-arrow-up ms-2 fs-14"
-          //                           style={{ opacity: "0.7" }}
-          //                         />
-          //                       )}
-          //                     </span>
-          //                   ) : null}
-          //                 </th>
-          //               ))}
-          //             </tr>
-          //           </thead>
-          //           <tbody>
-          //             {sortData(
-          //               reduceData,
-          //               sortD.columnName,
-          //               sortD.sortType
-          //             ).map((item, index) => (
-          //               <tr key={index}>
-          //                 <td style={{ width: "30%" }}>
-          //                   <div className="market-title d-flex align-items-center ">
-          //                     <img
-          //                       src={cryptoicons[item.crypto_symbol]}
-          //                       width="12%"
-          //                     />
-          //                     <Col onClick={() => handleClick(item)}>
-          //                       <h5 className="mb-0 ms-2">
-          //                         {item.crypto_name}
-          //                       </h5>
-          //                       <span className="text-muted ms-2">
-          //                         {item.crypto_symbol}
-          //                       </span>
-          //                     </Col>
-          //                   </div>
-          //                 </td>
-          //                 <td className="text-center">{item.trade}</td>
-          //                 <td
-          //                   className={`text-center`}
-          //                   style={{ color: item.change > 0 ? "green" : "red" }}
-          //                 >
-          //                   {item.purchase_units}%
-          //                 </td>
-          //                 <td className="text-center">
-          //                   {item.crypto_purchase_price}
-          //                 </td>
-          //                 <td
-          //                   className={`text-center`}
-          //                   style={{
-          //                     color: item.profitLoss > 0 ? "green" : "red",
-          //                   }}
-          //                 >
-          //                   ${item.profitLoss}
-          //                 </td>
-          //               </tr>
-          //             ))}
-          //           </tbody>
-          //         </table>
-          //         <div className="d-sm-flex text-center justify-content-between align-items-center mt-3 mb-3">
-          //           <div className="dataTables_info">
-          //             Showing {activePag.current * sort + 1} to{" "}
-          //             {data.length > (activePag.current + 1) * sort
-          //               ? (activePag.current + 1) * sort
-          //               : data.length}{" "}
-          //             of {data.length} entries
-          //           </div>
-          //           <div
-          //             className="dataTables_paginate paging_simple_numbers mb-0"
-          //             id="application-tbl1_paginate"
-          //           >
-          //             <Link
-          //               className="paginate_button previous "
-          //               onClick={() =>
-          //                 activePag.current > 0 &&
-          //                 onClick(activePag.current - 1)
-          //               }
-          //             >
-          //               <i className="fa fa-angle-double-left"></i>
-          //             </Link>
-          //             <span>
-          //               {paggination.map((number, i) => (
-          //                 <Link
-          //                   key={i}
-          //                   className={`paginate_button  ${
-          //                     activePag.current === i ? "current" : ""
-          //                   } `}
-          //                   onClick={() => onClick(i)}
-          //                 >
-          //                   {number}
-          //                 </Link>
-          //               ))}
-          //             </span>
-
-          //             <Link
-          //               className="paginate_button next"
-          //               onClick={() =>
-          //                 activePag.current + 1 < paggination.length &&
-          //                 onClick(activePag.current + 1)
-          //               }
-          //             >
-          //               <i className="fa fa-angle-double-right"></i>
-          //             </Link>
-          //           </div>
-          //         </div>
-          //       </div>
-          //     </div>
-          //   </div>
-          // </div>
-          <TabelComponent
-            cols={renderTabel2()}
-            data={filterDataForCoin()}
-            tabeltitle={"Withdrawal Request"}
-            itemsPerPage={10}
-          />
-          // <div className="card">
-          //   <div className="card-header border-0">
-          //     <Col xl={12}>
-          //       <Row>
-          //         <h3>{header}</h3>
-          //       </Row>
-          //       <Row>
-          //         <p className="">{description}</p>
-          //       </Row>
-          //     </Col>
-          //   </div>
-          //   <div className="card-body pt-0">
-          //     <div className="table-responsive dataTablemarket">
-          //       <div
-          //         id="market_wrapper"
-          //         className="dataTables_wrapper no-footer"
-          //       >
-          //         <table
-          //           className="table dataTable  shadow-hover display"
-          //           style={{ minWidth: "845px" }}
-          //         >
-          //           <thead>
-          //             <tr>
-          //               {InnerColumns.map((column, index) => (
-          //                 <th
-          //                   key={index}
-          //                   style={{
-          //                     textAlign:
-          //                       column.label === "Available Assets"
-          //                         ? ""
-          //                         : "center",
-          //                   }}
-          //                 >
-          //                   {column.label}
-          //                   {column.sort ? (
-          //                     <span
-          //                       type="button"
-          //                       onClick={() =>
-          //                         column.sort ? onSort(column.columnName) : ""
-          //                       }
-          //                     >
-          //                       {sortD.columnName === column.columnName &&
-          //                       sortD.sortType === "asc" ? (
-          //                         <i
-          //                           className="fa fa-arrow-down ms-2 fs-14"
-          //                           style={{ opacity: "0.7" }}
-          //                         />
-          //                       ) : (
-          //                         <i
-          //                           className="fa fa-arrow-up ms-2 fs-14"
-          //                           style={{ opacity: "0.7" }}
-          //                         />
-          //                       )}
-          //                     </span>
-          //                   ) : null}
-          //                 </th>
-          //               ))}
-          //               <th>
-          //                 <Button
-          //                   variant="outline-dark"
-          //                   style={{
-          //                     borderRadius: "50px ",
-          //                     border: "2px solid grey",
-          //                     padding: "6px",
-          //                     fontSize: "10px bold",
-          //                     paddingLeft: "20px",
-          //                     paddingRight: "20px",
-          //                     //   '&:hover': {
-          //                     //     backgroundColor: 'red',
-          //                     //     color: 'black',
-          //                     //   }
-          //                   }}
-          //                 >
-          //                   Close all
-          //                 </Button>
-          //               </th>
-          //             </tr>
-          //           </thead>
-          //           <tbody>
-          //             {sortData(
-          //               filterDataForCoin(),
-          //               sortD.columnName,
-          //               sortD.sortType
-          //             ).map((item, index) => (
-          //               <tr key={index}>
-          //                 <td style={{ width: "30%" }}>
-          //                   <div className="market-title d-flex align-items-center ">
-          //                     <img
-          //                       src={cryptoicons[item.crypto_symbol]}
-          //                       width="12%"
-          //                     />
-          //                     <Col>
-          //                       <h5 className="mb-0 ms-2">
-          //                         {item.crypto_name}
-          //                       </h5>
-          //                       <span className="text-muted ms-2">
-          //                         {item.crypto_symbol}
-          //                       </span>
-          //                     </Col>
-          //                   </div>
-          //                 </td>
-          //                 <td className="text-center">{item.trade}</td>
-          //                 <td
-          //                   className={`text-center`}
-          //                   style={{ color: item.change > 0 ? "green" : "red" }}
-          //                 >
-          //                   {item.purchase_units}%
-          //                 </td>
-          //                 <td className="text-center">
-          //                   {item.crypto_purchase_price}
-          //                 </td>
-          //                 <td className="text-center">
-          //                   <span
-          //                     className="text-center"
-          //                     style={{
-          //                       border: "2px solid #D3D3D3",
-          //                       padding: "6px 15px",
-          //                       borderRadius: "5px",
-          //                     }}
-          //                     onClick={handleShow}
-          //                   >
-          //                     {item.stop_loss}
-          //                   </span>
-          //                 </td>
-          //                 <td className="text-center">
-          //                   <span
-          //                     className="text-center"
-          //                     style={{
-          //                       border: "2px solid #D3D3D3",
-          //                       padding: "6px 15px",
-          //                       borderRadius: "5px",
-          //                     }}
-          //                     onClick={handleShow}
-          //                   >
-          //                     {item.take_profit}
-          //                   </span>
-          //                 </td>
-          //                 <td
-          //                   className={`text-center`}
-          //                   style={{
-          //                     color:
-          //                       profitLossAmount(
-          //                         item.purchase_units,
-          //                         item.crypto_purchase_price,
-          //                         item.crypto_symbol
-          //                       ) > 0
-          //                         ? "green"
-          //                         : "red",
-          //                   }}
-          //                 >
-          //                   {Math.round(
-          //                     profitLossAmount(
-          //                       item.purchase_units,
-          //                       item.crypto_purchase_price,
-          //                       item.crypto_symbol
-          //                     ) * 10000
-          //                   ) / 10000}
-          //                 </td>
-          //                 <td
-          //                   className={`text-center`}
-          //                   style={{
-          //                     color:
-          //                       profitLossPercentage(
-          //                         item.purchase_units,
-          //                         item.crypto_purchase_price,
-          //                         item.crypto_symbol,
-          //                         item.trade
-          //                       ) > 0
-          //                         ? "green"
-          //                         : "red",
-          //                   }}
-          //                 >
-          //                   {Math.round(
-          //                     profitLossPercentage(
-          //                       item.purchase_units,
-          //                       item.crypto_purchase_price,
-          //                       item.crypto_symbol,
-          //                       item.trade
-          //                     ) * 100
-          //                   ) / 100}
-          //                   %
-          //                 </td>
-          //                 <td className="align-items-center">
-          //                   <Button
-          //                     variant="outline-danger"
-          //                     style={{
-          //                       borderRadius: "50px ",
-          //                       padding: "5px 15px",
-          //                       fontSize: "10px bold",
-          //                       //   '&:hover': {
-          //                       //     backgroundColor: 'red',
-          //                       //     color: 'black',
-          //                       //   }
-          //                     }}
-          //                     onClick={() =>
-          //                       buyNow(
-          //                         item,
-          //                         profitLossAmount(
-          //                           item.purchase_units,
-          //                           item.crypto_purchase_price,
-          //                           item.crypto_symbol
-          //                         )
-          //                       )
-          //                     }
-          //                   >
-          //                     Close
-          //                   </Button>
-          //                 </td>
-          //               </tr>
-          //             ))}
-          //           </tbody>
-          //         </table>
-          //         <div className="d-sm-flex text-center justify-content-between align-items-center mt-3 mb-3">
-          //           <div className="dataTables_info">
-          //             Showing {activePag.current * sort + 1} to{" "}
-          //             {data.length > (activePag.current + 1) * sort
-          //               ? (activePag.current + 1) * sort
-          //               : data.length}{" "}
-          //             of {data.length} entries
-          //           </div>
-          //           <div
-          //             className="dataTables_paginate paging_simple_numbers mb-0"
-          //             id="application-tbl1_paginate"
-          //           >
-          //             <Link
-          //               className="paginate_button previous "
-          //               onClick={() =>
-          //                 activePag.current > 0 &&
-          //                 onClick(activePag.current - 1)
-          //               }
-          //             >
-          //               <i className="fa fa-angle-double-left"></i>
-          //             </Link>
-          //             <span>
-          //               {paggination.map((number, i) => (
-          //                 <Link
-          //                   key={i}
-          //                   className={`paginate_button  ${
-          //                     activePag.current === i ? "current" : ""
-          //                   } `}
-          //                   onClick={() => onClick(i)}
-          //                 >
-          //                   {number}
-          //                 </Link>
-          //               ))}
-          //             </span>
-
-          //             <Link
-          //               className="paginate_button next"
-          //               onClick={() =>
-          //                 activePag.current + 1 < paggination.length &&
-          //                 onClick(activePag.current + 1)
-          //               }
-          //             >
-          //               <i className="fa fa-angle-double-right"></i>
-          //             </Link>
-          //           </div>
-          //         </div>
-          //       </div>
-          //     </div>
-          //   </div>
-          // </div>
-        )}
-      </div>
-      {/* <div className="col-xl-12">
         {clicked === false ? (
           <div className="card">
             <div className="card-header border-0">
@@ -1309,28 +626,17 @@ const UpdateTrade = () =>{
                             {item.crypto_purchase_price}
                           </td>
                           <td className="text-center">
-                            <span
-                              className="text-center"
-                              style={{
-                                border: "2px solid #D3D3D3",
-                                padding: "6px 15px",
-                                borderRadius: "5px",
-                              }}
-                              onClick={handleShow}
+                            <span className="text-center" style={{ border: "2px solid #D3D3D3", padding: "6px 15px", borderRadius: "5px" }}
+                                 onClick={handleShow}
                             >
-                              {item.stop_loss}
+                        {item.stop_loss}
                             </span>
                           </td>
                           <td className="text-center">
-                            <span
-                              className="text-center"
-                              style={{
-                                border: "2px solid #D3D3D3",
-                                padding: "6px 15px",
-                                borderRadius: "5px",
-                              }}
-                              onClick={handleShow}
+                            <span className="text-center" style={{ border: "2px solid #D3D3D3", padding: "6px 15px", borderRadius: "5px" }}
+                            onClick={handleShow}
                             >
+
                               {item.take_profit}
                             </span>
                           </td>
@@ -1460,7 +766,7 @@ const UpdateTrade = () =>{
             </div>
           </div>
         )}
-      </div> */}
+      </div>
 
       <Modal className="fade bd-example-modal-lg" show={largeModal} size="lg">
         <Modal.Header>
@@ -1769,13 +1075,8 @@ const UpdateTrade = () =>{
           </Tab.Container>
         </Modal.Body>
       </Modal>
-      {/* Update Trade Modal */}
-      <Modal
-        className="fade bd-example-modal-lg"
-        show={show}
-        onHide={handleClose}
-        size="lg"
-      >
+{/* Update Trade Modal */}
+      <Modal className="fade bd-example-modal-lg" show={show} onHide={handleClose} size="lg">
         <Modal.Header>
           <Modal.Title>Update Trade</Modal.Title>
           <Button
@@ -1792,15 +1093,15 @@ const UpdateTrade = () =>{
                     <Card>
                       <Card.Header>
                         <Row>
-                          <Col xl={2} xs={4}>
+                          <Col xl={2} xs={4}  >
                             <img
-                              src={cryptoicons[modalCurrentData?.crypto_symbol]}
+                              src={cryptoicons[modalCurrentData?.symbol]}
                               width="100%"
                             />
                           </Col>
 
                           <Col>
-                            <h4 className="mb-0">{modalCurrentData?.crypto_name}</h4>
+                            <h4 className="mb-0">{modalCurrentData?.name}</h4>
                             <Row>
                               <div className="d-flex justify-content-start mb-0">
                                 <p
@@ -1808,7 +1109,7 @@ const UpdateTrade = () =>{
                                   style={{ fontSize: "20px" }}
                                 >
                                   <h3 className="mb-0">
-                                    {modalCurrentData?.crypto_purchase_price}
+                                    {modalCurrentData?.price}
                                   </h3>
                                 </p>
                                 <span
@@ -1818,12 +1119,11 @@ const UpdateTrade = () =>{
                                   650.89[3.04%]
                                 </span>
                               </div>
-                              <span
-                                className="mb-0"
+                              <span className="mb-0"
                                 style={{ color: "black", fontWeight: "300" }}
-                              >
-                                Price by PrimeCrypto | Market Open
-                              </span>
+                              >Price by PrimeCrypto |
+
+                                Market Open</span>
                             </Row>
                           </Col>
                         </Row>
@@ -1831,19 +1131,13 @@ const UpdateTrade = () =>{
                       <Card.Body>
                         <div className="custom-tab-1">
                           <Tab.Container defaultActiveKey="Posts">
-                            <Nav
-                              as="ul"
-                              style={{ justifyContent: "space-around" }}
-                            >
-                              <Nav.Item as="li" className="nav-item">
-                                <Nav.Link
-                                  to="#nosl"
-                                  eventKey="NoSl"
-                                  style={{ color: "red" }}
-                                >
+                            <Nav as="ul" style={{ justifyContent: "space-around" }}>
+                              <Nav.Item as="li" className="nav-item" >
+                                <Nav.Link to="#nosl" eventKey="NoSl" style={{ color: "red" }}>
                                   No SL
                                 </Nav.Link>
-                                <Link style={{ color: "rgb(62, 172, 255)" }}>
+                                <Link style={{ color: "rgb(62, 172, 255)" }}
+                                >
                                   Stop Loss
                                 </Link>
                               </Nav.Item>
@@ -1864,30 +1158,30 @@ const UpdateTrade = () =>{
                               <Nav.Item as="li" i className="nav-item">
                                 <Nav.Link
                                   to="#take-profit"
-                                  eventKey="TakeProfit"
-                                  style={{ color: "green" }}
-                                >
+                                  eventKey="TakeProfit" style={{ color: "green" }}>
                                   $50,000.00
                                 </Nav.Link>
-                                <Link
-                                  style={{
-                                    color: "rgb(62, 172, 255)",
-                                    marginLeft: "2rem",
-                                  }}
-                                  onClick={() => onClick()}
+                                <Link style={{ color: "rgb(62, 172, 255)", marginLeft: "2rem" }}
+                                  onClick={() =>
+                                    onClick()
+                                  }
                                 >
                                   Take Profit
                                 </Link>
                               </Nav.Item>
                             </Nav>
-                            <Tab.Content>
-                              <Tab.Pane id="nosl" eventKey="NoSl">
+                            <Tab.Content >
+                              <Tab.Pane id="nosl" eventKey="NoSl"
+
+                              >
                                 <div className="sell-element">
                                   <div className="">
                                     <Row>
                                       <Col xl={1}></Col>
                                       <Col xl={2}>
-                                        <h3 className="rate">Rate</h3>
+                                        <h3 className="rate" >
+                                          Rate
+                                        </h3>
                                       </Col>
                                       <Col xl={6}>
                                         <form style={{ marginTop: "8px" }}>
@@ -1898,9 +1192,6 @@ const UpdateTrade = () =>{
                                             <input
                                               type="text"
                                               className="form-control"
-                                              onChange={(e) =>
-                                                setStopLoss(e.target.value)
-                                              }
                                             />
                                             <span className="input-group-text text-black">
                                               +
@@ -1930,13 +1221,18 @@ const UpdateTrade = () =>{
                                 </div>
                               </Tab.Pane>
 
-                              <Tab.Pane id="take-profit" eventKey="TakeProfit">
+                              <Tab.Pane
+                                id="take-profit"
+                                eventKey="TakeProfit"
+                              >
                                 <div className="sell-element">
                                   <div className="">
                                     <Row>
                                       <Col xl={1}></Col>
                                       <Col xl={2}>
-                                        <h3 className="rate">Rate</h3>
+                                        <h3 className="rate">
+                                          Rate
+                                        </h3>
                                       </Col>
                                       <Col xl={6}>
                                         <form style={{ marginTop: "8px" }}>
@@ -1947,9 +1243,6 @@ const UpdateTrade = () =>{
                                             <input
                                               type="text"
                                               className="form-control"
-                                              onChange={(e) =>
-                                                setTakeProfit(e.target.value)
-                                              }
                                             />
                                             <span className="input-group-text text-black">
                                               +
@@ -1984,12 +1277,15 @@ const UpdateTrade = () =>{
                       </Card.Body>
                     </Card>
                     <Modal.Footer style={{ justifyContent: "center" }}>
-                      <Button className="open" variant="info" onClick={()=> UpdateTrade()}>
+                      <Button className="open"
+                       
+                        variant="info"
+      
+                      >
                         Update Trade
                       </Button>
                     </Modal.Footer>
-                    <p style={{ justifyContent: "center", display: "flex" }}>
-                      By the Crytocurrencies your Accepting Our
+                    <p style={{ justifyContent: "center", display: "flex" }}>By the Crytocurrencies your Accepting Our
                       <Link style={{ color: "rgb(62, 172, 255)" }}>
                         Crytocurrencies Addendum
                       </Link>
@@ -2000,6 +1296,8 @@ const UpdateTrade = () =>{
             </div>
           </Tab.Container>
         </Modal.Body>
+
+
       </Modal>
 
      

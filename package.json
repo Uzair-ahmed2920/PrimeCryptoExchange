@@ -35,7 +35,6 @@
     "react-chartist": "^0.14.4",
     "react-chartjs-2": "^5.0.1",
     "react-color": "^2.19.3",
-    "react-currency-format": "^1.1.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
     "react-dropzone-uploader": "^2.11.0",

@@ -17,6 +17,7 @@ const currentUser = useSelector((state) => state.currentUser);
 				</ol>
 			</div>
 		</>
+    	
   );
 };
 

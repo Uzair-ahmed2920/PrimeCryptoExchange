@@ -712,13 +712,6 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
 }
 
 
-  @media only screen and (max-width: 600px) and (min-width: 320px)  {
-
-    .btn {
-      /* margin-top: -11rem; */
-      justify-content: end
-    }
-  }
 .unitbtn{
   margin-top: 7px !important;
 }
