@@ -384,7 +384,7 @@ const UpdateTrade = () =>{
       {
         title: "Amount",
         render: (rowData) => {
-          return <span>{rowData.trade}</span>;
+          return <span>{rowData.trade.toLocaleString()}</span>;
         },
       },
       {
@@ -393,7 +393,7 @@ const UpdateTrade = () =>{
           return (
             <span style={{ color: rowData.change > 0 ? "green" : "red" }}>
               {" "}
-              {rowData.purchase_units}%
+              {rowData.purchase_units.toLocaleString()}%
             </span>
           );
         },
@@ -401,7 +401,7 @@ const UpdateTrade = () =>{
       {
         title: "Open",
         render: (rowData) => {
-          return <span> {rowData.crypto_purchase_price}</span>;
+          return <span> {rowData.crypto_purchase_price.toLocaleString()}</span>;
         },
       },
       {
@@ -413,7 +413,7 @@ const UpdateTrade = () =>{
                 color: rowData.profitLoss > 0 ? "green" : "red",
               }}
             >
-              ${rowData.profitLoss}
+              ${rowData.profitLoss.toLocaleString()}
             </span>
           );
         },
@@ -440,7 +440,7 @@ const UpdateTrade = () =>{
       {
         title: "Amount",
         render: (rowData) => {
-          return <span>{rowData.trade}</span>;
+          return <span>{rowData.trade.toLocaleString()}</span>;
         },
       },
       {
@@ -448,7 +448,7 @@ const UpdateTrade = () =>{
         render: (rowData) => {
           return (
             <span style={{ color: rowData.change > 0 ? "green" : "red" }}>
-              {rowData.purchase_units}%
+              {rowData.purchase_units.toLocaleString()}%
             </span>
           );
         },
@@ -456,7 +456,7 @@ const UpdateTrade = () =>{
       {
         title: "Open",
         render: (rowData) => {
-          return <span> {rowData.crypto_purchase_price}</span>;
+          return <span> {rowData.crypto_purchase_price.toLocaleString()}</span>;
         },
       },
       {
@@ -516,8 +516,8 @@ const UpdateTrade = () =>{
                   rowData.purchase_units,
                   rowData.crypto_purchase_price,
                   rowData.crypto_symbol
-                ) * 10000
-              ) / 10000}
+                ) * 100
+              ) / 100}
             </span>
           );
         },
@@ -1601,7 +1601,7 @@ const UpdateTrade = () =>{
                               alignItems: "center",
                             }}
                           >
-                            {currentPLAmount}
+                            {currentPLAmount.toLocaleString()}
                           </div>
                         </Row>
 
@@ -1634,7 +1634,7 @@ const UpdateTrade = () =>{
                               alignItems: "center",
                             }}
                           >
-                            {modalCurrentData?.trade + currentPLAmount}
+                            {(modalCurrentData?.trade + currentPLAmount).toLocaleString()}
                           </div>
                         </Row>
                       </Card.Header>
@@ -1687,69 +1687,6 @@ const UpdateTrade = () =>{
                             Units
                           </Button>
                         </Col>
-                        </Row>
-                        <Row>
-                          <Col xl={1}></Col>
-                          <Col xl={2}>
-                            <h3
-                              style={{
-                                color: "rgb(62, 172, 255)",
-                                fontSize: "large",
-                                fontWeight: "600",
-                                marginTop: "1rem",
-                              }}
-                            >
-                              Amount
-                            </h3>
-                          </Col>
-                          <Col xl={6}>
-                            <form style={{ marginTop: "8px" }}>
-                              <div className="input-group ">
-                                <span className="input-group-text text-black">
-                                  -
-                                </span>
-                                {/* <input type="text" className="form-control" value={inputValue}/> */}
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  value={inputValue}
-                                  onChange={(e) =>
-                                    setInputValue(e.target.value)
-                                  }
-                                />
-                                <span className="input-group-text text-black">
-                                  +
-                                </span>
-                              </div>
-                            </form>
-                          </Col>
-                          <Col
-                            className="btn"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          >
-                            <Button
-                              style={{
-                                backgroundColor: "#3eacff",
-                                height: "3rem",
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                              }}
-                              variant="info"
-                            >
-                              <i className="material-icons">swap_horiz</i>
-                              Units
-                            </Button>
-                          </Col>
-                          <Row>
-                            <div className="text-center mb-0">
-                              <p>0.24 UNITS</p>
-                            </div>
-                          </Row>
                         </Row>
                       </div>
                     }

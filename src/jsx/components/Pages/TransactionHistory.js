@@ -113,6 +113,7 @@ const TransactionHistory = () => {
           />
         </Row>
       )}
+      </Col>
     </>
   );
 };

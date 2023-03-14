@@ -22,7 +22,7 @@ import TabelComponent from "../../../layouts/TabelComponent";
 //import bitcoin from "../../../../images/coins/btc.png";
 import TradeOrderForm from "./TradeOrderForm";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { createTrade, getAllCoin } from "../../../../Redux/coins";
+import { addToWatchList, createTrade, getAllCoin } from "../../../../Redux/coins";
 import Cookies from "universal-cookie";
 import jwt_decode from "jwt-decode";
 
@@ -76,7 +76,26 @@ const DataTable = () => {
     console.log("res of trade", res);
     setLargeModal(false);
   };
+  // const addToWatchlist = async (data) => {
+  //   //console.log("item", item);
+  //   let body = {
+  //     user_id: id,
+  //     coin_name: data.name,
+  //   }
+  //   console.log("body of watch", body);
+  //  const res= await dispatch(addToWatchlist(body));
+  //   console.log("res of watch", res);
+  //   // dispatch(addWatchlistAction(item.name))
+  // };
 
+  const watchlist = (value) => {
+    let body = {
+      user_id: id,
+      coin_name: value.name,
+    }
+    const res = dispatch(addToWatchList(body));
+    console.log("res of watch", res);
+  }
   const buyNow = (value) => {
     console.log("row clicked", value);
     // navigate("/coin-details")
@@ -135,17 +154,18 @@ const DataTable = () => {
       return 0;
     });
   };
+  const [columnName , setColumnName] = useState("Change 24h")
   const change1h = () => {
     setPercentage("percent_change_1h");
-    columns[2].label = "Change 1h";
+    setColumnName("Change 1h")
   };
   const change24h = () => {
     setPercentage("percent_change_24h");
-    columns[2].label = "Change 1h";
+    setColumnName("Change 24h")
   };
   const change7d = () => {
     setPercentage("percent_change_7d");
-    columns[2].label = "Change 7d";
+    setColumnName("Change 7d")
   };
   const returnValue = (item) => {
     if (percentage === "percent_change_1h") {
@@ -157,10 +177,6 @@ const DataTable = () => {
     }
   };
 
-  const addToWatchlist = (item) => {
-    console.log("item", item);
-    // dispatch(addWatchlistAction(item.name))
-  };
   const requests = useSelector((state) => state.coinReducer);
 
   const getData = async () => {
@@ -195,9 +211,6 @@ const DataTable = () => {
     }
   };
 
-  const handleChange = (e) => {
-    setInputValue(e.target.value);
-  };
   const handleClick = (price) => {
     if (inputId === "price") {
       setInputId("units");
@@ -212,6 +225,7 @@ const DataTable = () => {
 
   useEffect(() => {
     // set 1 min interval for fetching data
+    dispatch(getAllCoin());
     const interval = setInterval(() => {
       getData();
     }, 60000);
@@ -224,11 +238,12 @@ const DataTable = () => {
         title: "Markets",
         render: (rowData) => {
           return (
-            <div className="market-title d-flex align-items-center">
+            <div className="market-title d-flex align-items-center ">
               <img src={cryptoicons[rowData.symbol]} width="12%" />
-              {/* <Col> */}
-              <span className="text-muted ms-2">{rowData.name}</span>
-              {/* </Col> */}
+              <Col>
+                <h5 className="mb-0 ms-2">{rowData.name}</h5>
+                <span className="text-muted ms-2">{rowData.symbol}</span>
+              </Col>
             </div>
           );
         },
@@ -242,13 +257,32 @@ const DataTable = () => {
                 color: GetColor(rowData.id, rowData.price),
               }}
             >
-              ${rowData.price}
+              ${rowData.price?.toLocaleString()}
             </span>
           );
         },
       },
       {
-        title: "Change 24h",
+        title: <Dropdown>
+        <Dropdown.Toggle
+          variant=""
+          className="pb-0"
+          style={{ color: "#374557" }}
+        >
+          {columnName}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Dropdown.Item href="#" onClick={change1h}>
+            Change 1h
+          </Dropdown.Item>
+          <Dropdown.Item href="#" onClick={change24h}>
+            Change 24h
+          </Dropdown.Item>
+          <Dropdown.Item href="#" onClick={change7d}>
+            Change 7d
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>,
         render: (rowData) => {
           return <span>{returnValue(rowData)}%</span>;
         },
@@ -277,7 +311,7 @@ const DataTable = () => {
               <Button
                 style={{ backgroundColor: "black" }}
                 className="btn-sm text-white"
-                onClick={() => addToWatchlist(rowData)}
+                onClick={() => watchlist(rowData)}
               >
                 Add to WatchList
               </Button>
@@ -460,7 +494,7 @@ const DataTable = () => {
                                   style={{ fontSize: "20px" }}
                                 >
                                   <h3 className="mb-0">
-                                    {modalCurrentData?.price}
+                                    {modalCurrentData?.price.toLocaleString()}
                                   </h3>
                                 </p>
                                 <span
@@ -508,13 +542,13 @@ const DataTable = () => {
                               </div>
                             </form>
                           </Col>
-                          <Col className="unitbtn" >
+                          <Col className="unitbtn">
                             {/* <Button style={{ backgroundColor: '#3eacff', height: "3rem" }} className='btn btn-sm'><i className="material-icons">swap_horiz</i></Button> */}
                             <Button
-                            variant="light"
+                              variant="light"
                               className="bttn"
                               onClick={() =>
-                                handleClick(modalCurrentData.price)
+                                handleClick(modalCurrentData.price.toLocaleString())
                               }
                             >
                               <i className="material-icons">swap_horiz</i>
@@ -618,17 +652,16 @@ const DataTable = () => {
                                           </div>
                                         </form>
                                       </Col>
-                                      <Col className="unitbtn" >
-                                        <Button 
-                                       variant="light"
-                                       className="bttn"
+                                      <Col className="unitbtn">
+                                        <Button
+                                          variant="light"
+                                          className="bttn"
                                         >
                                           <i className="material-icons">
                                             swap_horiz
                                           </i>
                                           Units
                                         </Button>
-                                    
                                       </Col>
                                       <Col xl={1}></Col>
                                     </Row>
@@ -675,10 +708,10 @@ const DataTable = () => {
                                           </div>
                                         </form>
                                       </Col>
-                                      <Col className="unitbtn" >
-                                        <Button 
-                                       variant="light"
-                                       className="bttn"
+                                      <Col className="unitbtn">
+                                        <Button
+                                          variant="light"
+                                          className="bttn"
                                         >
                                           <i className="material-icons">
                                             swap_horiz
@@ -699,11 +732,11 @@ const DataTable = () => {
                             </Tab.Content>
                           </Tab.Container>
                         </div>
-                        
                       </Card.Body>
                     </Card>
                     <Modal.Footer style={{ justifyContent: "center" }}>
-                      <Button className="open"
+                      <Button
+                        className="open"
                         variant="light"
                         onClick={() => openTrade()}
                       >

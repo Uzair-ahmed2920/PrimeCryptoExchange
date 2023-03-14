@@ -193,7 +193,7 @@ const DepositRequests = () => {
       {
         title: "Amount",
         render: (rowData) => {
-          return <span>{rowData.amount}</span>;
+          return <span>{rowData.amount.toLocaleString()}</span>;
         },
       },
       {

@@ -1,3 +1,4 @@
+import { Col, Row } from "react-bootstrap";
 import PageTitle from "../../layouts/PageTitle";
 import DataTable from "../CustomComponent/TradeComponents/TradeTable";
 const Trade = (props) => {
