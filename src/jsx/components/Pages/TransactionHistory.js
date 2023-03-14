@@ -53,9 +53,7 @@ const TransactionHistory = () => {
     <>
       <Col xl="12">
         <Row>
-          <PageTitle activeMenu="Transaction History" 
-           motherMenu="Dashboard" link="dashboard" />
-      
+          <PageTitle activeMenu="Transaction History" motherMenu="Home" />
         </Row>
         <Row>
           <ButtonGroup
@@ -74,8 +72,8 @@ const TransactionHistory = () => {
                 setWithdraw(false);
               }}
               style={{
-                backgroundColor: deposit ? "rgb(62, 172, 255)" : "#fff",
-                color: deposit ? "#fff" : "rgb(62, 172, 255)",
+                backgroundColor: deposit ? "#0d6efd" : "#fff",
+                color: deposit ? "#fff" : "#0d6efd",
                 borderColor: "white",
               }}
               variant="secondary"
@@ -88,8 +86,8 @@ const TransactionHistory = () => {
                 setWithdraw(true);
               }}
               style={{
-                backgroundColor: withdraw ? "rgb(62, 172, 255)" : "#fff",
-                color: withdraw ? "#fff" : "rgb(62, 172, 255)",
+                backgroundColor: withdraw ? "#0d6efd" : "#fff",
+                color: withdraw ? "#fff" : "#0d6efd",
                 borderColor: "white",
               }}
               variant="secondary"
@@ -100,15 +98,21 @@ const TransactionHistory = () => {
         </Row>
         {deposit ? (
         <Row>
-          <DataTable header="Deposit Requests" rows={tableData} columns={columns} />
+          <DataTable
+            header="Deposit Requests"
+            rows={tableData}
+            columns={columns}
+          />
         </Row>
-        ) : (
-            <Row>
-          <DataTable header="Withdraw Requests" rows={tableData} columns={columns} />
+      ) : (
+        <Row>
+          <DataTable
+            header="Withdraw Requests"
+            rows={tableData}
+            columns={columns}
+          />
         </Row>
-        )
-            }
-      </Col>
+      )}
     </>
   );
 };
